@@ -48,7 +48,7 @@ const Username = ({userSession, billsOfUSer})  => {
                     </li>
 
                     <li className={`hover:bg-gray-200 py-3 font-semibold flex justify-center ${tabs.segurity ? `bg-gray-300 py-3` : ``}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 " fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <a name={`segurity`} className="hidden sm:block" href="#" onClick={handleClick}>Seguridad</a>
@@ -56,12 +56,12 @@ const Username = ({userSession, billsOfUSer})  => {
 
                 </ul>
             </div>
-            <div id="first" className={`${tabs.usuarios ? `` : `hidden`}  flex bg-white justify-center p-2 `}>
+            <div id="first" className={`${tabs.usuarios ? `` : `hidden`}  flex bg-white justify-center p-2 lg:w-3/4 `}>
                 <UserData user={userSession}/>
             </div>
 
-            <div id="second" className={`${tabs.activity ? `` : `hidden`}  flex bg-white justify-center mx-auto w-full `}>
-            <div className="justify-center w-4/5">
+            <div id="second" className={`${tabs.activity ? `` : `hidden`}  flex bg-white justify-center p-2 lg:w-3/4 `}>
+            <div className="justify-center">
                 <div className="mt-6">
                     <StoreHeading title="Tus Facturas"/>
                 </div>
@@ -70,7 +70,7 @@ const Username = ({userSession, billsOfUSer})  => {
                 </div>
             </div>
             </div>
-            <div id="thirt" className={`${tabs.segurity ? `` : `hidden`}  flex bg-white justify-center p-2 `}>
+            <div id="thirt" className={`${tabs.segurity ? `` : `hidden`}  flex bg-white justify-center p-2 lg:w-3/4 `}>
                 <UserSegurity user={userSession}/>
             </div>
           </div>
