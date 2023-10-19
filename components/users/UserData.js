@@ -182,7 +182,7 @@ const UserData = ({user}) => {
             </div> 
             
             <button onClick={submit}
-                class="bg-blue-500 hover:bg-blue-700 ml-6 rounded text-white font-bold mt-2 py-2 px-4">
+                class="bg-red-500 hover:bg-red-700 ml-6 rounded text-white font-bold mt-2 py-2 px-4">
                     Guardar  
             </button> 
             </form>
