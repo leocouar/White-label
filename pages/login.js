@@ -1,10 +1,16 @@
-import { getSession, getCsrfToken } from "next-auth/client";
+import { getSession, getCsrfToken, signIn } from "next-auth/client";
 import { useRouter } from "next/router";
 import login from "/images/login.png";
 
 const Login = ({csrfToken, session}) => {
     const router = useRouter();
 
+    const handleGoogleSignIn = () => {
+      signIn('google'); // 'google' es el ID del proveedor de Google configurado en NextAuth.js
+    };
+    const handleFacebookSignIn = () => {
+      signIn('facebook'); // 'facebook' es el ID del proveedor de Facebook configurado en NextAuth.js
+    };
     if (session) {
       router.push('/'); // Redirigir al dashboard si está autenticado
       return null; // O puedes renderizar un componente de carga aquí
@@ -64,6 +70,26 @@ const Login = ({csrfToken, session}) => {
                                       </span>
                                 Entrar
                             </button>
+                        </div>
+                        <div>
+                            <button type="button" onClick={handleGoogleSignIn} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-palette-secondary hover:bg-palette-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                                  <svg className="h-5 w-5 text-palette-dark group-hover:text-palette-primary" fill="currentColor" viewBox="0 0 48 48">
+                                      <path d="M23.5 4c6.3 0 11.4 5.1 11.4 11.4s-5.1 11.4-11.4 11.4S12.1 21.7 12.1 15.4 17.2 4 23.5 4zm0 21.8c3.2 0 5.9-2.6 5.9-5.9s-2.6-5.9-5.9-5.9-5.9 2.6-5.9 5.9 2.7 5.9 5.9 5.9zm0 2.3c-4.3 0-7.7 2.3-9.6 5.7l-.2.3l.3.2c2.7 1.9 6 3 9.5 3s6.9-1.1 9.5-3l.3-.2l-.2-.3c-1.9-3.4-5.3-5.7-9.5-5.7zm0 21c-5.4 0-9.8-4.4-9.8-9.8s4.4-9.8 9.8-9.8 9.8 4.4 9.8 9.8-4.4 9.8-9.8 9.8zm21.7-11.1c0-1.1.1-2.2.1-3.3s0-2.1-.1-3.3h-3.3v2.9h-4v-2.9h-2.9v-4h2.9v-2.9h4v2.9h3.3c0 2.3 0 4.6-.1 6.9h-6.5c.1 1.4.1 2.9.1 4.3s0 2.9-.1 4.3h6.5c.1 1.3.1 2.7.1 4s0 2.7-.1 4h-6.5c0 2.3-.1 4.6-.1 6.9h3.3v-2.9h4v2.9h2.9v4h-2.9v2.9h-4v-2.9h-3.3c0-1.1-.1-2.2-.1-3.3s0-2.1.1-3.3h6.6z"/>
+                                  </svg>
+                              </span>
+                              Iniciar sesión con Google
+                          </button>
+                        </div>
+                        <div>
+                          <button type="button" onClick={handleFacebookSignIn} style={{ backgroundColor: '#1877f2', }} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-palette-secondary hover:bg-palette-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                                      <path d="M20.924 0H3.075C1.376 0 0 1.375 0 3.075v17.849C0 22.625 1.375 24 3.075 24h8.807v-9.294H9.19V10.797h2.692V8.196c0-2.673 1.635-4.137 4.025-4.137 1.15 0 2.263.203 2.263.203v2.5h-1.276c-1.257 0-1.65.78-1.65 1.612v1.94h2.807l-.45 2.909h-2.357V24h4.607C22.625 24 24 22.625 24 20.924V3.075C24 1.375 22.625 0 20.924 0"></path>
+                                  </svg>
+                              </span>
+                              Iniciar sesión con Facebook
+                          </button>
                         </div>
                 </form>
             </div>
