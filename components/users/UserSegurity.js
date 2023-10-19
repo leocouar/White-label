@@ -45,7 +45,7 @@ const UserSegurity = ({user}) => {
                 </div>
             </div>
                 <div className="justify-center w-full">
-                    <button onClick={submit} className="flex m-auto bg-indigo-400 rounded-full px-4 py-2">guardar</button>
+                    <button onClick={submit} className="flex m-auto bg-red-400  rounded-full px-4 py-2">Guardar</button>
                 </div>
             </form>
              
