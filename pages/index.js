@@ -3,6 +3,7 @@ import Carrusel from "@/components/Carrusel";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
 import Banner from '@/components/products/ProductBanner.js';
+import NewRecipe from "@/components/recipes/NewRecipe";
 
 
 
@@ -15,10 +16,11 @@ function IndexPage({brands, categories}) {
               {/* <Carrusel/>*/}
               {/*<img src="images/inicio.jpg" className="w-full h-screen"></img>*/}
             </div>
-            <div className="w-full h-full">
-              <div className='flex justify-center'>
-                <Banner/>
-              </div>
+            <div className='flex justify-center'>
+              <Banner/>
+            </div>
+            <div className='flex justify-center'>
+              <NewRecipe />
             </div>
             <ProductListings brands={brands} categories={categories}/>
           </div>
