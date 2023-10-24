@@ -49,7 +49,7 @@ const Payment = ({ myPoints, users }) => {
     lastName: "",
     username: "",
     address: "",
-    cuit: "",
+    cuit: ""
   });
 
   const [tabs, setTabs] = useState({
