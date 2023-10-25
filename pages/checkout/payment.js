@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import creditCardIcon from '../../images/creditCard.svg';
 import pointCard from '../../images/pointCard.svg';
 import cash from '../../images/cash.svg';
-import mercadoPago from "../../images/mercadoPago.svg";
+import mercadoPago from "../../images/MercadoPago.svg";
 import CreditCard from "@/components/cart/CreditCard";
 import { getSession } from "next-auth/client";
 import { getBilling } from "../../services/billingService";
