@@ -30,7 +30,7 @@ function CartTableBill({ cart }) {
 
 
   return (
-    <div className="flex items-center justify-center m-auto w-full mb-8">
+    <div className="flex items-center justify-center m-auto w-full mb-4">
       <table className="shadow overflow-x-auto border-b border-gray-200 sm:rounded-lgz">
       <thead className="">
       <tr className="content-center">
