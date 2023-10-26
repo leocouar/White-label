@@ -5,6 +5,7 @@ import { useState, useMemo } from "react";
 
 
 const NewProduct = ({ categories, brands, sizes }) => {
+    const [formSubmitted, setFormSubmitted] = useState(false);
     const [ sizeToCheck, setsizeToCheck ] = useState([]);
     const initialForm = useMemo(() => ({
         name: "",
@@ -29,6 +30,7 @@ const NewProduct = ({ categories, brands, sizes }) => {
     const validationsForm = (form) => {
         let errors = {};
 
+        if (formSubmitted) {
         if (!form.name.trim()) {
             errors.name = "El campo 'Nombre' es requerido";
         }
@@ -63,6 +65,7 @@ const NewProduct = ({ categories, brands, sizes }) => {
         if (!form.points.trim()) {
             errors.points = "El campo 'Puntos' es requerido";
         }
+    }
         return errors;
     };
 
@@ -281,6 +284,7 @@ const NewProduct = ({ categories, brands, sizes }) => {
 
                     <button type="submit"
                         className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8`}
+                        onClick={() => setFormSubmitted(true)} // Marcamos el formulario como enviado al hacer clic en el botón Guardar
                     >
                         Guardar
                     </button>
