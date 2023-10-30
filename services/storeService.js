@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export async function findAll() {
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/store`;
+export async function findAllStores() {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
 
     try {
         let response = await axios.get(fetchUrl);
@@ -11,18 +11,19 @@ export async function findAll() {
     }
 }
 
-export async function findByID(id){
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/store/${id}`;
+export async function findByID(id) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}`;
 
     try {
         let response = await axios.get(fetchUrl);
         return response.data;
     } catch (error) {
-        throw new Error("Could not get all stores !");
+        console.error(error)
+        throw new Error("Could not get the store!");
     }
 }
 
-export async function save(store) {
+export async function saveStore(store) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
     try {
         let response = await axios.post(fetchUrl, store);
@@ -33,7 +34,7 @@ export async function save(store) {
     }
 }
 
-export async function update(store) {
+export async function updateStore(store) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
 
     try {
@@ -54,8 +55,8 @@ export async function deleteStore(id) {
     }
 }
 
-export async function getAllProducts(id){
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/store/${id}/products`;
+export async function getAllProducts(id) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}/products`;
 
     try {
         let response = await axios.get(fetchUrl);
@@ -65,8 +66,8 @@ export async function getAllProducts(id){
     }
 }
 
-export async function getOwner(id){
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/store/${id}/owner`;
+export async function getOwner(id) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}/owner`;
 
     try {
         let response = await axios.get(fetchUrl);

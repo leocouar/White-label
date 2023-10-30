@@ -4,11 +4,12 @@ import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import logo from "/images/logoMati.png";
+import logo from "/images/camara_bolivar_logo.png";
 import UserSession from "@/components/users/UserSession";
 import { useSession } from "next-auth/client";
 import Loading from "./utils/Loading";
 import { findAll } from "services/categoriesService";
+import { findAllStores } from "services/storeService";
 
 
 function Nav() {
@@ -17,8 +18,12 @@ function Nav() {
   const [session, loading] = useSession();
   const [isShow, setIsShow] = useState(false)
   const [load, setLoad] = useState(false)
+
   const [categoriesVisible, setCategoriesVisible] = useState(false);
   const [categories, setCategories] = useState([])
+
+  const [storesVisible, setStoresVisible] = useState(false);
+  const [stores, setStores] = useState([])
 
 
   const [color, setColor] = useState(false)
@@ -40,7 +45,8 @@ function Nav() {
   }
 
   useEffect(async() => {
-    setCategories(await findAll())
+    setCategories(await findAll());
+    setStores(await findAllStores());
   }, [])
 
   useEffect(() => {
@@ -53,6 +59,12 @@ function Nav() {
 
   const showCategories = (() => {
     setCategoriesVisible(!categoriesVisible)
+    setStoresVisible(false)
+  })
+
+  const showStores = (() =>{
+    setStoresVisible(!storesVisible)
+    setCategoriesVisible(false)
   })
   
   const handleDocumentClick = (e) => {
@@ -108,12 +120,6 @@ function Nav() {
           id="menu"
           className={`w-full block flex-grow ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-between divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
         >
-          <Link href="/" >
-            <a className="text-smw border-b border-gray-200 block mt-4 lg:inline-block lg:border-none lg:mt-0
-               text-m font-primary text-palette-primary md:p-2 rounded-md hover:text-palette-secondary tracking-tight pt-1">
-                INICIO                
-            </a>
-          </Link>
 
           <div className="relative text-smw block mt-4 lg:inline-block lg:mt-0">
             <button 
@@ -143,25 +149,42 @@ function Nav() {
             </div>
           </div>
 
+          <div className="relative text-smw block mt-4 lg:inline-block lg:mt-0">
+            <button 
+                type="button"
+                onClick={showStores}
+                className="inline-flex text-m font-primary text-palette-primary tracking-tight md:p-2 rounded-md hover:text-palette-secondary">
+                COMERCIOS
+                  <svg className="h-5 w-5 align-items-lg-stretch" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"/>
+                  </svg>
+              </button>       
+              <div
+                className={`${storesVisible ? "" : "hidden"} z-50 absolute mt-2 w-auto lg:w-auto lg:right-0 md:w-32 rounded-md shadow-lg bg-white ring-2 ring-palette-lighter ring-opacity-75 focus:outline-none md:-mx-2 -mx-0`}
+                role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
+                <div className="overflow-y-auto no-scrollbar max-h-80 lg:max-h-44" role="none">
+                  {stores?.map((store) =>(
+                      <Link href={`/accessories/${store.id}`} passHref legacyBehavior>
+                        <a href="#" onClick={showStores} className="text-palette-primary block text-center hover:text-palette-secondary px-4 py-2 text-sm" role="menuitem"
+                        tabIndex="-1" id="menu-item-0">{store.name}</a>
+                      </Link>
+                    ))
+                  }   
+                </div>
+            </div>
+          </div>
+
           <Link href="/about/inicio">
             <a className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight md:p-2 rounded-md hover:text-palette-secondary">
-                  QUIENES SOMOS
+                  NOSOTROS
             </a>
           </Link>
 
-          {session?.user?.role?.includes("ADMIN") ? (
-            <Link href="/admin">
-              <a className="top-4 right-3 lg:order-last text-smw block mt-4 mr-4 lg:inline-block lg:mt-0">
-                <h1>
-                  <div className="text-m font-primary text-palette-primary md:p-2 rounded-md hover:text-palette-secondary tracking-tight pt-1">
-                    ADMINISTRACION
-                  </div>
-                </h1>
-              </a>
-            </Link>
-          ) : (
-            ""
-          )}
+
+
         </div>
 
         {
