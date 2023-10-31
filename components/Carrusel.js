@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
-const largeImages = ['/images/panaleria.png', '/images/lactancia.png', '/images/CarrouselAccesorios.png']
+const largeImages = ['/images/carruselshop.jpg', '/images/carruselshop1.jpg', '/images/carruselshop2.jpg']
 const responsiveImages = ['/images/PanaleriaResponsive.png', '/images/LactanciaResponsive.png', '/images/AccesoriosResponsive.png']
 
 function Carousel({ }) {

@@ -12,7 +12,7 @@ function IndexPage({brands, categories}) {
       <>
           <div className='bg-white'>
             <div >
-              {/* <Carrusel/>*/}
+            <Carrusel/>
               {/*<img src="images/inicio.jpg" className="w-full h-screen"></img>*/}
             </div>
             <div className="w-full h-full">
