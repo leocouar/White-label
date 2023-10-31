@@ -97,28 +97,12 @@ function Nav() {
             <img src={logo.src} className="w-32 mx-16 ml-8 md:mx-70 lg:mx-4 lg:w-32" />
           </div>
         </Link>
-        <div className="lg:order-2 -mx-8 lg:m-auto">
-          <UserSession session={session} />
-        </div>
-        <div className="lg:order-3">
-          <Link href="/cart" passHref>
-            <a className="flex md:-mt-1 flex-wrap ml-2 md:ml-1 object-right p-6 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
-              <FontAwesomeIcon
-                className="text-palette-primary hover:text-palette-secondary h-6"
-                icon={faShoppingCart}
-              />
-              {cartItems === 0 ? null : (
-                <div className=" text-xs bg-palette-secondary rounded-full text-white font-semibold py-1 px-2 ">
-                  {cartItems}
-                </div>
-              )}
-            </a>
-          </Link>
-        </div>
+
+
 
         <div
           id="menu"
-          className={`w-full block flex-grow ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-between divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
+          className={`w-full block flex-grow ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
         >
 
           <div className="relative text-smw block mt-4 lg:inline-block lg:mt-0">

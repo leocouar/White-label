@@ -1,9 +1,12 @@
-function dashboard() {
+import MenuDashboard from "@/components/dashboard/MenuDashboard.js"
+
+
+function Dashboard() {
 
     return (
-            <div className="justify-center">
-                Hola valen
-            </div>
+        <div>
+            <MenuDashboard/>
+        </div>
     )
 }
-export default dashboard
+export default Dashboard
