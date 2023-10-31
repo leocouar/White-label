@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import VistaComercio from './VistaComercio';
 
-function MenuDashboard() {
+function MenuDashboard(id) {
     const [vista, setVista] = useState(false);
 
     const handleClick = (texto) => {
@@ -33,7 +34,7 @@ function MenuDashboard() {
                 <div className="flex-1 p-8">
                     {vista === 'comercio' && (
                         <div className="mt-8 p-4 bg-white shadow-md rounded-md">
-                            Comercio
+                            <VistaComercio id={id}/>
                         </div>
                     )}
                     {vista === 'productos' && (
