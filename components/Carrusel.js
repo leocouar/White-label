@@ -11,6 +11,7 @@ function Carousel({ }) {
     const [windowDimensions, setWindowDimensions] = useState([0, 0]);
     const [imgs, setImgs] = useState([]);
     const [initialHeight, setInitialHeight] = useState(null);
+    
 
     //Obtains the img elements that will be set
     useEffect(() => {
@@ -51,6 +52,7 @@ function Carousel({ }) {
             window.removeEventListener('resize', updateWindowDimensions);
         };
     }, [imgs, initialHeight]);
+
 
     //This ensures the central element will remain in the center
 
@@ -131,9 +133,9 @@ function Carousel({ }) {
     const positions = [1, 2, 3];
     return (
         <div style={heightAdjust} className='relative'>
-            <div id="container" ref={containerRef} className="w-full overflow-hidden">
+            <div id="container" ref={containerRef} className="w-full overflow-hidden rounded-3xl">
                 {sliderControl(true)}
-                <div className=" flex " style={{ width: `${windowDimensions[1]}px`}}>
+                <div className="flex" style={{ width: `${windowDimensions[1]}px`}}>
                     {positions.map((item, index) => (
                         <img key={index}
                             className="w-1/3"
