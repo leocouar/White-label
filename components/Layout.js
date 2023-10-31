@@ -1,6 +1,7 @@
 import { CartProvider } from '@/context/Store'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import { NotificationContainer } from 'react-notifications'
 
 function Layout({ children }) {
   
@@ -11,6 +12,7 @@ function Layout({ children }) {
       </div>
 
         <main className='bg-palette-bg'>
+          <NotificationContainer />
           {children}
         </main>
 

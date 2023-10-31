@@ -1,5 +1,5 @@
 import { useDropzone } from "react-dropzone";
-import { NotificationContainer } from "react-notifications";
+import { NotificationContainer,NotificationManager } from "react-notifications";
 import useForm from "../../hooks/useForm";
 import { useState, useMemo } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,8 +55,11 @@ const UploadFile = ({ isOpen, setIsOpen, folder }) => {
     }
 
     function upload() {
-        recipeService.uploadRecipe(form,file)
-
+        recipeService.uploadRecipe(form,file).then(
+            NotificationManager.info('Receta Enviada, en la brevedad se enviara el presupuesto', 'Envio Exitoso', 4000,  () => {
+            })
+        )
+        setIsOpen(false)
     };
 
     return (
@@ -68,7 +71,6 @@ const UploadFile = ({ isOpen, setIsOpen, folder }) => {
 
             <div className="fixed z-40 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
                 aria-modal="true">
-                <NotificationContainer />
                 <div className="flex items-end justify-center m min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                         aria-hidden="true"></div>
@@ -111,7 +113,7 @@ const UploadFile = ({ isOpen, setIsOpen, folder }) => {
                                                         <ul>{files}</ul>
                                                     </div>
                                                 </aside>
-
+                                                
 
                                             </section>
 
