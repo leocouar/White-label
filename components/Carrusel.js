@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const largeImages = ['/images/carruselshop.jpg', '/images/carruselshop1.jpg', '/images/carruselshop2.jpg']
-const responsiveImages = ['/images/PanaleriaResponsive.png', '/images/LactanciaResponsive.png', '/images/AccesoriosResponsive.png']
+const responsiveImages = ['/images/carruselshopresponsive.jpg', '/images/carruselshop1responsive.jpg', '/images/carruselshop2responsive.jpg']
 
 function Carousel({ }) {
     const containerRef = useRef(null);
