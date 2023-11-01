@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
-const VistaComercio = () => {
+const VistaComercio = (id) => {
+  console.log(id);
   // State to control the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Commerce information (you can use your own data or fetch it from an API)
-  const commerceData = {
+  const [commerceData, setCommerceData] = useState(id
+    /*{
     email: 'info@yourcommerce.com',
     phone: '+1 (123) 456-7890',
     address: '123 Main St, City, Country',
@@ -14,15 +16,14 @@ const VistaComercio = () => {
       saturday: '10:00 AM - 4:00 PM',
       sunday: 'Closed',
     },
-  };
-
+  }*/);
   // State variables for edited values
-  const [newEmail, setNewEmail] = useState(commerceData.email);
-  const [newPhone, setNewPhone] = useState(commerceData.phone);
-  const [newAddress, setNewAddress] = useState(commerceData.address);
-  const [newMondayToFriday, setNewMondayToFriday] = useState(commerceData.businessHours.mondayToFriday);
-  const [newSaturday, setNewSaturday] = useState(commerceData.businessHours.saturday);
-  const [newSunday, setNewSunday] = useState(commerceData.businessHours.sunday);
+  // const [newEmail, setNewEmail] = useState(commerceData.email);
+  // const [newPhone, setNewPhone] = useState(commerceData.phone);
+  // const [newAddress, setNewAddress] = useState(commerceData.address);
+  // const [newMondayToFriday, setNewMondayToFriday] = useState(commerceData.businessHours.mondayToFriday);
+  // const [newSaturday, setNewSaturday] = useState(commerceData.businessHours.saturday);
+  // const [newSunday, setNewSunday] = useState(commerceData.businessHours.sunday);
 
   const handleEditClick = () => {
     // Open the modal when the "Edit" button is clicked
@@ -36,29 +37,29 @@ const VistaComercio = () => {
 
   const handleSave = () => {
     // Update the commerce information with the new values
-    setCommerceData({
-      email: newEmail,
-      phone: newPhone,
-      address: newAddress,
-      businessHours: {
-        mondayToFriday: newMondayToFriday,
-        saturday: newSaturday,
-        sunday: newSunday,
-      },
-    });
+    // setCommerceData({
+    //   email: newEmail,
+    //   phone: newPhone,
+    //   address: newAddress,
+    //   businessHours: {
+    //     mondayToFriday: newMondayToFriday,
+    //     saturday: newSaturday,
+    //     sunday: newSunday,
+    //   },
+    // });
 
     // Close the modal
     setIsModalOpen(false);
   };
 
   return (
-    <div className="bg-gray-100 p-4 rounded-md shadow-md">
-      <h1 className="text-2xl font-semibold mb-4">Commerce Info</h1>
+    <div className="bg-blue-100 p-4 rounded-md shadow-md">
+      <h1 className="text-4xl font-semibold mb-4">Commerce Info</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Display commerce information */}
         <div>
-          <h2 className="text-lg font-semibold">Contact Information</h2>
-          <ul>
+          <h2 className="text-2xl font-semibold">{commerceData.name}</h2>
+          <ul className="list-disc ml-5">
             <li>
               <span className="font-medium">Email:</span> {commerceData.email}
             </li>
@@ -71,17 +72,19 @@ const VistaComercio = () => {
           </ul>
         </div>
         <div>
-          <h2 className="text-lg font-semibold">Business Hours</h2>
-          <ul>
+          <h2 className="text-2xl font-semibold">Business Hours</h2>
+          <ul className="list-disc ml-5">
             <li>
               <span className="font-medium">Monday - Friday:</span>{' '}
-              {commerceData.businessHours.mondayToFriday}
+              {/* {commerceData.businessHours.mondayToFriday} */}
             </li>
             <li>
-              <span className="font-medium">Saturday:</span> {commerceData.businessHours.saturday}
+              <span className="font-medium">Saturday:</span> 
+              {/* {commerceData.businessHours.saturday} */}
             </li>
             <li>
-              <span className="font-medium">Sunday:</span> {commerceData.businessHours.sunday}
+              <span className="font-medium">Sunday:</span> 
+              {/* {commerceData.businessHours.sunday} */}
             </li>
           </ul>
         </div>
