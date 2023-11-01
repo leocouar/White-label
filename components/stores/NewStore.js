@@ -10,12 +10,11 @@ const NewStore = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
-
     //Datos para endpoints
     const [file, setFile] = useState();
 
     //Imagenes a visualizar
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [resizedImageUrl, setResizedImageUrl] = useState(null);
 
     //Errores
     const [errName, setErrName] = useState(false);
@@ -56,31 +55,44 @@ const NewStore = () => {
     };
 
 
-    //Selecciona una imagen a cargar
-    const handleImageSelect = (event) => {
-        const file = event.target.files[0];
-        setFile(file);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setSelectedImage(e.target.result);
+    //Selecciona una imagen a cargar  
+    const handleImageUpload = (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+  
+      reader.onload = (upload) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+  
+          // Set the new width and height for the image
+          const sides = 368;
+  
+          // Draw the image with the new dimensions
+          canvas.width = sides;
+          canvas.height = sides;
+          ctx.drawImage(img, 0, 0, sides, sides);
+  
+          // Convert the canvas to a Blob
+          canvas.toBlob((blob) => {
+            const type = file.type === 'image/jpeg' ? 'image/jpeg' : 'image/png';
+            const resizedImageFile = new File([blob], file.name, {
+              type: type,
+              lastModified: Date.now(),
+            });
+  
+            // Set the resized file in state
+            setFile(resizedImageFile);
+  
+            // Convert Blob to data URL
+            const imageUrl = URL.createObjectURL(blob);
+            setResizedImageUrl(imageUrl);
+          }, 'image/jpeg');
         };
-        reader.readAsDataURL(file);
-    };
-
-    //Carga la imagen en pantalla guardandola en la cache
-    const handleImageLoad = (event) => {
-        const img = event.target;
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-
-        try {
-            localStorage.setItem('cachedImage', canvas.toDataURL());
-        } catch (e) {
-            console.error('Error saving image to cache:', e);
-        }
+        img.src = upload.target.result;
+      };
+      reader.readAsDataURL(file);
     };
 
     useEffect(() => {
@@ -135,23 +147,26 @@ const NewStore = () => {
                 </div>
 
                 {/*LOGO*/}
-                <div className="w-full">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                <div className="w-full block">
+                    <label className="block mb-3 uppercase tracking-wide text-gray-700 text-xs font-bold "
                         htmlFor="description">Logo:</label>
                     <div>
-                        <input type="file" accept="image/*" onChange={handleImageSelect} />
-                        {selectedImage && (
-                            <div>
-                                <img
-                                    src={selectedImage}
-                                    alt="Selected"
-                                    onLoad={handleImageLoad}
-                                    style={{ display: 'block', maxWidth: '100%', maxHeight: '400px' }}
-                                />
-                            </div>
-                        )}
+                        <label htmlFor="upload" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                            Subir imagen
+                        </label>
+                        <input
+                            type="file"
+                            id="upload"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                        />
+                        <p className={`text-blue-500 text-xs italic`}>
+                            El logo debe ser de 368x368 en formato .jpg o .png. <u>De no ser asi, sera redimensionada.</u>
+                        </p>
+                        {resizedImageUrl && <img src={resizedImageUrl} alt="Resized" />}
                     </div>
-                    {errImg && <p className={`text-red-500 text-xs italic`}>
+                    {errImg && <p className={`text-red-500  italic`}>
                         "Se requiere que escoja un logotipo."
                     </p>}
                 </div>
