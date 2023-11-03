@@ -27,7 +27,7 @@ export async function saveStore(store) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
     try {
         let response = await axios.post(fetchUrl, store);
-        return response;
+        return response.data;
     } catch (error) {
         console.log(error);
         throw new Error("Could not create store!");
@@ -39,7 +39,7 @@ export async function updateStore(store) {
 
     try {
         let response = await axios.put(fetchUrl, store);
-        return response;
+        return response.data;
     } catch (error) {
         throw new Error("Could not update store !");
     }

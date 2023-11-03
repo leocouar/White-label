@@ -1,24 +1,20 @@
-import React, { useState } from 'react';
+import { useState,useEffect } from 'react';
+import {updateStore} from 'services/storeService.js' 
 
-const VistaComercio = (id) => {
-  console.log(id);
+const VistaComercio = ({commerceData}) => {
   // State to control the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+ 
+  useEffect(()=>{
+    setStoreToUpdate({
+      ...storeToUpdate
+  })
+  },1000)
   // Commerce information (you can use your own data or fetch it from an API)
-  const [commerceData, setCommerceData] = useState(id
-    /*{
-    email: 'info@yourcommerce.com',
-    phone: '+1 (123) 456-7890',
-    address: '123 Main St, City, Country',
-    businessHours: {
-      mondayToFriday: '9:00 AM - 6:00 PM',
-      saturday: '10:00 AM - 4:00 PM',
-      sunday: 'Closed',
-    },
-  }*/);
+
   // State variables for edited values
-  // const [newEmail, setNewEmail] = useState(commerceData.email);
+  const [storeToUpdate, setStoreToUpdate] = useState(commerceData.store.store);
+  // [newEmail, setNewEmail]
   // const [newPhone, setNewPhone] = useState(commerceData.phone);
   // const [newAddress, setNewAddress] = useState(commerceData.address);
   // const [newMondayToFriday, setNewMondayToFriday] = useState(commerceData.businessHours.mondayToFriday);
@@ -29,7 +25,12 @@ const VistaComercio = (id) => {
     // Open the modal when the "Edit" button is clicked
     setIsModalOpen(true);
   };
-
+  const handleChange = (e) => {   
+    setStoreToUpdate({
+        ...storeToUpdate,
+        [e.target.name]: e.target.value,
+    });
+}
   const handleCloseModal = () => {
     // Close the modal
     setIsModalOpen(false);
@@ -37,37 +38,29 @@ const VistaComercio = (id) => {
 
   const handleSave = () => {
     // Update the commerce information with the new values
-    // setCommerceData({
-    //   email: newEmail,
-    //   phone: newPhone,
-    //   address: newAddress,
-    //   businessHours: {
-    //     mondayToFriday: newMondayToFriday,
-    //     saturday: newSaturday,
-    //     sunday: newSunday,
-    //   },
-    // });
-
+        updateStore(storeToUpdate)
+    
     // Close the modal
     setIsModalOpen(false);
-  };
+    }
+  
 
   return (
     <div className="bg-blue-100 p-4 rounded-md shadow-md">
-      <h1 className="text-4xl font-semibold mb-4">Commerce Info</h1>
+      <h1 className="text-4xl font-semibold mb-4">{storeToUpdate.name}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Display commerce information */}
         <div>
-          <h2 className="text-2xl font-semibold">{commerceData.name}</h2>
+          <h2 className="text-2xl font-semibold">"{storeToUpdate.description}"</h2>
           <ul className="list-disc ml-5">
             <li>
-              <span className="font-medium">Email:</span> {commerceData.email}
+              <span className="font-medium">Email:</span> {storeToUpdate.email}
             </li>
             <li>
-              <span className="font-medium">Phone:</span> {commerceData.phone}
+              <span className="font-medium">Phone:</span> {storeToUpdate.telephone}
             </li>
             <li>
-              <span className="font-medium">Address:</span> {commerceData.address}
+              <span className="font-medium">Address:</span> {storeToUpdate.address}
             </li>
           </ul>
         </div>
@@ -109,12 +102,14 @@ const VistaComercio = (id) => {
         <label className="block text-sm font-medium mb-2">Email:</label>
         <input
           type="text"
-          value={newEmail}
-          onChange={(e) => setNewEmail(e.target.value)}
+          value={storeToUpdate?.email}
+          onChange={handleChange}
           className="w-full px-3 py-2 border rounded-md"
+          id="email"
+          name="email"
         />
       </div>
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <label className="block text-sm font-medium mb-2">Phone:</label>
         <input
           type="text"
@@ -158,7 +153,7 @@ const VistaComercio = (id) => {
           onChange={(e) => setNewSunday(e.target.value)}
           className="w-full px-3 py-2 border rounded-md"
         />
-      </div>
+      </div> */}
       <button
         onClick={handleSave}
         className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
