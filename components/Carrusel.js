@@ -133,7 +133,7 @@ function Carousel({ }) {
     const positions = [1, 2, 3];
     return (
         <div style={heightAdjust} className='relative'>
-            <div id="container" ref={containerRef} className="w-full overflow-hidden rounded-3xl">
+            <div id="container" ref={containerRef} className="w-full overflow-hidden">
                 {sliderControl(true)}
                 <div className="flex" style={{ width: `${windowDimensions[1]}px`}}>
                     {positions.map((item, index) => (
