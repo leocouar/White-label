@@ -46,9 +46,10 @@ const NewStore = () => {
         const newStore = {
             "name": name,
             "description": description,
-            "owner": session?.user?.username
+            "owners": [{
+                "username": session?.user?.username
+            }]
         };
-
         const response = await saveStore(newStore); // Assuming saveStore returns a promise
         const folder = response.id;
         uploadFile("store", file, folder)
