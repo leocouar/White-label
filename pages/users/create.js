@@ -3,18 +3,19 @@ import {useState} from "react";
 import {save} from "../../services/userService";
 
 const Create = () => {
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
 
     const [enable, setEnable] = useState(false)
 
     const [user, setUser] = useState({
-        "name": "",
-        "lastName": "",
-        "cardId": "",
-        "password": "",
-        "cuit": "",
-        "phone": "",
-        "email": ""
+        name: "",
+        lastName: "",
+        cardId: "",
+        password: "",
+        cuit: "",
+        phone: "",
+        email: ""
     })
 
 
@@ -26,20 +27,58 @@ const Create = () => {
         validate();
     }
 
+    const [errorMessages, setErrorMessages] = useState({
+        name: "",
+        lastName: "",
+        email: "",
+        cuil: "",
+        password: ""
+    });
 
     function validate() {
         let isValidEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(user.email);
         let isValidPassword = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$/i.test(user.password);  
-        let isValidDNIoCUIL = /^[0-9.-]*$/i.test(user.cuil);  
-
-        if (user.name && user.lastName != "" && isValidDNIoCUIL && isValidPassword && isValidEmail){
+        let isValidDNIoCUIL = /^[0-12.-]*$/i.test(user.cuil);  
+    
+        let errors = {
+            name: "",
+            lastName: "",
+            email: "",
+            cuil: "",
+            password: ""
+        };
+    
+        if (!user.name) {
+            errors.name = "Complete su Nombre.";
+        }
+    
+        if (!user.lastName) {
+            errors.lastName = "Complete su Apellido.";
+        }
+    
+        if (!isValidEmail) {
+            errors.email = "Ingrese Una Direccion De Correo Electronico.";
+        }
+    
+        if (!isValidDNIoCUIL) {
+            errors.cuil = "Complete su DNI o CUIL.";
+        }
+    
+        if (!isValidPassword) {
+            errors.password = "Complete su Contraseña (de 8 a 16 caracteres al menos 1 mayúscula y 1 dígito).";
+        }
+    
+        if (user.name && user.lastName !== "" && isValidDNIoCUIL && isValidPassword && isValidEmail){
             setEnable(true)  
         }  
         else {
             setEnable(false)
         }
-                
-    } 
+
+        if (formSubmitted) {
+            setErrorMessages(errors); // Actualiza los mensajes de error solo si se intentó enviar el formulario
+        }
+    }
 
     
 
@@ -47,11 +86,15 @@ const Create = () => {
 
     const submit = (e) => {
         e.preventDefault();
-        save(user).then((result) => {
-            if (result.status === 202) {
-                window.location.href = '/login'
-            }
-        });
+        setFormSubmitted(true); // Indica que se intentó enviar el formulario
+        validate(); // Ejecuta la validación
+        if (enable) {
+            save(user).then((result) => {
+                if (result.status === 202) {
+                    window.location.href = '/login'
+                }
+            });
+        }
     }
 
     return (
@@ -72,7 +115,7 @@ const Create = () => {
                                 onChange={handleChange}
                                 name={"name"}
                                 value={user.name}
-                                className="appearance-none block w-full capitalize bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                className="appearance-none block w-full capitalize bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 type="text"
                                 placeholder="Nombre"/>
                                 {
@@ -80,7 +123,7 @@ const Create = () => {
                                    ?
                                    <></>     
                                    :
-                                   <p className="text-red-500 text-xs italic">Complete su Nombre.</p>
+                                   errorMessages.name && <p className="text-red-500 text-xs italic">{errorMessages.name}</p>
                                    
                                 }
                                 
@@ -95,7 +138,7 @@ const Create = () => {
                                 onChange={handleChange}
                                 name={"lastName"}
                                 value={user.lastName}
-                                className="appearance-none block capitalize w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                className="appearance-none block capitalize w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 type="text" 
                                 placeholder="Ingrese su Apellido"/>
                                 {
@@ -103,7 +146,7 @@ const Create = () => {
                                    ?
                                    <></>     
                                    :
-                                   <p className="text-red-500 text-xs italic">Complete su Apellido.</p>
+                                   errorMessages.lastName && <p className="text-red-500 text-xs italic">{errorMessages.lastName}</p>
                                    
                                 }
 
@@ -120,7 +163,7 @@ const Create = () => {
                                 onChange={handleChange} 
                                 value={user.email}
                                 name={"email"}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 type="text" 
                                 placeholder="Ingrese un e-mail"/>  
                                 {
@@ -128,7 +171,7 @@ const Create = () => {
                                    ?
                                    <></>     
                                    :
-                                   <p className="text-red-500 text-xs italic">Ingrese Una Direccion De Correo Electronico.</p>
+                                   errorMessages.email && <p className="text-red-500 text-xs italic">{errorMessages.email}</p>
                                    
                                 }
                         </div>
@@ -144,7 +187,7 @@ const Create = () => {
                                 onChange={handleChange} 
                                 value={user.cuil}
                                 name={"cuil"}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 type="text"  
                                 placeholder="Ingrese su DNI &oacute; CUIL"/> 
                                 {
@@ -152,7 +195,7 @@ const Create = () => {
                                    ?
                                    <></>     
                                    :
-                                   <p className="text-red-500 text-xs italic">Complete su DNI o CUIL.</p>
+                                   errorMessages.cuil && <p className="text-red-500 text-xs italic">{errorMessages.cuil}</p>
                                    
                                 }
                         </div>
@@ -169,7 +212,7 @@ const Create = () => {
                                 onChange={handleChange} 
                                 value={user.password}
                                 name={"password"}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 type="text" 
                                 placeholder="Ingrese una contraseña"/> 
                                 {
@@ -177,7 +220,7 @@ const Create = () => {
                                    ?
                                    <></>     
                                    :
-                                   <p className="text-red-500 text-xs italic">Complete su Contraseña (de 8 a 16 caracteres al menos 1 mayuscula y 1 digito)</p>
+                                   errorMessages.password && <p className="text-red-500 text-xs italic">{errorMessages.password}</p>
                                    
                                 }
                         </div>
