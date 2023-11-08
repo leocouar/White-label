@@ -39,7 +39,7 @@ export async function updateStore(store) {
 
     try {
         let response = await axios.put(fetchUrl, store);
-        return response;
+        return response.data;
     } catch (error) {
         throw new Error("Could not update store !");
     }
