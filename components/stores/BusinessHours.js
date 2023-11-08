@@ -44,7 +44,8 @@ const BusinessHours = ({canSubmitData = false, onScheduleChange}) => {
     };
 
     useEffect(() => {
-        //if (canSubmitData){ //Evita que se prepare una y otra vez los datos antes de estar listos.
+        //Traduce del JSON a un texto legible.
+        if (canSubmitData){         
             let validData = true;
             let businessSchedule = "";
             schedulesData.map((schedule, index) => {
@@ -58,10 +59,11 @@ const BusinessHours = ({canSubmitData = false, onScheduleChange}) => {
                 })
             });
             validData ?
-                console.log(businessSchedule)
+                //Se devuelven los datos al componente padre como un String
+                onScheduleChange(businessSchedule)
                 :
-                console.log(null);
-        //}
+                onScheduleChange(null);
+        }
     }, [schedulesData])
 
     return (

@@ -44,8 +44,6 @@ const Schedule = ( {params, canSubmitData, onScheduleChange} ) => {
     setSelectedDays(updatedDays); // Update the state with the new array
   };
   
-
-  
   //Completa los datos a devolver al componente padre
   useEffect(() => {
     const timeSpans = timeSelectorBlocks.map(({ open, close }) => ({

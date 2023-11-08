@@ -38,7 +38,6 @@ const TimeInput = ({ errorIfEmpty = false, setTime }) => {
 
     //Muestra u oculta el selector de hora
     const handleHourButtonClick = () => {
-        console.log("AAAAA")
         setTimeout(() => {
             setShowHourSelect(!showHourSelect);
             setShowMinuteSelect(false);
@@ -50,7 +49,6 @@ const TimeInput = ({ errorIfEmpty = false, setTime }) => {
 
     //Muestra u oculta el selector de minutos
     const handleMinuteButtonClick = () => {
-        console.log("BBBBB")
         setTimeout(() => {
             setShowMinuteSelect(!showMinuteSelect);
             setShowHourSelect(false);
@@ -99,7 +97,6 @@ const TimeInput = ({ errorIfEmpty = false, setTime }) => {
                                     <div id={j === 0 ? "hSelector" : "mSelector"}
                                         tabindex={0}
                                         ref={j === 0 ? hSelRef : mSelRef}
-                                        onFocus={(console.log("I'm FOCUSED!!"))}
                                         onBlur={j === 0 ? handleHourButtonClick : handleMinuteButtonClick}
                                         className=" absolute mt-2 ml-3 block rounded scrollbar-thin bg-white w-8 h-44 overflow-y-scroll">
                                         {j == 0 ? (
