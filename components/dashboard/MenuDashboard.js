@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import VistaComercio from './VistaComercio';
+import VistaProductos from './VistaProductos';
 
 
 function MenuDashboard(store) {
@@ -23,11 +24,11 @@ function MenuDashboard(store) {
                             <div onClick={() => handleClick('Productos')} class="block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white cursor-pointer">
                                 Productos
                             </div>
+
+                            <div onClick={() => handleClick('Cerrar sesion')} class="block text-black-500 py-2.5 px-4 my-2 rounded transition duration-200  hover:from-cyan-400 hover:to-cyan-300 hover:bg-red-400 hover:text-white mt-auto cursor-pointer" >
+                                Cerrar sesión
+                            </div>
                     </nav>
-                    
-                    <div onClick={() => handleClick('Cerrar sesion')} class="block text-black-500 py-2.5 px-4 my-2 rounded transition duration-200  hover:from-cyan-400 hover:to-cyan-300 hover:bg-red-400 hover:text-white mt-auto cursor-pointer" >
-                        Cerrar sesión
-                    </div>
                     
                     <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
                 </div>
@@ -39,7 +40,7 @@ function MenuDashboard(store) {
                     )}
                     {vista === 'productos' && (
                         <div className="mt-8 p-4 bg-white shadow-md rounded-md">
-                            Productos
+                            <VistaProductos/>
                         </div>
                     )}
                 </div>

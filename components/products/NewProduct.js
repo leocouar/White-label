@@ -2,6 +2,9 @@
 import { NotificationContainer } from "react-notifications";
 import useForm from "../../hooks/useForm";
 import { useState, useMemo } from "react";
+import * as brandsService from 'services/brandService';
+import * as categoriesService from "services/categoriesService";
+import * as sizeService  from "services/sizeService";
 
 
 const NewProduct = ({ categories, brands, sizes }) => {
@@ -288,5 +291,16 @@ const NewProduct = ({ categories, brands, sizes }) => {
             </div>
         </>)
 }
-
+export async function getServerSideProps() {
+    const categories = await categoriesService.findAll();
+    const brands = await brandsService.findAll();
+    const sizes = await sizeService.findAll();
+    return {
+      props: {
+        brands,
+        categories,
+        sizes
+      },
+    }
+  }
 export default NewProduct;
