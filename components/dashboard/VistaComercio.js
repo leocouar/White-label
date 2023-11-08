@@ -48,18 +48,18 @@ const VistaComercio = ({commerceData}) => {
           <h2 className="text-2xl font-semibold">"{storeToShow.description}"</h2>
           <ul className="list-disc ml-5 space-y-2">
             <li>
-              <span className="font-extrabold">Address:</span> {storeToShow.address}
+              <span className="font-extrabold">Dirección:</span> {storeToShow.address}
             </li>
             <li>
-              <span className="font-extrabold">Schedule:</span> {storeToShow.schedule}
+              <span className="font-extrabold">Horarios:</span> {storeToShow.schedule}
             </li>
           </ul>
         </div>
         <div>
-          <h2 className="text-2xl font-semibold">Contact</h2>
+          <h2 className="text-2xl font-semibold">Contacto</h2>
           <ul className="list-disc ml-5 space-y-2">
             <li>
-              <span className="font-extrabold">Phone:</span> {storeToShow.telephone}
+              <span className="font-extrabold">Teléfono:</span> {storeToShow.telephone}
             </li>
             <li>
               <span className="font-extrabold">Email:</span> {storeToShow.email}
@@ -74,81 +74,85 @@ const VistaComercio = ({commerceData}) => {
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
           onClick={handleEditClick}
         >
-          Edit
+          Editar
         </button>
       </div>
 
       {isModalOpen && (
     <div className="fixed inset-0 z-10 flex items-center justify-center">
       <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
-      <div className="modal-container bg-white w-96 md:w-2/5 mx-auto p-6 rounded-lg shadow-lg z-20 max-h-96 overflow-y-auto">
-      <h2 className="text-lg font-semibold mb-4">Edit Commerce Information</h2>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Description:</label>
-        <input
-          type="text"
-          value={storeToUpdate?.description}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md"
-          id="description"
-          name="description"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Email:</label>
-        <input
-          type="text"
-          value={storeToUpdate?.email}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md"
-          id="email"
-          name="email"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Phone:</label>
-        <input
-          type="text"
-          value={storeToUpdate?.telephone}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md"
-          id="telephone"
-          name="telephone"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Address:</label>
-        <input
-          type="text"
-          value={storeToUpdate?.address}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md"
-          id="address"
-          name="address"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Schedule:</label>
-        <input
-          type="text"
-          value={storeToUpdate?.schedule}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md"
-          id="schedule"
-          name="schedule"
-        />
+      <div className="modal-container bg-white w-80 md:w-4/5 mx-auto p-6 rounded-lg shadow-lg z-20 max-h-96 overflow-y-auto">
+      <h2 className="text-lg font-semibold mb-3">Editar información del comercio</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Descripción:</label>
+          <input
+            type="text"
+            value={storeToUpdate?.description}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+            id="description"
+            name="description"
+            />
+        </div>
+      <div className="flex flex-wrap -mx-3">
+        <div className="w-full md:w-1/2 px-3 mb-4">
+          <label className="block text-sm font-medium mb-1">Email:</label>
+          <input
+            type="text"
+            value={storeToUpdate?.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+            id="email"
+            name="email"
+            />
+        </div>
+        <div className="w-full md:w-1/2 px-3 mb-4">
+          <label className="block text-sm font-medium mb-1">Teléfono:</label>
+          <input
+            type="text"
+            value={storeToUpdate?.telephone}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+            id="telephone"
+            name="telephone"
+            />
+        </div>
+      </div>  
+      <div className="flex flex-wrap -mx-3">
+        <div className="w-full md:w-1/2 px-3 mb-4">
+          <label className="block text-sm font-medium mb-1">Dirección:</label>
+          <input
+            type="text"
+            value={storeToUpdate?.address}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+            id="address"
+            name="address"
+            />
+        </div>
+        <div className="w-full md:w-1/2 px-3 mb-4">
+          <label className="block text-sm font-medium mb-1">Horarios:</label>
+          <input
+            type="text"
+            value={storeToUpdate?.schedule}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+            id="schedule"
+            name="schedule"
+            />
+        </div>
       </div>
       <button
         onClick={handleSave}
         className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
-      >
-        Save
+        >
+        Guardar
       </button>
       <button
         onClick={handleCloseModal}
         className="bg-red-500 text-white px-4 py-2 rounded-md"
       >
-        Cancel
+        Cancelar
       </button>
     </div>
   </div>
