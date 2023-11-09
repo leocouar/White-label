@@ -9,7 +9,7 @@ import { deleteProduct } from '../../services/productService';
 import NewProduct from "@/components/products/NewProduct";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
-import * as sizeService  from "services/sizeService";
+import * as sizeService from "services/sizeService";
 
 const VistaProductos = ({ id, brands, categories, sizes }) => {
   const [products, setProducts] = useState([]);
@@ -18,7 +18,7 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        /*const product = await fineProductsInStore(id) */
+        /*const products = await fineProductsInStore(id) */
         const products = await all(id);
         setProducts(products);
       } catch (error) {
@@ -33,28 +33,32 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
   const filteredItems = products.filter(item => filterText.toLowerCase() == '' || filterText.includes(item.id));
   const [data, setData] = useState(filteredItems)
 
-  const reloadProducts = async () =>{
-    try{
+  const reloadProducts = async () => {
+    try {
       const products = await all(id);
       setProducts(products)
-    } 
-    catch (error){
+    }
+    catch (error) {
       console.error("Error fetching products: ", error)
     }
   }
   const handleDelete = async (rowId) => {
-    try{
+    try {
       await deleteProduct(rowId)
       const updatedData = data.filter(row => row.id !== rowId);
       setData(updatedData);
       await reloadProducts();
     }
-    catch(error){
+    catch (error) {
       console.error("Error deleting product: ", error)
     }
   };
 
-  const handleEditClick = () => {
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
@@ -127,15 +131,22 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
   return (
     <div className="min-h-80 max-w-12 my-4 sm:my-8 mx-auto w-full">
       <div className="mb-4 flex justify-end">
-            
-                <button onClick={handleEditClick} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded mb-4">
-                    Agregar Producto
-                </button> 
-        
+
+        <button onClick={handleOpenModal} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded mb-4">
+          Agregar Producto
+        </button>
+
       </div>
       {isModalOpen && (
-        <NewProduct categories={categories} brands={brands} sizes={sizes}/>
-)}
+        <div className="fixed inset-0 z-10 flex items-center justify-center">
+          <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div> 
+          <div className="md:col-span-2 text-left relative">
+            
+            <NewProduct categories={categories} brands={brands} sizes={sizes} handleCloseModal={handleCloseModal} />
+          </div>
+        </div>
+
+      )}
       <div className="overflow-hidden">
         <DataTable
           columns={columns}
