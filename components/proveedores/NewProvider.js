@@ -1,28 +1,31 @@
 import { NotificationContainer } from "react-notifications";
 import useProvider from "../../hooks/useProvider";
-import { useMemo } from "react";
-
+import { useMemo, useState } from "react";
 
 const NewProvider = () => {
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
     const initialForm = useMemo(() => ({
         name: "",
         address: "",
         cuit: "",
-    })
-);
+    }), []);
 
     const validationsForm = (form) => {
         let errors = {};
 
-        if (!form.name.trim()) {
-            errors.name = "El campo 'Nombre' es requerido";
+        if (formSubmitted) {
+            if (!form.name.trim()) {
+                errors.name = "El campo 'Nombre' es requerido";
+            }
+            if (!form.address.trim()) {
+                errors.address = "El campo 'Direccion' es requerido";
+            }
+            if (!form.cuit.trim()) {
+                errors.cuit = "El campo 'Cuit' es requerido";
+            }
         }
-        if (!form.address.trim()) {
-            errors.address = "El campo 'Direccion' es requerido";
-        }
-        if (!form.cuit.trim()) {
-            errors.cuit = "El campo 'Cuit' es requerido";
-        }
+
         return errors;
     };
 
@@ -31,7 +34,8 @@ const NewProvider = () => {
         errors,
         handleChange,
         handleBlur,
-        handleSubmit, } = useProvider(initialForm, validationsForm);
+        handleSubmit,
+    } = useProvider(initialForm, validationsForm);
 
     return (
             <>
@@ -103,8 +107,10 @@ const NewProvider = () => {
 
                     <button type="submit"
                         className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8`}
+                        onClick={() => setFormSubmitted(true)} // Marcamos el formulario como enviado al hacer clic en el botón Guardar
                     >
                         Guardar
+                        
                     </button>
                 </form>
             </div>

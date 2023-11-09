@@ -7,6 +7,7 @@ import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
 
 
+
 const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
     const initialForm = useMemo(() => ({
@@ -32,6 +33,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
     const validationsForm = (form) => {
         let errors = {};
 
+        if (formSubmitted) {
         if (!form.name.trim()) {
             errors.name = "El campo 'Nombre' es requerido";
         }
@@ -66,6 +68,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         if (!form.points.trim()) {
             errors.points = "El campo 'Puntos' es requerido";
         }
+    }
         return errors;
     };
 
@@ -250,6 +253,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
 
                         </div>
                     </div>
+
                     <div className="flex justify-center space-x-4 mt-8">
                         <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         >
@@ -261,6 +265,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             Cancelar
                         </button>
                     </div>
+
                 </form>
             </div>
         </>)

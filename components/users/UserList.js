@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { updateTwinsCard } from "services/productService";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faEye, faEdit, faTrash, faTag, faInfo} from '@fortawesome/free-solid-svg-icons'
 
 
 const UserList = ({ users }) => {
@@ -32,7 +34,7 @@ const UserList = ({ users }) => {
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                         <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-red-50">
                                 <tr>
                                     <th></th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -53,8 +55,14 @@ const UserList = ({ users }) => {
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Mellizos
                                     </th>
-                                    <th scope="col" className="relative px-6 py-3">
-                                        <span className="sr-only">Editar</span>
+                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Facturacion
+                                    </th>
+                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Datos
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                       Puntos
                                     </th>
                                 </tr>
                             </thead>
@@ -82,7 +90,7 @@ const UserList = ({ users }) => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <span
-                                                    className="px-2 inline-flex text-xs leading-5 items-center rounded-full bg-blue-300 text-black-500">
+                                                    className="px-2 inline-flex text-xs leading-5 items-center text-black-500">
                                                     {user.cardId}
                                                 </span>
                                             </td>
@@ -93,7 +101,7 @@ const UserList = ({ users }) => {
                                                 {user.phone}
                                             </td>
                                             <td className="flex flex-col relative px-6 py-4 justify-center items-center">
-                                                <select className="felx flex-col rounded-full bg-blue-300 text-black-900 justify-center items-center"
+                                                <select className="felx flex-col bg-red-100 text-black-900 justify-center items-center"
                                                     id={`${user.username}`}
                                                     onChange={handleTwins} 
                                                     value={user.twins}
@@ -104,17 +112,23 @@ const UserList = ({ users }) => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <Link href={`/bills/user/${user.username}`} passHref>
-                                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">Facturaci&oacute;n</a>
+                                                    <a href="#" className="text-black-600 hover:text-indigo-900">Facturaci&oacute;n</a>
                                                 </Link>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <Link href={`/users/${user.username}`} passHref>
-                                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">Mas ...</a>
+                                                <Link
+                                                href={`/users/${user.username}`}
+                                                passHref
+                                                >
+                                                <button className="bg-red-300 ml-0 hover:bg-red-200 text-white w-10 h-auto p-2 rounded-full font-primary font-semibold text-xs flex
+                                                justify-center items-baselinetransform transition duration-500 group cursor-pointer">
+                                                <FontAwesomeIcon icon={faEdit} className="w-5 m-auto"/>
+                                                </button>
                                                 </Link>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-rigth text-sm font-medium">
                                                 <Link href={`/users/wallet/${user.username}`} passHref>
-                                                    <a href="#" className="text-indigo-600 hover:text.-indigo-900">Puntos</a>
+                                                    <a href="#" className="text-black-600 hover:text.-indigo-900">Mi Billetera</a>
                                                 </Link>
                                             </td>
                                         </tr>
@@ -126,7 +140,7 @@ const UserList = ({ users }) => {
                 </div>
             </div>
             <Link href="/users/create" passHref>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-10 ml-10 rounded w-40">
+                <button className=" bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mt-10 ml-10 rounded w-40 sm: ml-28">
                     Nuevo Usuario
                 </button>
             </Link>
