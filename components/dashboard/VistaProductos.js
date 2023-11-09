@@ -141,7 +141,7 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
         <div className="fixed inset-0 z-10 flex items-center justify-center">
           <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div> 
           <div className="md:col-span-2 text-left relative">
-            <h2 className="text-white text-center font-bold text-xl mb-2">Agregar Producto</h2>
+            
             <NewProduct categories={categories} brands={brands} sizes={sizes} handleCloseModal={handleCloseModal} />
           </div>
         </div>

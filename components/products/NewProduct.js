@@ -103,8 +103,9 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
     return (
         <>
             <NotificationContainer />
-            <div className="flex justify-center bg-white p-8 rounded shadow-lg">
-                <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+            <div className="flex justify-center bg-white p-8 rounded shadow-lg ">
+                <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
+                    <h2 className="text-black text-center font-bold text-xl mb-5">Agregar Producto</h2>
                     <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full md:w-1/2 px-3 mb-4">
                             <div className="w-full">
@@ -132,7 +133,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                                 </label>
                                 <textarea
                                     autoComplete="off"
-                                    className="resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    className="resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-6 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="descripcion" placeholder="Descripci&oacute;n del producto" name="description" rows="3"
                                     value={form.description}
                                     onChange={handleChange}
