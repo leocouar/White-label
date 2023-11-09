@@ -1,9 +1,9 @@
 import React, { useState, useEffect, createRef, useLayoutEffect } from 'react';
 
 //Componente para ingresar un horario escribiendo o mediante un selector
-const TimeInput = ({ errorIfEmpty = false, setTime }) => {
-    const [hours, setHours] = useState("");
-    const [minutes, setMinutes] = useState("");
+const TimeInput = ({ time=null, errorIfEmpty = false, setTime }) => {
+    const [hours, setHours] = useState(time ? time.split(':')[0] : "");
+    const [minutes, setMinutes] = useState(time ? time.split(':')[1] : "");
     const [showHourSelect, setShowHourSelect] = useState(false);
     const [showMinuteSelect, setShowMinuteSelect] = useState(false);
     const hSelRef = createRef();

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/client";
 import { saveStore } from "/services/storeService";
 import { uploadFile } from "/services/fileService";
-import BusinessHours from './BusinessHours';
+import Schedule from './Schedule';
 
 
 const NewStore = () => {
@@ -14,14 +14,19 @@ const NewStore = () => {
     const [telephone, setTelephone] = useState('');
     const [address, setAddress] = useState('');
     //SOLO PARA TESTEO AHORA
-    const [businessHours, setBusinessHours] = useState();
-    const [canSubmitData, setCanSubmitData] = useState(false)
-
+      //Imaginemos que el back devuelve esto...
+    const [scheduleData, setScheduleData] = useState();
+    const [canSubmitData, setCanSubmitData] = useState(0)
+  
     //Datos para endpoints
     const [file, setFile] = useState();
 
     //Imagenes a visualizar
     const [resizedImageUrl, setResizedImageUrl] = useState(null);
+
+    useEffect(()=>{
+        console.log(scheduleData)
+    })
 
     //Errores
     const [errName, setErrName] = useState(false);
@@ -36,6 +41,8 @@ const NewStore = () => {
     const handleFormSubmit = async(event) => {
         event.preventDefault(); // Prevent the form from submitting
 
+        setCanSubmitData(!canSubmitData);
+
         //Si hay algun error, se muestra en pantalla
         if (!name.trim()) {
             setErrName(true);
@@ -47,7 +54,7 @@ const NewStore = () => {
             setErrImg(true)
         }
 
-        if (businessHours === null){
+        if (scheduleData === null){
             setErrSchedule(true)
         }
 
@@ -55,6 +62,7 @@ const NewStore = () => {
         if (name.trim() && description.trim() && file && usinessHours !== null) {
             saveNewStore();
         }
+
     };
 
     //Guarda la tienda con su logo
@@ -194,7 +202,7 @@ const NewStore = () => {
                 <div className="w-full">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                         htmlFor="description">Horarios:</label>
-                    <BusinessHours canSubmitData={canSubmitData} onScheduleChange={(e) => setBusinessHours(e)}/>
+                    <Schedule canSubmitData={canSubmitData} schedule={scheduleData} onChange={(e) => setScheduleData(e)}/>
                     {errSchedule && <p className={`text-red-500 text-xs italic`}>
                         "Por favor, introduzca horarios validos."
                     </p>}

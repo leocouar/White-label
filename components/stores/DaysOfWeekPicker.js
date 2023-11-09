@@ -11,7 +11,7 @@ export const daysOfWeek = [
 ];
 
 //Componente que permite escoger un dia de la semana mediante un selector.
-const DaysOfWeekSelect = ({ defaultDay, setDay }) => {
+const DaysOfWeekPicker = ({ defaultDay, setDay }) => {
   const [selectedDay, setSelectedDay] = useState(defaultDay);
 
   const handleSelectChange = (event) => {
@@ -33,4 +33,4 @@ const DaysOfWeekSelect = ({ defaultDay, setDay }) => {
   );
 };
 
-export default DaysOfWeekSelect;
+export default DaysOfWeekPicker;

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import TimePicker from './TimePicker';
 
 //Componente que permite determinar horarios de apertura y de cierre
-const TimeSpan = ({ checkErrors = false, blockId, setTime }) => {
-  const [openTime, setOpenTime] = useState(null);
-  const [closeTime, setCloseTime] = useState(null);
+const TimeSpan = ({ errDetection = false, schedule = null, blockId, setTime }) => {
+  const [openTime, setOpenTime] = useState(schedule.open);
+  const [closeTime, setCloseTime] = useState(schedule.close);
 
   const handleOpenTime = (e) => {
     setOpenTime(e);
@@ -23,9 +23,9 @@ const TimeSpan = ({ checkErrors = false, blockId, setTime }) => {
 
   return (
     <div className="flex items-center">
-      <TimePicker errorIfEmpty={checkErrors} setTime={(e) => handleOpenTime(e)} />
+      <TimePicker time={openTime} errorIfEmpty={errDetection} setTime={(e) => handleOpenTime(e)} />
       <span className="inline-block text-center">&nbsp;a</span>
-      <TimePicker errorIfEmpty={checkErrors} setTime={(e) => handleCloseTime(e)} />
+      <TimePicker time={closeTime} errorIfEmpty={errDetection} setTime={(e) => handleCloseTime(e)} />
     </div>
   );
 };
