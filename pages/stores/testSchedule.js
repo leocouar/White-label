@@ -23,85 +23,94 @@ const TestSchedule = () => {
     const testWithJSON = () => {
         setScheduleData([
             {
-                id: 1,
-                days: [
-                    {
-                        day: "Lunes"
-                    },
-                    {
-                        day: "Miércoles"
-                    }
-                ],
-                openingHours: [
-                    {
-                        open: "08:00",
-                        close: "12:00"
-                    },
-                    {
-                        open: "14:30",
-                        close: "19:30"
-                    }
-                ]
+              id: 1,
+              days: [
+                {
+                  day: "Lunes"
+                },
+                {
+                  day: "Miércoles"
+                }
+              ],
+              multiple : false,
+              "openingHours": [
+                {
+                  open: "08:00",
+                  close: "12:00"
+                },
+                {
+                  open: "14:30",
+                  close: "19:30"
+                }
+              ]
             },
             {
-                id: 2,
-                days: [
-                    {
-                        day: "Jueves"
-                    },
-                    {
-                        day: "Viernes"
-                    }
-                ],
-                openingHours: [
-                    {
-                        open: "09:00",
-                        close: "14:00"
-                    }
-                ]
+              id: 2,
+              days: [
+                {
+                  day: "Lunes"
+                },
+                {
+                  day: "Miercoles"
+                },
+                {
+                  day: "Viernes"
+                }
+              ],
+              multiple : true,
+              "openingHours": [
+                {
+                  open: "09:00",
+                  close: "14:00"
+                }
+              ]
             },
             {
-                id: 3,
-                days: [
-                    {
-                        day: "Sábado"
-                    }
-                ],
-                openingHours: [
-                    {
-                        open: "08:00",
-                        close: "12:00"
-                    },
-                    {
-                        open: "13:00",
-                        close: "15:00"
-                    }
-                ]
+              id: 3,
+              days: [
+                {
+                  day: "Sábado"
+                }
+              ],
+              multiple : true,
+              "openingHours": [
+                {
+                  open: "08:00",
+                  close: "12:00"
+                },
+                {
+                  open: "13:00",
+                  close: "15:00"
+                }
+              ]
             },
             {
-                id: 4,
-                days: [
-                    {
-                        day: "Domingo"
-                    }
-                ],
-                openingHours: [
-                    {
-                        open: "10:00",
-                        close: "12:30"
-                    }
-                ]
+              id: 4,
+              days: [
+                {
+                  day: "Domingo"
+                }
+              ],
+              multiple : true,
+              "openingHours": [
+                {
+                  open: "10:00",
+                  close: "12:30"
+                }
+              ]
             }
-        ]);
+          ]);
         setKey(key + 1);
     }
 
+    //Limpia el contenido del componente
     const cleanAll = () => {
         setScheduleData([]);
         setCanSubmitData(0)
         setKey(key + 1);
     }
 
+    //Obtiene, o un JSON, o el texto plano
     const setData = (e) => {
         if (canSubmitData === 1) {
             setScheduleData(e);
@@ -111,7 +120,7 @@ const TestSchedule = () => {
 
     return (
         /*HORARIOS - SOLO PARA TESTEO*/
-        <div className="block justify-center w-1/2">
+        <div className="block justify-center md:w-1/2">
             <div className="w-full">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                     htmlFor="description">Horarios:</label>

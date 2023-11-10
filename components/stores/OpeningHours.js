@@ -7,7 +7,9 @@ import { daysOfWeek } from './DaysOfWeekPicker';
 const OpeningHours = ({ params, openingHours = {}, disableErrDetection, errDetection = false, onChange }) => {
   const [selectedDays, setSelectedDays] = useState(
     !openingHours.days ?
-      params.rangeDays ? [{ day: "Lunes" }, { day: "Viernes" }] : [{ day: "Sábado" }]
+      params.rangeDays ? [{ day: "Lunes" }, { day: "Viernes" }]
+        :
+        [{ day: "Lunes" }]
       :
       openingHours.days.map((dayName, index) => ({
         day: dayName.day
@@ -21,7 +23,23 @@ const OpeningHours = ({ params, openingHours = {}, disableErrDetection, errDetec
         id: index, open: timeSpan.open, close: timeSpan.close
       }))
   );
+  const [amountDays, setamountDays] = useState(openingHours.days ? openingHours.days.length : 1);
   const [lastUsedId, setLastUsedId] = useState(1);
+
+  const addDay = () => {
+    disableErrDetection();
+    const newSelectedDays = [...selectedDays, { day: 'Lunes' }];
+    setSelectedDays(newSelectedDays);
+    setamountDays(amountDays + 1);
+  };
+
+  const deleteDay = () => {
+    disableErrDetection();
+    const newSelectedDays = [...selectedDays];
+    newSelectedDays.pop();
+    setSelectedDays(newSelectedDays);
+    setamountDays(amountDays - 1);
+  };  
 
   const addTimeSpan = () => {
     disableErrDetection();
@@ -50,7 +68,6 @@ const OpeningHours = ({ params, openingHours = {}, disableErrDetection, errDetec
       }
       return block;
     });
-
     setTimeSpans(updatedBlocks);
   };
 
@@ -72,7 +89,7 @@ const OpeningHours = ({ params, openingHours = {}, disableErrDetection, errDetec
       open,
       close,
     }));
-    const returnedData = { id: params.id, days: selectedDays, openingHours: timeSpans }
+    const returnedData = { id: params.id, days: selectedDays, multiple: !params.rangeDays, openingHours: timeSpans }
     onChange(returnedData);
 
   }, [selectedDays, timeSelector]);
@@ -80,19 +97,49 @@ const OpeningHours = ({ params, openingHours = {}, disableErrDetection, errDetec
   return (
     <div className="w-full">
       <div className="block">
-        <div className="flex  my-2 mx-2">
+        <div className="flex flex-wrap my-2 mx-2">
           {params.rangeDays ? (
             <div className="flex items-center">
-              <DaysOfWeekPicker defaultDay={getDayNumber(selectedDays[0].day)} setDay={(e) => handleChangeDay(daysOfWeek[e].label, 0)} />
+              <DaysOfWeekPicker
+                key={0}
+                defaultDay={getDayNumber(selectedDays[0].day)}
+                setDay={(e) => handleChangeDay(daysOfWeek[e].label, 0)}
+              />
               <span className="mx-2">a</span>
-              <DaysOfWeekPicker defaultDay={getDayNumber(selectedDays[1].day)} setDay={(e) => handleChangeDay(daysOfWeek[e].label, 1)} />
+              <DaysOfWeekPicker
+                key={1}
+                defaultDay={getDayNumber(selectedDays[1].day)}
+                setDay={(e) => handleChangeDay(daysOfWeek[e].label, 1)}
+              />
             </div>
           ) : (
-            <DaysOfWeekPicker defaultDay={getDayNumber(selectedDays[0].day)} setDay={(e) => handleChangeDay(daysOfWeek[e].label, 0)} />
+            <>
+              {selectedDays.map((_, index) => (
+                <div className="flex items-center">
+                  {index > 0 ? <>&nbsp;-&nbsp;</> : <></>}
+                  <DaysOfWeekPicker
+                    key={2 + index}
+                    defaultDay={getDayNumber(selectedDays[index].day)}
+                    setDay={(e) => handleChangeDay(daysOfWeek[e].label, index)}
+                  />
+                </div>
+              ))}
+              <button id="moreDays" onClick={addDay}
+                className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-1 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-auto sm:text-sm mx-2 my-2">
+                +
+              </button>
+              {amountDays > 1 && (
+                <button id="moreDays" onClick={deleteDay}
+                  className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-1 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 w-auto sm:text-sm mx-2 my-2">
+                  −
+                </button>
+              )}
+            </>
           )}
         </div>
+
         {timeSelector.map((block, index) => (
-          <div className="flex wrap" key={block.id}>
+          <div className="flex flex-wrap" key={block.id}>
             <TimeSpan errDetection={errDetection}
               schedule={timeSelector[index]}
               blockId={block.id}
