@@ -43,7 +43,7 @@ const Details = ({checkout}) => {
                         ?
                         <></>
                         :
-                        checkout.products.map((p, index) => (
+                        Array.isArray(checkout?.products) && checkout.products.map((p, index) => (
 
                             <tr key={index}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer">
