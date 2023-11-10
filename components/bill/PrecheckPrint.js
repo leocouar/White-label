@@ -10,11 +10,11 @@ const PrecheckPrint = ({checkout}) => {
                    <div id="head-factura" className="flex justify-around border-b-4 border-grey-800">
                        <img id="img-factura" src={logo.src} className="w-32" />
                        <div id="local-factura" className="text-right text-gray-500">
-                           Dulce Bebe<br />
-                           Av. Alsina 472<br />
-                           San Carlos de Bolivar<br />
-                           Prov Buenos Aires<br />
-                           B6550<br />
+                           Ecommerce<br />
+                           Calle falsa 123<br />
+                           Ciudad<br />
+                           Provincia<br />
+                           Codigo<br />
                        </div>
                    </div>
 
