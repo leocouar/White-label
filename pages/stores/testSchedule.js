@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Schedule from '@/components/stores/Schedule';
+import Schedule from '@/components/schedules/Schedule';
 
 
 const TestSchedule = () => {

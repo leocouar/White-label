@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/client";
 import { saveStore } from "/services/storeService";
 import { uploadFile } from "/services/fileService";
-import Schedule from './Schedule';
+import Schedule from '../schedules/Schedule';
 
 
 const NewStore = () => {
@@ -13,20 +13,12 @@ const NewStore = () => {
     const [email, setEmail] = useState('');
     const [telephone, setTelephone] = useState('');
     const [address, setAddress] = useState('');
-    //SOLO PARA TESTEO AHORA
-      //Imaginemos que el back devuelve esto...
-    const [scheduleData, setScheduleData] = useState();
-    const [canSubmitData, setCanSubmitData] = useState(0)
   
     //Datos para endpoints
     const [file, setFile] = useState();
 
     //Imagenes a visualizar
     const [resizedImageUrl, setResizedImageUrl] = useState(null);
-
-    useEffect(()=>{
-        console.log(scheduleData)
-    })
 
     //Errores
     const [errName, setErrName] = useState(false);
@@ -35,8 +27,6 @@ const NewStore = () => {
     const [errEmail, setErrEmail] = useState(false);
     const [errTel, setErrTel] = useState(false);
     const [errImg, setErrImg] = useState(false);
-    //SOLO PARA TESTEO
-    const [errSchedule, setErrSchedule] = useState(false);
 
     const handleFormSubmit = async(event) => {
         event.preventDefault(); // Prevent the form from submitting
@@ -54,10 +44,6 @@ const NewStore = () => {
             setErrImg(true)
         }
 
-        if (scheduleData === null){
-            setErrSchedule(true)
-        }
-
         //De lo contrario, continuamos
         if (name.trim() && description.trim() && file && usinessHours !== null) {
             saveNewStore();
@@ -72,8 +58,7 @@ const NewStore = () => {
             "description": description,
             "telephone": telephone,
             "email": email,
-            "address": address,
-            "owner": session?.user?.username
+            "address": address
         };
 
         const response = await saveStore(newStore); // Assuming saveStore returns a promise
@@ -197,17 +182,6 @@ const NewStore = () => {
                         "Se requiere que escoja un logotipo."
                     </p>}
                 </div>
-
-                {/*HORARIOS - SOLO PARA TESTEO*/}
-                <div className="w-full">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
-                        htmlFor="description">Horarios:</label>
-                    <Schedule canSubmitData={canSubmitData} schedule={scheduleData} onChange={(e) => setScheduleData(e)}/>
-                    {errSchedule && <p className={`text-red-500 text-xs italic`}>
-                        "Por favor, introduzca horarios validos."
-                    </p>}
-                </div>
-
 
                 <button type="submit" className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8`}>
                     Guardar

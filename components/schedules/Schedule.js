@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import OpeningHours from '@/components/stores/OpeningHours';
+import OpeningHours from '@/components/schedules/OpeningHours';
 
 //Componente que permite establecer una agenda de horarios de trabajo para un negocio.
 const Schedule = ({ canSubmitData = 0, disableDataSubmit, schedule = [], onChange }) => {
