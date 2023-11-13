@@ -66,7 +66,8 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
     {
       name: 'Id',
       selector: 'id',
-      sortable: true
+      sortable: true,
+      hide: 'sm'
     },
     {
       name: 'Producto',
@@ -76,13 +77,15 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
     {
       name: 'Descripcion',
       selector: 'description',
-      sortable: true
+      sortable: true,
+      hide: 'sm'
     },
 
     {
       name: 'Stock',
       selector: 'stock',
-      sortable: true
+      sortable: true,
+      hide: 'sm'
     },
     {
       name: 'Acciones',
