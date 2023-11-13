@@ -99,3 +99,25 @@ html {
 }
 
 
+/* customScrollBar.css */
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}

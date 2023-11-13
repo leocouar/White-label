@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStore, faUserSlash, faTag } from '@fortawesome/free-solid-svg-icons';
 import VistaComercio from './VistaComercio';
 import VistaProductos from './VistaProductos';
 
@@ -10,6 +12,8 @@ function MenuDashboard(store, id) {
             setVista('comercio');
         } else if (texto === 'Productos') {
             setVista('productos');
+        } else if (texto === 'Cerrar sesion') {
+            // Handle logout logic
         }
     };
     return (
@@ -45,6 +49,20 @@ function MenuDashboard(store, id) {
                     )}
                 </div>
                 
+            </div>
+            {/* Mobile navigation icons */}
+            <div className="md:hidden fixed bottom-0 z-10 left-0 right-0 p-4 bg-gray-200 flex justify-around">
+                <div onClick={() => handleClick('Comercio')} className="text-gray-700 cursor-pointer">
+                    <FontAwesomeIcon icon={faStore} className="w-4"/>
+                </div>
+
+                <div onClick={() => handleClick('Productos')} className="text-gray-700 cursor-pointer">
+                    <FontAwesomeIcon icon={faTag} className="w-4"/>
+                </div>
+
+                <div onClick={() => handleClick('Cerrar sesion')} className="text-gray-700 cursor-pointer">
+                    <FontAwesomeIcon icon={faUserSlash} className="w-4"/>
+                </div>
             </div>
         </>
     )
