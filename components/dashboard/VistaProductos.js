@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DataTable from 'react-data-table-component';
-import { getAllProducts } from 'services/storeService';
+import { fineProductsInStore } from 'services/productService';
 import { faEye, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import FilterComponent from '../filter/FilterComponent';
 import { deleteProduct } from '../../services/productService';
@@ -11,23 +11,24 @@ import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
 
-const VistaProductos = ({ id, brands, categories, sizes }) => {
+const VistaProductos = ({ store, brands, categories, sizes }) => {
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prod,setProd]= useState(store.store.store)
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const products = await getAllProducts(id) 
+        const products1 = await fineProductsInStore(prod.id)
         /*const products = await all(id);*/
-        setProducts(products);
+        setProducts(products1);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
     fetchProducts();
-  }, [id]);
+  }, [prod]);
 
   const [filterText, setFilterText] = useState('')
   const filteredItems = products.filter(item => filterText.toLowerCase() == '' || filterText.includes(item.id));
@@ -35,7 +36,7 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
 
   const reloadProducts = async () => {
     try {
-      const products = await all(id);
+      const products = await fineProductsInStore(products);
       setProducts(products)
     }
     catch (error) {

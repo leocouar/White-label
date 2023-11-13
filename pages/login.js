@@ -11,10 +11,10 @@ const Login = ({csrfToken, session}) => {
     const handleFacebookSignIn = () => {
       signIn('facebook'); // 'facebook' es el ID del proveedor de Facebook configurado en NextAuth.js
     };
-    if (session) {
-      router.push('/'); // Redirigir al dashboard si está autenticado
-      return null; // O puedes renderizar un componente de carga aquí
-    }
+    // if (session) {
+    //   router.push('/stores/list'); // Redirigir al dashboard si está autenticado
+    //   return null; // O puedes renderizar un componente de carga aquí
+    // }
     
    
      return (
@@ -104,7 +104,7 @@ export async function getServerSideProps(context) {
     if (session) {
       return {
         redirect: {
-          destination: "/", // Redirigir al dashboard si está autenticado
+          destination: "/stores/list", // Redirigir al dashboard si está autenticado
           permanent: false,
         },
       };

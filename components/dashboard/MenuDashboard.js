@@ -5,7 +5,7 @@ import VistaComercio from './VistaComercio';
 import VistaProductos from './VistaProductos';
 
 
-function MenuDashboard(store, id) {
+function MenuDashboard(store) {
     const [vista, setVista] = useState(false);
     const handleClick = (texto) => {
         if (texto === 'Comercio') {
@@ -19,7 +19,7 @@ function MenuDashboard(store, id) {
     return (
         <>
             <div className="flex">
-                <div class="p-2 bg-black-500 w-60 flex flex-col hidden md:flex" id="sideNav">
+                <div class="p-2 bg-black-500 w-60  flex-col hidden md:flex" id="sideNav">
                     <nav>         
                             <div onClick={() => handleClick('Comercio')} class="block text-black-500 py-2.5 px-4 my-4 rounded transition hover:py-3.5 duration-200  hover:bg-blue-400 hover:text-white hover:from-cyan-400 hover:to-cyan-300  cursor-pointer" >
                                 Comercio
@@ -44,7 +44,7 @@ function MenuDashboard(store, id) {
                     )}
                     {vista === 'productos' && (
                         <div className="mt-8 p-4 bg-white shadow-md rounded-md">
-                            <VistaProductos products={id}/>
+                            <VistaProductos store={store}/>
                         </div>
                     )}
                 </div>
@@ -63,7 +63,7 @@ function MenuDashboard(store, id) {
                 <div onClick={() => handleClick('Cerrar sesion')} className="text-gray-700 cursor-pointer">
                     <FontAwesomeIcon icon={faUserSlash} className="w-4"/>
                 </div>
-            </div>
+           </div>
         </>
     )
 
