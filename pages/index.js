@@ -2,7 +2,7 @@ import ProductListings from '@/components/products/ProductListings'
 import Carrusel from "@/components/Carrusel";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
-import Banner from '@/components/products/ProductBanner.js';
+import Banner from '@/components/products/CommerceBanner.js';
 
 
 
@@ -12,7 +12,7 @@ function IndexPage({brands, categories}) {
       <>
           <div className='bg-white'>
             <div >
-             <Carrusel/>
+              <Carrusel/>
               {/*<img src="images/inicio.jpg" className="w-full h-screen"></img>*/}
             </div>
             <div className="w-full h-full">
