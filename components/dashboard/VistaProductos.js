@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DataTable from 'react-data-table-component';
-import { all, fineProductsInStore } from '../../services/productService';
+import { getAllProducts } from 'services/storeService';
 import { faEye, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import FilterComponent from '../filter/FilterComponent';
 import { deleteProduct } from '../../services/productService';
@@ -18,8 +18,8 @@ const VistaProductos = ({ id, brands, categories, sizes }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        /*const products = await fineProductsInStore(id) */
-        const products = await all(id);
+        const products = await getAllProducts(id) 
+        /*const products = await all(id);*/
         setProducts(products);
       } catch (error) {
         console.error('Error fetching products:', error);

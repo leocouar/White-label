@@ -3,7 +3,7 @@ import VistaComercio from './VistaComercio';
 import VistaProductos from './VistaProductos';
 
 
-function MenuDashboard(store) {
+function MenuDashboard(store, id) {
     const [vista, setVista] = useState(false);
     const handleClick = (texto) => {
         if (texto === 'Comercio') {
@@ -40,7 +40,7 @@ function MenuDashboard(store) {
                     )}
                     {vista === 'productos' && (
                         <div className="mt-8 p-4 bg-white shadow-md rounded-md">
-                            <VistaProductos/>
+                            <VistaProductos products={id}/>
                         </div>
                     )}
                 </div>
