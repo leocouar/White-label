@@ -19,7 +19,7 @@ function MenuDashboard(store) {
                 <div class="p-2 bg-black-500 w-60 flex flex-col hidden md:flex" id="sideNav">
                     <nav>         
                         <div onClick={() => handleClick('Comercio')} className={`block font-primary py-2.5 px-4 mt-5 rounded transition hover:py-3.5 duration-200 hover:bg-blue-200 hover:text-white hover:from-cyan-400 hover:to-cyan-300  cursor-pointer ${vista === 'comercio' ? 'bg-blue-400 text-white' : 'text-black-500'}`}>
-                            Comercio
+                            Informacion
                         </div>
 
                         <div onClick={() => handleClick('Productos')} className={`block font-primary py-2.5 px-4 rounded transition duration-200 hover:bg-blue-200 hover:text-white cursor-pointer ${vista === 'productos' ? 'bg-blue-400 text-white' : 'text-black-500'}`}>
