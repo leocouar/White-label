@@ -23,10 +23,10 @@ export async function findByID(id) {
     }
 }
 
-export async function saveStore(store) {
+export async function saveStore(store, creator) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
     try {
-        let response = await axios.post(fetchUrl, store);
+        let response = await axios.post(fetchUrl, store, creator);
         return response.data;
     } catch (error) {
         console.log(error);

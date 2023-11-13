@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/client";
 import { saveStore } from "/services/storeService";
-import { uploadFile } from "/services/fileService";
+import { uploadFile } from 'services/fileService';
 
 const NewStore = () => {
     const [session, loading] = useSession();
@@ -72,17 +72,18 @@ const NewStore = () => {
 
     //Guarda la tienda con su logo
     const saveNewStore = async () => {
+        console.log(session)
         const newStore = {
             "name": name,
             "description": description,
             "telephone": telephone,
             "email": email,
-            "address": address,
-            "owners": [{
-                "username": session?.user?.username
-            }]
+            "address": address
         };
-        const response = await saveStore(newStore);
+        const response = await saveStore(newStore, {
+            params: {
+                creatorId: session?.user?.username
+            }});
         const folder = response.id;
         uploadFile("store", file, folder)
     };
@@ -150,8 +151,6 @@ const NewStore = () => {
     useEffect(() => {
         console.log(errEmail)
     })
-
-
 
     useEffect(() => {
         if (file) setErrImg(false);
@@ -265,7 +264,7 @@ const NewStore = () => {
                         <p className={`text-blue-500 text-xs italic`}>
                             El logo debe ser de 368x368 en formato .jpg o .png. <u>De no ser asi, sera redimensionada.</u>
                         </p>
-                        {resizedImageUrl && <img src={resizedImageUrl} alt="Resized" />}
+                        {resizedImageUrl && <img className="w-1/2" src={resizedImageUrl} alt="Resized" />}
                     </div>
                     {errImg && <p className={`text-red-500 text-xs italic`}>
                         "Se requiere que escoja un logotipo."
