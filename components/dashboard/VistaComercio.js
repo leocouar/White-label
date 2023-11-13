@@ -40,15 +40,15 @@ const VistaComercio = ({commerceData}) => {
   
 
   return (
-    <div className="bg-blue-100 p-4 rounded-md shadow-md">
+    <div className="bg-blue-100 p-4 rounded-md shadow-md h-full">
       <h1 className="text-4xl font-semibold mb-4">{storeToShow.name}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Display commerce information */}
         <div>
           <h2 className="text-2xl font-semibold">"{storeToShow.description}"</h2>
-          <ul className="list-disc ml-5 space-y-2">
+          <ul className="list-disc ml-5 space-y-2 mt-12">
             <li>
-              <span className="font-extrabold">Dirección:</span> {storeToShow.address}
+              <span className="font-extrabold mt-8">Dirección:</span> {storeToShow.address}
             </li>
             <li>
               <span className="font-extrabold">Horarios:</span> {storeToShow.schedule}
@@ -56,8 +56,8 @@ const VistaComercio = ({commerceData}) => {
           </ul>
         </div>
         <div>
-          <h2 className="text-2xl font-semibold">Contacto</h2>
-          <ul className="list-disc ml-5 space-y-2">
+          <h2 className="text-2xl font-semibold mt-10">Contacto</h2>
+          <ul className="list-disc ml-5 space-y-2 mt-2">
             <li>
               <span className="font-extrabold">Teléfono:</span> {storeToShow.telephone}
             </li>
@@ -71,7 +71,7 @@ const VistaComercio = ({commerceData}) => {
       {/* Edit button */}
       <div className="md:col-span-2 text-right">
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md mt-10"
           onClick={handleEditClick}
         >
           Editar

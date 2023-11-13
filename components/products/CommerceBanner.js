@@ -1,5 +1,4 @@
 
-  
 function Banner() {
 
     const callouts = [
@@ -86,7 +85,7 @@ function Banner() {
         
         <div className="bg-gray-100 w-full"> 
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto h-100 py-16 sm:py-24 lg:max-w-none flex overflow-x-auto sm: overflow-hidden">
+          <div className="mx-auto h-100 py-16 sm:py-24 lg:max-w-none flex overflow-x-auto no-scrollbar">
             {callouts.map((callout) => (
               <div className="flex-shrink-0 mx-3 max-w-full">
                 <div className="bg-white relative h-auto lg:w-48 border-2 border-gray-200  shadow-lg rounded-lg group-hover:opacity-75 sm:h-64 transition-transform duration-300 transform origin-center hover:scale-110">
