@@ -299,7 +299,7 @@ export async function getProductsRelated(product) {
         throw new Error("Could not get products related about " + product.name + ". Error:" + error);
     }
 }
-export async function fineProductsInStore(product) {
+export async function fineProductsInStore(id) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}/products`;
     try {
         let response = await axios.get(fetchUrl);
