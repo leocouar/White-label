@@ -1,4 +1,5 @@
 
+  
 function Banner() {
 
     const callouts = [
@@ -89,7 +90,7 @@ function Banner() {
             {callouts.map((callout) => (
               <div className="flex-shrink-0 mx-3 max-w-full">
                 <div className="bg-white relative h-auto lg:w-48 border-2 border-gray-200  shadow-lg rounded-lg group-hover:opacity-75 sm:h-64 transition-transform duration-300 transform origin-center hover:scale-110">
-                  <a href={callout.href}>
+                  <a href={'/commerce'}>
                   <img
                     src={callout.imageSrc}
                     className="rounded"
