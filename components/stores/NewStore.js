@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/client";
 import { saveStore } from "/services/storeService";
-import { uploadFile } from "/services/fileService";
-import Schedule from '../schedules/Schedule';
-
+import { uploadFile } from 'services/fileService';
 
 const NewStore = () => {
     const [session, loading] = useSession();
@@ -13,7 +11,7 @@ const NewStore = () => {
     const [email, setEmail] = useState('');
     const [telephone, setTelephone] = useState('');
     const [address, setAddress] = useState('');
-  
+
     //Datos para endpoints
     const [file, setFile] = useState();
 
@@ -28,24 +26,45 @@ const NewStore = () => {
     const [errTel, setErrTel] = useState(false);
     const [errImg, setErrImg] = useState(false);
 
-    const handleFormSubmit = async(event) => {
-        event.preventDefault(); // Prevent the form from submitting
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const phoneRegex = /^\+?[0-9]+$/;
 
-        setCanSubmitData(!canSubmitData);
+    const handleFormSubmit = async (event) => {
+        event.preventDefault(); // Prevent the form from submitting
+        let errorDetected = false;
 
         //Si hay algun error, se muestra en pantalla
         if (!name.trim()) {
+            errorDetected = true;
             setErrName(true);
         }
         if (!description.trim()) {
+            errorDetected = true;
             setErrDesc(true);
         }
+
+        if (!address.trim()) {
+            errorDetected = true;
+            setErrAdd(true)
+        }
+
+        if (!phoneRegex.test(telephone.trim())) {
+            errorDetected = true;
+            setErrTel(true)
+        }
+
+        if (!emailRegex.test(email.trim())) {
+            errorDetected = true;
+            setErrEmail(true);
+        }
+
         if (!file) {
+            errorDetected = true;
             setErrImg(true)
         }
 
         //De lo contrario, continuamos
-        if (name.trim() && description.trim() && file && usinessHours !== null) {
+        if (!errorDetected) {
             saveNewStore();
         }
 
@@ -53,6 +72,7 @@ const NewStore = () => {
 
     //Guarda la tienda con su logo
     const saveNewStore = async () => {
+        console.log(session)
         const newStore = {
             "name": name,
             "description": description,
@@ -60,11 +80,13 @@ const NewStore = () => {
             "email": email,
             "address": address
         };
-        const response = await saveStore(newStore); // Assuming saveStore returns a promise
+        const response = await saveStore(newStore, {
+            params: {
+                creatorId: session?.user?.username
+            }});
         const folder = response.id;
         uploadFile("store", file, folder)
     };
-
 
     //Selecciona una imagen a cargar  
     const handleImageUpload = (event) => {
@@ -115,6 +137,22 @@ const NewStore = () => {
     }, [description]);
 
     useEffect(() => {
+        if (address.trim()) setErrAdd(false);
+    }, [address]);
+
+    useEffect(() => {
+        if (phoneRegex.test(telephone.trim())) setErrTel(false);
+    }, [telephone]);
+
+    useEffect(() => {
+        if (!emailRegex.test(!email.trim())) setErrEmail(false);
+    }, [email]);
+
+    useEffect(() => {
+        console.log(errEmail)
+    })
+
+    useEffect(() => {
         if (file) setErrImg(false);
     }, [file]);
 
@@ -157,6 +195,57 @@ const NewStore = () => {
                     </p>}
                 </div>
 
+                {/*DIRECCION*/}
+                <div className="w-full">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                        htmlFor="address">Dirección:</label>
+                    <input
+                        type="text"
+                        id="address"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        placeholder="Direcci&oacute;n del comercio..."
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                    {errAddr && <p className={`text-red-500 text-xs italic`}>
+                        "El campo 'Dirección' es requerido."
+                    </p>}
+                </div>
+
+                {/*TELEFONO*/}
+                <div className="w-full">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                        htmlFor="telephone">Tel&eacute;fono:</label>
+                    <input
+                        type="tel"
+                        id="telephone"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        placeholder="Número de teléfono"
+                        value={telephone}
+                        onChange={(e) => setTelephone(e.target.value)}
+                    />
+                    {errTel && <p className={`text-red-500 text-xs italic`}>
+                        "Telefono invalido"
+                    </p>}
+                </div>
+
+                {/*EMAIL*/}
+                <div className="w-full">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                        htmlFor="email">E-mail:</label>
+                    <input
+                        type="text"
+                        id="email"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        placeholder="Direcci&oacute;n de correo electr&oacute;nico"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    {errEmail && <p className={`text-red-500 text-xs italic`}>
+                        "E-mail invalido. Verifique este campo"
+                    </p>}
+                </div>
+
                 {/*LOGO*/}
                 <div className="w-full block">
                     <label className="block mb-3 uppercase tracking-wide text-gray-700 text-xs font-bold "
@@ -175,7 +264,7 @@ const NewStore = () => {
                         <p className={`text-blue-500 text-xs italic`}>
                             El logo debe ser de 368x368 en formato .jpg o .png. <u>De no ser asi, sera redimensionada.</u>
                         </p>
-                        {resizedImageUrl && <img src={resizedImageUrl} alt="Resized" />}
+                        {resizedImageUrl && <img className="w-1/2" src={resizedImageUrl} alt="Resized" />}
                     </div>
                     {errImg && <p className={`text-red-500 text-xs italic`}>
                         "Se requiere que escoja un logotipo."
