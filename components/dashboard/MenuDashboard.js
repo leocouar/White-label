@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStore, faUserSlash, faTag } from '@fortawesome/free-solid-svg-icons';
 import VistaComercio from './VistaComercio';
 import VistaProductos from './VistaProductos';
+import { signOut } from "next-auth/client"
 
 
 function MenuDashboard(store) {
@@ -13,7 +14,7 @@ function MenuDashboard(store) {
         } else if (texto === 'Productos') {
             setVista('productos');
         } else if (texto === 'Cerrar sesion') {
-            // Handle logout logic
+            signOut()
         }
     };
     return (
