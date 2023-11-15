@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import { saveStore } from "/services/storeService";
 import { uploadFile } from "/services/fileService";
 import Schedule from '../schedules/Schedule';
 
 
 const NewStore = () => {
-    const [session, loading] = useSession();
+    const { data: session } = useSession()
     //Datos de texto
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import logo from "/images/camara_bolivar_logo.png";
 import UserSession from "@/components/users/UserSession";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import Loading from "./utils/Loading";
 import { findAll } from "services/categoriesService";
 import { findAllStores } from "services/storeService";
@@ -14,7 +14,8 @@ import NavSearch from "./ProductSearch/ProductSearch";
 function Nav() {
   const cart = useCartContext()[0];
   const [cartItems, setCartItems] = useState(0);
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
   const [isShow, setIsShow] = useState(false)
   const [load, setLoad] = useState(false)
 
@@ -49,7 +50,6 @@ function Nav() {
 
   const showCategories = (() => {
     setCategoriesVisible(!categoriesVisible)
-    setStoresVisible(false)
   })
 
   const handleDocumentClick = (e) => {
@@ -77,7 +77,7 @@ function Nav() {
               <FontAwesomeIcon icon={faBars} className="w-5 top-6 ml-2 mr-0 items-center" />
             </button>
           </div>
-          <Link href="/">
+          <Link legacyBehavior href="/">
             <div className="flex sm:block cursor-pointer flex-row items-center">
               <img src={logo.src} className="w-32 mx-16 ml-8 md:mx-70 lg:mx-4 lg:w-32" />
             </div>
@@ -112,7 +112,7 @@ function Nav() {
                 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
                 <div className="overflow-y-auto no-scrollbar max-h-80 lg:max-h-44" role="none">
                   {categories?.map((category) => (
-                    <Link href={`/accessories/${category.id}`} passHref legacyBehavior>
+                    <Link legacyBehavior href={`/accessories/${category.id}`} passHref>
                       <a href="#" onClick={showCategories} className="text-palette-primary block text-center hover:text-palette-secondary px-4 py-2 text-sm" role="menuitem"
                         tabIndex="-1" id="menu-item-0">{category.name}</a>
                     </Link>
@@ -121,12 +121,12 @@ function Nav() {
                 </div>
               </div>
             </div>
-            <Link href="/stores/list">
+            <Link legacyBehavior href="/stores/list">
               <a className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight md:p-2 rounded-md hover:text-palette-secondary">
                 TUS COMERCIOS
               </a>
             </Link>
-            <Link href="/about/inicio">
+            <Link legacyBehavior href="/about/inicio">
               <a className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight md:p-2 rounded-md hover:text-palette-secondary">
                 NOSOTROS
               </a>

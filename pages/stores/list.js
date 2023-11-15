@@ -1,5 +1,5 @@
 import NewStore from "@/components/stores/NewStore";
-import { getSession, getCsrfToken, signIn } from "next-auth/client";
+import { getSession, getCsrfToken, signIn } from "next-auth/react";
 import StoreHeading from "@/components/StoreHeading";
 import ListStores from "@/components/stores/ListStore";
 

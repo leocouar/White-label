@@ -1,12 +1,14 @@
 import NextAuth from "next-auth"
-import Providers from 'next-auth/providers';
+import Auth0Provider from "next-auth/providers/auth0"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import axios from "axios";
 
 const options = {
     // Configure one or more authentication providers
     providers: [
-        Providers.Credentials({
+        CredentialsProvider({
             // The name to display on the sign in form (e.g. 'Sign in with...')
             name: 'credentials',
             async authorize (credentials) {
@@ -28,7 +30,7 @@ const options = {
                 }
             }
         }),
-        Providers.Google({
+        GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             authorization: {
@@ -51,13 +53,13 @@ const options = {
         signOut: '/auth/signout',
         error: '/login/error', // Error code passed in query string as ?error=
         verifyRequest: '/auth/verify-request', // (used for check email message)
-        newUser: null // If set, new users will be directed here on first sign in
+        newUser: null  // New users will be directed here on first sign in (leave the property out if not of interest)
     },
     callbacks: {
         async signIn(user) {
             return user;
         },
-        async session(session, token) {
+        async session(session,user, token) {
             session.user = token.user;
             return session;
         },
