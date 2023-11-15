@@ -3,9 +3,14 @@ import Link from "next/link";
 import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+
 import logo from "/images/camara_bolivar_logo.png";
 import UserSession from "@/components/users/UserSession";
+
 import { useSession } from "next-auth/client";
+import { signOut } from "next-auth/client";
+
 import Loading from "./utils/Loading";
 import { findAll } from "services/categoriesService";
 import { findAllStores } from "services/storeService";
@@ -22,6 +27,15 @@ function Nav() {
   const [categories, setCategories] = useState([])
 
   const [color, setColor] = useState(false)
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(); 
+    } catch (error) {
+      
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   useEffect(() => {
     const changeColor = () => {
@@ -83,7 +97,7 @@ function Nav() {
             </div>
           </Link>
 
-          
+
 
           <div className="flex-1" style={{ margin: "0 auto" }}>
             <NavSearch />
@@ -93,8 +107,8 @@ function Nav() {
             id="menu"
             className={` flex-grow ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
           >
-            
-          
+
+
             <Link href="/stores/list">
               <a className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight md:p-2 rounded-md hover:text-palette-secondary">
                 TUS COMERCIOS
@@ -105,8 +119,28 @@ function Nav() {
                 NOSOTROS
               </a>
             </Link>
-
-
+            
+            {!session ? (
+          <Link href="/login">
+            <a 
+            title={session ? "Sign Out" : "Sign On"}
+            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary">
+            <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
+            </a>
+          </Link>
+        ) : (
+          <Link href="/">
+            <a
+            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
+            title="Sign Out"
+            onClick={handleSignOut}
+          >
+            
+            <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
+          </a>
+          </Link>
+          
+        )}
 
           </div>
 
