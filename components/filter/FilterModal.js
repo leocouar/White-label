@@ -32,41 +32,66 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
         asc: ascOrder ? "T" : "F"
     };
 
+    const prepareSearch = (params, orderBy, asc) =>{
+        return {
+            "term": searchTerm,
+            "params": params,
+            "orderBy": orderBy,
+            "asc": asc ? "T" : "F"
+        }
+    }
+
+    const searchNow = (typeOfChange, parameters) => {
+        let finalParams;
+        switch (typeOfChange) {
+            case 1:
+                finalParams = prepareSearch(parameters, selectedOrderCol, ascOrder);
+                searchFunction(finalParams); break;
+            case 2:
+                finalParams = prepareSearch(queryParameters, parameters, ascOrder);
+                searchFunction(finalParams); break;
+            case 3:
+                finalParams = prepareSearch(queryParameters, selectedOrderCol, parameters);
+                searchFunction(finalParams); break;
+        }
+
+    }
+
     //Prepara los parametros para la consulta
     const handleChangeSubCat = async (e, index) => {
-        setQueryParameters((prevQueryParameters) => {
-            //Para cada parametro de la lista...
-            const updatedParameters = prevQueryParameters.map((arr, i) => {
-                //Si el indice actual coincide con el brindado, creamos un nuevo array
-                // If the current index matches the provided index, we create a new array.
-                if (i === index) {
-                    const existingIndex = arr.indexOf(e.target.value);
-                    //Remueve o elimina el elemento del array segun el caso
-                    if (existingIndex !== -1) {
-                        return arr.filter((_, i) => i !== existingIndex);
-                    } else {
-                        return [...arr, e.target.value];
-                    }
+        const updatedParameters = queryParameters.map((arr, i) => {
+            //Si el indice actual coincide con el brindado, creamos un nuevo array
+            // If the current index matches the provided index, we create a new array.
+            if (i === index) {
+                const existingIndex = arr.indexOf(e.target.value);
+                //Remueve o elimina el elemento del array segun el caso
+                if (existingIndex !== -1) {
+                    return arr.filter((_, i) => i !== existingIndex);
+                } else {
+                    return [...arr, e.target.value];
                 }
-                //En caso de que no haya cambios, retorna el array tal como esta
-                return arr;
-            });
-            return updatedParameters;
+            }
+            //En caso de que no haya cambios, retorna el array tal como esta
+            return arr;
         });
+        setQueryParameters(updatedParameters);  //Guarda los parametros      
+        searchNow(1, updatedParameters)            //Realiza la busqueda
     };
 
     //Indica cual sera la columna de la tabla que se utilizara para el orden.
     const handleChangeColumn = async (e) => {
         const orderCol = e.target.value
         setSelectedOrderCol(orderCol);
+        searchNow(2, orderCol);
     }
 
     //Indica en que orden (ascendente o descendente) se traeran los resultados
     const handleChangeOrder = async (value) => {
         setAscOrder(value);
+        searchNow(3, value);
     }
 
-   
+
 
     useEffect(() => {
         // Update the window width when the window is resized
@@ -184,7 +209,6 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
                     </div>
                 </div>
             </div>
-            <button className="mb-2 md:mb-0 bg-palette-slight border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => searchButton()}>Buscar</button>
         </div>
     )
 }
