@@ -60,7 +60,6 @@ const options = {
             return user;
         },
         async session(session,user, token) {
-            session.user = token.user;
             return session;
         },
         async jwt(token, user) {
