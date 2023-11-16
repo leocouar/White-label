@@ -25,6 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -44,6 +45,3 @@ yarn-error.log*
 **/public/worker-*.js.map
 .vscode/settings.json
 
-package-lock.json
-yarn.lock
-.env

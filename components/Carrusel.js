@@ -1,8 +1,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
-const largeImages = ['/images/panaleria.png', '/images/lactancia.png', '/images/CarrouselAccesorios.png']
-const responsiveImages = ['/images/PanaleriaResponsive.png', '/images/LactanciaResponsive.png', '/images/AccesoriosResponsive.png']
+const largeImages = ['/images/carruselshop.jpg', '/images/carruselshop1.jpg', '/images/carruselshop2.jpg']
+const responsiveImages = ['/images/carruselshopresponsive.jpg', '/images/carruselshop1responsive.jpg', '/images/carruselshop2responsive.jpg']
 
 function Carousel({ }) {
     const containerRef = useRef(null);
@@ -11,6 +11,7 @@ function Carousel({ }) {
     const [windowDimensions, setWindowDimensions] = useState([0, 0]);
     const [imgs, setImgs] = useState([]);
     const [initialHeight, setInitialHeight] = useState(null);
+    
 
     //Obtains the img elements that will be set
     useEffect(() => {
@@ -51,6 +52,7 @@ function Carousel({ }) {
             window.removeEventListener('resize', updateWindowDimensions);
         };
     }, [imgs, initialHeight]);
+
 
     //This ensures the central element will remain in the center
 
@@ -133,7 +135,7 @@ function Carousel({ }) {
         <div style={heightAdjust} className='relative'>
             <div id="container" ref={containerRef} className="w-full overflow-hidden">
                 {sliderControl(true)}
-                <div className=" flex " style={{ width: `${windowDimensions[1]}px`}}>
+                <div className="flex" style={{ width: `${windowDimensions[1]}px`}}>
                     {positions.map((item, index) => (
                         <img key={index}
                             className="w-1/3"
