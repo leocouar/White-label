@@ -1,55 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { searchList } from 'services/productService';
-const ProductCatalog = () => {
+import ProductListings, {prepareDefaultParams} from '@/components/products/ProductListings';
+import {findAll as findBrands} from 'services/brandService';
+import {findAll as findCategs} from 'services/categoriesService';
+
+const ProductCatalog = ({ brands, categories}) => {
   const router = useRouter();
-  const [products, setProducts] = useState([]);
-  const [searchedTerm, setSearchedTerm] = useState('');
   const { query } = router.query; 
+  const [initialSearch,setInitialSearch] = useState();
+
+  const fetchInitialSearchResults = async () => {
+    const defaultParams = await prepareDefaultParams(query);
+    setInitialSearch(defaultParams);
+  };
 
   useEffect(() => {
-    // Llamada a la función searchList para obtener los productos basados en 'query'
-    async function fetchProducts() {
-      try {
-        // Llama a la función searchList con el parámetro 'name' como 'query'
-        const results = await searchList(query); // Suponiendo que 'query' es el nombre del producto
-        setProducts(results);
-        setSearchedTerm(query);
-      } catch (error) {
-        console.error('Error al obtener los productos:', error);
-      }
-    }
-
-    // Verifica si 'query' tiene un valor antes de realizar la búsqueda
+    setInitialSearch(null);
     if (query) {
-      // Invoca la función fetchProducts para obtener los productos
-      fetchProducts();
+      fetchInitialSearchResults();
     }
   }, [query]);
+
+  useEffect(()=>{
+   console.log(initialSearch) 
+  },[initialSearch])
 
   return (
     <div>
       <h1>Catálogo de Productos</h1>
-      {searchedTerm && (
-        <h2>Resultados para: "{searchedTerm}"</h2>
+      {initialSearch && query && (
+        <h2>Resultados para: "{query}"</h2>
       )}
-      {products.length === 0 && searchedTerm && (
-        <p className='bg-red'>No se encontraron resultados para "{searchedTerm}"</p>
+      {!initialSearch && !query && (
+        <p className='bg-red'>No se encontraron resultados para "{query}"</p>
       )}
       {/* Muestra los productos si existen */}
-      {products.length > 0 && (
-        <div>
-          {products.map(product => (
-            <div key={product.id}>
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              
-            </div>
-          ))}
-        </div>
-      )}
+      {initialSearch && <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} initialTerm={query}/>}
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  const brands = await findBrands();
+  const categories = await findCategs();
+  
+  return {
+    props: {
+      brands,
+      categories
+    },
+  }
+}
 
 export default ProductCatalog;

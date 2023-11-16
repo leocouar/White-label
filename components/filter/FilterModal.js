@@ -1,14 +1,38 @@
-import { useEffect, useState } from "react";
-import { debounce } from 'lodash';
+import { useEffect, useState, useRef } from "react";
 
-function FilterModal({ filterParams, searchFunction, columnList }) {
+/*Elemplos de los tipos de parametros que deberia recibir en filterParams y columnList
+
+//Aqui se reciben los valores para utilizar en la consulta y el nombre a mostrar al usuario.
+const columnList = [
+    { value: 'sales', label: 'Popularidad' },
+    { value: 'price', label: 'Precio' },
+    { value: 'stock', label: 'Stock' },
+    { value: 'name', label: 'Nombre' },
+];
+
+//type es el nombre a mostrar al usuario.
+//elements es un array a devolver con los elementos seleccionados por numero.
+//column es utilizado para determinar si una columna deberia ser gruesa o mas fina.
+const filterParams = [
+    { type: "Categorias", elements: categories, column: true },
+    { type: "Marcas", elements: brands, column: false }
+];*/
+
+function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
+    const filterElementRef = useRef(null);
+    const [windowWidth, setWindowWidth] = useState();
+    const [windowHeight, setWindowHeight] = useState();
     const [showFilter, setShowFilter] = useState(false);
-
     const [selectedOrderCol, setSelectedOrderCol] = useState(columnList[0].value);
     const [ascOrder, setAscOrder] = useState(false);
     const [queryParameters, setQueryParameters] = useState(new Array(filterParams.length).fill([]));
-    const [searchTerm, setSearchTerm] = useState('');
-    const customParams = [searchTerm, queryParameters, selectedOrderCol, ascOrder ? "T" : "F"];
+    const customParams = {
+        term: searchTerm,
+        params: queryParameters,
+        orderBy: selectedOrderCol,
+        asc: ascOrder ? "T" : "F"
+    };
+    const [changesRegistered, setChangesRegistered] = useState(false);
 
 
     //Prepara los parametros para la consulta
@@ -42,23 +66,36 @@ function FilterModal({ filterParams, searchFunction, columnList }) {
     //Ejecuta la funcion de busqueda que se paso como parametro.
     function searchButton() {
         setShowFilter(false);
-        const updatedCustomParams = [...customParams];
-        updatedCustomParams[0] = searchTerm;
-        searchFunction(updatedCustomParams);
+        searchFunction(customParams);
     }
 
-    //Retrasa la busqueda 500ms para evitar multiples llamadas sucesivas 
+
     useEffect(() => {
-        const debouncedSearch = debounce(searchFunction, 500);
-        debouncedSearch(customParams);
-        return () => {
-            debouncedSearch.cancel();
+        // Update the window width when the window is resized
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+            setWindowHeight(window.innerHeight);
         };
-    }, [searchTerm]);
+
+        window.addEventListener("resize", handleResize);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (showFilter) {
+            filterElementRef.current.style.zIndex = 50; // Set your desired z-index value here
+        } else {
+            filterElementRef.current.style.zIndex = 30; // Resetting to default value if necessary
+        }
+    }, [showFilter]);
 
     return (
-        <div className='sticky top-16 pt-4 md:top-14 md:pt-0 z-30 bg-white'>
-            <div className='flex justify-center py-2 h-20 '>
+        <div ref={filterElementRef} className=''>
+            <div className='flex justify-center py-2 h-20'>
                 <button
                     className="justify-between my-auto mx-4 text-white  bg-palette-secondary border 
                                 border-solid border-palette-secondary hover:bg-palette-slight 
@@ -78,83 +115,87 @@ function FilterModal({ filterParams, searchFunction, columnList }) {
                     onClick={() => setShowFilter(true)}>
                     Filtros
                 </button>
-                <input
-                    className="w-2/3 text-palette-secondary border border-solid border-palette-secondary placeholder-palette-slighter font-semibold text-xl p-2 my-auto rounded-xl shadow-lg shadow-indigo-500/50 outline-none transition-all"
-                    placeholder="Buscar"
-                    id="search"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    autoComplete="off" />
             </div>
-            <div className={`fixed z-50  top-0 w-full left-0 ${showFilter ? "" : "hidden"}  `} id="modal">
-                <div className="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                    <div onClick={() => setShowFilter(false)} className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-700 opacity-75" />
-                    </div>
-                    <span className=" sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                    <div className="w-auto inline-block bg-white  rounded-lg text-left  shadow-xl transform transition-all my-8 align-middle"
-                        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                        <div className="flex grid-cols-2 m-auto px-4 pt-6 pb-2 sm:p-6 sm:pb-4">
-                            {
-                                filterParams
-                                    ?
-                                    filterParams.map((category, arrayIndex) => (
-                                        <div className="flex-center col-span-2 w-auto rounded">
-                                            <div className="w-auto bg-white text-sm text-palette-primary font-bold px-5 py-2">
-                                                <div className="m-2 -ml-4 text-2xl">{category.type}</div>
-                                            </div>
-                                            <div id="menu" className={category.column ?
-                                                `overflow-y-auto max-h-96 no-scrollbar`
-                                                :
-                                                `overflow-y-auto max-h-96 no-scrollbar lg:grid lg:grid-cols-4`}>
-                                                {
-                                                    category.elements
-                                                        ?
-                                                        category.elements.map((subcategory, index) => (
-                                                            <div key={index} className=" block mt-2 px-2">
-                                                                <label className="inline-flex items-center">
-                                                                    <input type="checkbox"
-                                                                        className="form-checkbox rounded text-red-500 "
-                                                                        onChange={(e) => handleChangeSubCat(e, arrayIndex)}
-                                                                        value={subcategory.id} />
-                                                                    <span className="ml-2">{subcategory.name}</span>
-                                                                </label>
-                                                            </div>
-                                                        )) : <></>
-                                                }
-                                            </div>
+
+            <div id="modal" className={`top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed z-50 ${showFilter ? "" : "hidden"}  `}
+                tyle={{ minHeight: windowWidth < 768 ? "100vh" : "85vh" }}>
+                <div className="flex shadow-xl items-center bg-white rounded-lg justify-center min-height-100vh text-center sm:block sm:p-0"
+                    style={{ width: windowWidth >= 1200 ? "70rem" : (windowWidth < 1024 ? (windowWidth < 768 ? "100vw" : "50rem") : "60rem") }}>
+                    <div className="w-auto sm:w-11/12 inline-block text-left 
+                        transform transition-all align-middle
+                        sm:min-height-full md:min-height-full"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="modal-headline">
+
+                        <div id="categoriesAndBrands"
+                            className="px-4 pt-6 pb-2 sm:p-6 sm:pb-4 flex"
+                            style={{ maxHeight: windowWidth < 768 ? "85vh" : "55vh" }}>
+                            {filterParams
+                                ?
+                                filterParams.map((category, arrayIndex) => (
+                                    <div className={`flex-center col-span-2 rounded 
+                                            ${category.column ? "lg:w-1/4 md:w-1/4" : "lg:w-3/4 md:w-3/4"}`}
+                                         style={{
+                                            minWidth: windowWidth < 768 ? "50%" : "auto",
+                                            maxHeight: windowWidth < 768 ? "52vh" : "45vh"
+                                        }}>
+                                        <div className="w-auto bg-white text-sm text-palette-primary font-bold px-5 py-2 m-2 -ml-4 text-2xl">
+                                            {category.type}
                                         </div>
-                                    )) : <></>
-                            }
+                                        <div
+                                            style={{ maxHeight: "80%"}}
+                                            className={`overflow-y-auto scrollbar-thin lg:grid md:grid
+                                                ${category.column ? "lg:grid-cols-1" : "lg:grid-cols-4 md:grid-cols-3"}`}>
+
+                                            {category.elements
+                                                ?
+                                                category.elements.map((subcategory, index) => (
+                                                    <div key={index} className=" block mt-2 px-2" >
+                                                        <label className="inline-flex items-center">
+                                                            <input type="checkbox"
+                                                                className="form-checkbox rounded text-red-500 "
+                                                                onChange={(e) => handleChangeSubCat(e, arrayIndex)}
+                                                                value={subcategory.id} />
+                                                            <span className="ml-2">{subcategory.name}</span>
+                                                        </label>
+                                                    </div>
+                                                )) : <></>}
+                                        </div>
+                                    </div>
+                                )) : <></>}
                         </div>
-                        {columnList ? (
-                            <div className="flex grid-cols-2 m-auto px-4 pt-6 pb-2 sm:p-6 sm:pb-4">
-                                <div className="flex flex-col col-span-2 w-auto rounded">
-                                    <div className="w-auto bg-white text-sm text-palette-primary font-bold px-5 py-2 m-2 -ml-4 text-2xl">Ordenar por:</div>
+
+                        <div id="orderAndButtons"
+                        >
+                            {columnList ? (
+                                <div className={`px-4 md:pt-6 lg:pt-6 pb-2 ${windowWidth < 768 ? "grid" : "flex flex-wrap"}`}>
+                                    <div className="w-auto text-sm text-palette-primary font-bold px-5 m-2 -ml-4 text-2xl">
+                                        Ordenar por:
+                                    </div>
                                     <select
-                                        className="text-palette-primary px-5 py-2"
+                                        className="text-palette-primary px-5 h-12 bg-gray-200"
                                         id="orderBy"
                                         value={selectedOrderCol}
-                                        onChange={handleChangeColumn}
-                                    >
+                                        onChange={handleChangeColumn}>
                                         {columnList.map((option) => (
                                             <option key={option.value} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}
                                     </select>
-                                    <label className="flex items-center mt-2 px-2">
+                                    <label className="flex items-center mt-2 px-2 lg:pb-3">
                                         <input
                                             type="radio"
                                             className="form-radio rounded text-red-500"
                                             id="ascRadio"
                                             name="order"
                                             checked={!ascOrder}
-                                            onChange={() => setAscOrder(false)}                                    
+                                            onChange={() => setAscOrder(false)}
                                         />
                                         <span className="ml-2">Mayor a menor</span>
                                     </label>
-                                    <label className="flex items-center mt-2 px-2">
+                                    <label className="flex items-center mt-2 px-2 lg:pb-3">
                                         <input
                                             type="radio"
                                             className="form-radio rounded text-red-500"
@@ -166,12 +207,12 @@ function FilterModal({ filterParams, searchFunction, columnList }) {
                                         <span className="ml-2">Menor a mayor</span>
                                     </label>
                                 </div>
-                            </div>
-                        ) : <></>}
+                            ) : <></>}
 
-                        <div className="p-3  mt-2 text-center space-x-4 md:block">
-                            <button className="mb-2 md:mb-0 bg-palette-slight border border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => setShowFilter(false)}>Cerrar</button>
-                            <button className="mb-2 md:mb-0 bg-palette-slight border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => searchButton()}>Buscar</button>
+                            <div className="pl-3 pr-3 pb-3 md:pt-2 lg:pt-2 text-center space-x-4 md:block">
+                                <button className="mb-2 md:mb-0 bg-palette-slight border border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => setShowFilter(false)}>Cerrar</button>
+                                <button className="mb-2 md:mb-0 bg-palette-slight border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => searchButton()}>Buscar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
