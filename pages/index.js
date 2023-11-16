@@ -6,7 +6,6 @@ import Banner from '@/components/products/CommerceBanner.js';
 import { prepareDefaultParams } from '@/components/products/ProductListings';
 
 function IndexPage({ brands, categories, initialSearch }) {
-  console.log(initialSearch)
   return (
     <div className='bg-white'>
       <div >
@@ -18,7 +17,7 @@ function IndexPage({ brands, categories, initialSearch }) {
           <Banner />
         </div>
       </div>
-      <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} />
+      <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} showFilters={false}/>
     </div>
   )
 }

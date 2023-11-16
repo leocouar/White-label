@@ -3,7 +3,7 @@ import FilterModal from '@/components/filter/FilterModal'
 import { useEffect, useState, useRef } from "react";
 import { searchList } from "../../services/productService"
 
-function ProductListings({ brands, categories, initialSearch, initialTerm = "" }) {
+function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true }) {
     //Control de pagina
     const productListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);         //Indica si esta cargando nuevos productos
@@ -45,10 +45,6 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "" }
             behavior: 'smooth'
         });
     }
-
-    useEffect(()=>{
-        console.log(initialSearch);
-    },[initialSearch])
 
     //NUEVA BUSQUEDA
     //======================================================================================================
@@ -134,6 +130,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "" }
                 searchFunction={search}
                 searchTerm={initialTerm}
                 columnList={columnList}
+                showFilters={showFilters}
             ></FilterModal>
             <div className="mx-auto mt-3 w-11/12">
                 <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 ">

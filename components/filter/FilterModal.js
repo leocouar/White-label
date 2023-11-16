@@ -18,11 +18,10 @@ const filterParams = [
     { type: "Marcas", elements: brands, column: false }
 ];*/
 
-function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
+function FilterModal({ filterParams, searchFunction, searchTerm, columnList, showFilters }) {
     const filterElementRef = useRef(null);
     const [windowWidth, setWindowWidth] = useState();
     const [windowHeight, setWindowHeight] = useState();
-    const [showFilter, setShowFilter] = useState(false);
     const [selectedOrderCol, setSelectedOrderCol] = useState(columnList[0].value);
     const [ascOrder, setAscOrder] = useState(false);
     const [queryParameters, setQueryParameters] = useState(new Array(filterParams.length).fill([]));
@@ -32,11 +31,9 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
         orderBy: selectedOrderCol,
         asc: ascOrder ? "T" : "F"
     };
-    const [changesRegistered, setChangesRegistered] = useState(false);
-
 
     //Prepara los parametros para la consulta
-    const handleChangeSubCat = (e, index) => {
+    const handleChangeSubCat = async (e, index) => {
         setQueryParameters((prevQueryParameters) => {
             //Para cada parametro de la lista...
             const updatedParameters = prevQueryParameters.map((arr, i) => {
@@ -59,16 +56,17 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
     };
 
     //Indica cual sera la columna de la tabla que se utilizara para el orden.
-    const handleChangeColumn = (e) => {
-        setSelectedOrderCol(e.target.value);
+    const handleChangeColumn = async (e) => {
+        const orderCol = e.target.value
+        setSelectedOrderCol(orderCol);
     }
 
-    //Ejecuta la funcion de busqueda que se paso como parametro.
-    function searchButton() {
-        setShowFilter(false);
-        searchFunction(customParams);
+    //Indica en que orden (ascendente o descendente) se traeran los resultados
+    const handleChangeOrder = async (value) => {
+        setAscOrder(value);
     }
 
+   
 
     useEffect(() => {
         // Update the window width when the window is resized
@@ -85,39 +83,13 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
         };
     }, []);
 
-    useEffect(() => {
-        if (showFilter) {
-            filterElementRef.current.style.zIndex = 50; // Set your desired z-index value here
-        } else {
-            filterElementRef.current.style.zIndex = 30; // Resetting to default value if necessary
-        }
-    }, [showFilter]);
+    function searchButton() {
+        searchFunction(customParams);
+    }
 
     return (
         <div ref={filterElementRef} className=''>
-            <div className='flex justify-center py-2 h-20'>
-                <button
-                    className="justify-between my-auto mx-4 text-white  bg-palette-secondary border 
-                                border-solid border-palette-secondary hover:bg-palette-slight 
-                                hover:text-white active:bg-palette-slight font-bold
-                                uppercase
-                                text-xl
-                                p-2
-                                my-auto
-                                rounded-xl
-                                shadow-lg shadow-indigo-500/50
-                                outline-none
-                                focus:outline-none
-                                ease-linear
-                                transition-all
-                                duration-150"
-                    type="button"
-                    onClick={() => setShowFilter(true)}>
-                    Filtros
-                </button>
-            </div>
-
-            <div id="modal" className={`top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed z-50 ${showFilter ? "" : "hidden"}  `}
+            <div id="modal" className={`top-1/2 left-1/2 ${showFilters ? "" : "hidden"}  `}
                 tyle={{ minHeight: windowWidth < 768 ? "100vh" : "85vh" }}>
                 <div className="flex shadow-xl items-center bg-white rounded-lg justify-center min-height-100vh text-center sm:block sm:p-0"
                     style={{ width: windowWidth >= 1200 ? "70rem" : (windowWidth < 1024 ? (windowWidth < 768 ? "100vw" : "50rem") : "60rem") }}>
@@ -136,7 +108,7 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
                                 filterParams.map((category, arrayIndex) => (
                                     <div className={`flex-center col-span-2 rounded 
                                             ${category.column ? "lg:w-1/4 md:w-1/4" : "lg:w-3/4 md:w-3/4"}`}
-                                         style={{
+                                        style={{
                                             minWidth: windowWidth < 768 ? "50%" : "auto",
                                             maxHeight: windowWidth < 768 ? "52vh" : "45vh"
                                         }}>
@@ -144,7 +116,7 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
                                             {category.type}
                                         </div>
                                         <div
-                                            style={{ maxHeight: "80%"}}
+                                            style={{ maxHeight: "80%" }}
                                             className={`overflow-y-auto scrollbar-thin lg:grid md:grid
                                                 ${category.column ? "lg:grid-cols-1" : "lg:grid-cols-4 md:grid-cols-3"}`}>
 
@@ -191,7 +163,7 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
                                             id="ascRadio"
                                             name="order"
                                             checked={!ascOrder}
-                                            onChange={() => setAscOrder(false)}
+                                            onChange={() => handleChangeOrder(false)}
                                         />
                                         <span className="ml-2">Mayor a menor</span>
                                     </label>
@@ -202,21 +174,17 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList }) {
                                             id="descRadio"
                                             name="order"
                                             checked={ascOrder}
-                                            onChange={() => setAscOrder(true)}
+                                            onChange={() => handleChangeOrder(true)}
                                         />
                                         <span className="ml-2">Menor a mayor</span>
                                     </label>
                                 </div>
                             ) : <></>}
-
-                            <div className="pl-3 pr-3 pb-3 md:pt-2 lg:pt-2 text-center space-x-4 md:block">
-                                <button className="mb-2 md:mb-0 bg-palette-slight border border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => setShowFilter(false)}>Cerrar</button>
-                                <button className="mb-2 md:mb-0 bg-palette-slight border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => searchButton()}>Buscar</button>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button className="mb-2 md:mb-0 bg-palette-slight border-black-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white hover:text-white rounded-full hover:shadow-lg hover:bg-palette-secondary" onClick={() => searchButton()}>Buscar</button>
         </div>
     )
 }

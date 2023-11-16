@@ -21,10 +21,6 @@ const ProductCatalog = ({ brands, categories}) => {
     }
   }, [query]);
 
-  useEffect(()=>{
-   console.log(initialSearch) 
-  },[initialSearch])
-
   return (
     <div>
       <h1>Catálogo de Productos</h1>
@@ -35,7 +31,7 @@ const ProductCatalog = ({ brands, categories}) => {
         <p className='bg-red'>No se encontraron resultados para "{query}"</p>
       )}
       {/* Muestra los productos si existen */}
-      {initialSearch && <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} initialTerm={query}/>}
+      {initialSearch && <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} initialTerm={query} showFilters={true}/>}
     </div>
   );
 };
