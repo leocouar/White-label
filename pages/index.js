@@ -1,5 +1,6 @@
 import ProductListings from '@/components/products/ProductListings'
 import Carrusel from "@/components/Carrusel";
+import { findAllStores } from "services/storeService";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
 import Banner from '@/components/products/CommerceBanner.js';
@@ -7,7 +8,7 @@ import Banner from '@/components/products/CommerceBanner.js';
 
 
 
-function IndexPage({brands, categories}) {
+function IndexPage({brands, categories, stores}) {
   return (
       <>
           <div className='bg-white'>
@@ -17,7 +18,7 @@ function IndexPage({brands, categories}) {
             </div>
             <div className="w-full h-full">
               <div className='flex justify-center'>
-                <Banner/>
+                <Banner stores={stores}/>
               </div>
             </div>
             <ProductListings brands={brands} categories={categories}/>
@@ -29,11 +30,13 @@ function IndexPage({brands, categories}) {
 export async function getServerSideProps() {
   const brands = await brandsService.findAll();
   const categories = await categoriesService.findAll();
+  const stores  = await findAllStores();
 
   return {
     props: {
       brands,
       categories,
+      stores,
     },
   }
 }
