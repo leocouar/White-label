@@ -33,7 +33,7 @@ const VistaComercioU = () => {
    
     return <p>Cargando...</p>;
   }
-  console.log("Ruta de la imagen:", selectedStore.logo);
+
 
   return (
     <div className="w-full h-full">
@@ -44,7 +44,7 @@ const VistaComercioU = () => {
         </div>
         <div className="flex w-full justify-around">
           <div className="w-1/2">
-            <ul className="mt-6 ml-5 space-y-5">
+            <ul className="mt-12 ml-5 space-y-5">
               <li>
                 <span className="font-semibold">Descripción:</span><a className="pl-2">{selectedStore.description}</a>
               </li>
@@ -64,7 +64,7 @@ const VistaComercioU = () => {
           </div>
           <div className="w-1/4">
             <img
-              src={selectedStore.logo || logo} // Utilizar logo predeterminado si no hay uno en la tienda
+              src={selectedStore.logo.link}
               className="w-full h-auto mb-16 rounded-xl shadow-lg transition-transform duration-300 transform origin-center hover:scale-110"
             />
           </div>
