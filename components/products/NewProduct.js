@@ -77,7 +77,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         errors,
         handleChange,
         handleBlur,
-        handleSubmit, } = useForm(initialForm, validationsForm);
+        handleSubmit } = useForm(initialForm, validationsForm);
 
     const handleChangeSize = (e) => {
         if (e.target.checked) {
