@@ -1,10 +1,7 @@
 import { findAllStores } from 'services/storeService';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Image from 'next/image'
 import Link from 'next/link'
-import Price from '@/components/products/Price'
-import logo from "../../images/default.jpeg";
+
 
 
 function Banner() {

@@ -2,7 +2,7 @@ import VistaComercioU from "@/components/commerce/VistaComercioU";
 
 const CommercePage = () => {
 
-  return <VistaComercioU />;
+  return <VistaComercioU/>;
   
 };
 

@@ -30,7 +30,7 @@ const VistaComercioU = () => {
   const selectedStore = stores.find(store => store.id === parseInt(id));
 
   if (!selectedStore) {
-    // Puedes mostrar un mensaje de carga o redireccionar a otra página si el comercio no se encuentra
+   
     return <p>Cargando...</p>;
   }
   console.log("Ruta de la imagen:", selectedStore.logo);
