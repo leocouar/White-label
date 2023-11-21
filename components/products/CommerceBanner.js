@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Dashboard from "pages/dashboard/[id]";
-  
+
+
 function Banner(stores) {
   const router = useRouter();
-  
+  const DefaultImage = "https://i.pinimg.com/564x/56/02/c2/5602c21e0b1cc147c5c7f7ad36e688da.jpg"
     return (
 <div className="bg-white max-h-96 w-full">
       <div className="mx-auto px-2 sm:px-4">
@@ -21,8 +22,11 @@ function Banner(stores) {
                       
                     }
                   >
-                    
-                      <img src={store?.logo?.link} alt={store.name} className="rounded" />
+                      <img 
+                      src={store?.logo?.link || DefaultImage}
+                      alt={store.name}
+                      className="rounded"
+                       />
                       <h1 className="flex truncate justify-center mt-4 font-primary hover:text-clip">{store.name}</h1>
                     
                   </Link>
@@ -30,6 +34,7 @@ function Banner(stores) {
             </div>
           ))}
         </div>
+            
       </div>
     </div>
     )
