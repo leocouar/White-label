@@ -8,7 +8,7 @@ const VistaComercio = ({commerceData}) => {
   const [storeToUpdate, setStoreToUpdate] = useState(commerceData.store.store);
   const [storeToShow, setStoreToShow] = useState(commerceData.store.store)
   const [refreshData, setRefreshData] = useState(false)
-
+  const DefaultImage = "https://i.pinimg.com/564x/56/02/c2/5602c21e0b1cc147c5c7f7ad36e688da.jpg"
   useEffect(()=>{
     setStoreToShow({
       ...storeToUpdate
@@ -46,7 +46,7 @@ const VistaComercio = ({commerceData}) => {
               <h1 className="text-4xl font-semibold mb-4">"{storeToShow.name}"</h1>
               <h2 className="text-2xl italic mb-4">{storeToShow.description}</h2>
             </div>
-            <img src={storeToShow.logo.link} alt={storeToShow.name} className="w-48 rounded border-2"/>
+            <img src={storeToShow?.logo?.link || DefaultImage} alt={storeToShow.name} className="w-48 rounded border-2"/>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Display commerce information */}
