@@ -22,10 +22,10 @@ const ProductCatalog = ({ brands, categories}) => {
   }, [query]);
 
   return (
-    <div>
-      <h1>Catálogo de Productos</h1>
+    <div className='lg:ml-20 lg:flex'>
+      <h1></h1>
       {initialSearch && query && (
-        <h2>Resultados para: "{query}"</h2>
+        <h2 className='text-sm text-palette-primary font-semibold'>Resultados para: "{query}"</h2>
       )}
       {!initialSearch && !query && (
         <p className='bg-red'>No se encontraron resultados para "{query}"</p>

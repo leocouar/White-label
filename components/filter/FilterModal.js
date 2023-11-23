@@ -112,66 +112,38 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
         searchFunction(customParams);
     }
 
+    
+
     return (
-        <div ref={filterElementRef} className=''>
-            <div id="modal" className={`top-1/2 left-1/2 ${showFilters ? "" : "hidden"}  `}
-                tyle={{ minHeight: windowWidth < 768 ? "100vh" : "85vh" }}>
-                <div className="flex shadow-xl items-center bg-white rounded-lg justify-center min-height-100vh text-center sm:block sm:p-0"
-                    style={{ width: windowWidth >= 1200 ? "70rem" : (windowWidth < 1024 ? (windowWidth < 768 ? "100vw" : "50rem") : "60rem") }}>
-                    <div className="w-auto sm:w-11/12 inline-block text-left 
-                        transform transition-all align-middle
-                        sm:min-height-full md:min-height-full"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="modal-headline">
-
-                        <div id="categoriesAndBrands"
-                            className="px-4 pt-6 pb-2 sm:p-6 sm:pb-4 flex"
-                            style={{ maxHeight: windowWidth < 768 ? "85vh" : "55vh" }}>
-                            {filterParams
-                                ?
-                                filterParams.map((category, arrayIndex) => (
-                                    <div className={`flex-center col-span-2 rounded 
-                                            ${category.column ? "lg:w-1/4 md:w-1/4" : "lg:w-3/4 md:w-3/4"}`}
-                                        style={{
-                                            minWidth: windowWidth < 768 ? "50%" : "auto",
-                                            maxHeight: windowWidth < 768 ? "52vh" : "45vh"
-                                        }}>
-                                        <div className="w-auto bg-white text-sm text-palette-primary font-bold px-5 py-2 m-2 -ml-4 text-2xl">
-                                            {category.type}
-                                        </div>
-                                        <div
-                                            style={{ maxHeight: "80%" }}
-                                            className={`overflow-y-auto scrollbar-thin lg:grid md:grid
-                                                ${category.column ? "lg:grid-cols-1" : "lg:grid-cols-4 md:grid-cols-3"}`}>
-
-                                            {category.elements
-                                                ?
-                                                category.elements.map((subcategory, index) => (
-                                                    <div key={index} className=" block mt-2 px-2" >
-                                                        <label className="inline-flex items-center">
-                                                            <input type="checkbox"
-                                                                className="form-checkbox rounded text-red-500 "
-                                                                onChange={(e) => handleChangeSubCat(e, arrayIndex)}
-                                                                value={subcategory.id} />
-                                                            <span className="ml-2">{subcategory.name}</span>
-                                                        </label>
-                                                    </div>
-                                                )) : <></>}
-                                        </div>
-                                    </div>
-                                )) : <></>}
-                        </div>
-
-                        <div id="orderAndButtons"
+        <div ref={filterElementRef} className='mt-6'> 
+            <div id="modal"  className={`fixed top-1/2 left-0 transform -translate-y-1/2  ${showFilters ? "" : "hidden"} sm:h-full sm: z-5`}
+            style={{
+                    minHeight: windowWidth < 768 ? "100vh" : "100vh",
+                    maxWidth: windowWidth < 768 ? "100vh" : "45vh"
+                    }}>     
+              <div
+                    className="flex shadow-xl items-center bg-white rounded-lg justify-center text-center sm: max-w-auto"
+                    style={{
+                        minHeight: windowWidth < 768 ? "52vh" : "52v"
+                    }}
+                >
+                    <div className="text-left">
+                            <div
+                                id="categoriesAndBrands"
+                                className={`px-4 pb-2 sm:p-6 sm:pb-4${  
+                                   windowWidth < 768 ? "flex-col" : ""  // Agrega la clase flex-col si el ancho de la ventana es menor a 768
+                                }`}
+                                style={{ height: "100vh"}}
+                            >
+                                 <div id="orderAndButtons"
                         >
                             {columnList ? (
-                                <div className={`px-4 md:pt-6 lg:pt-6 pb-2 ${windowWidth < 768 ? "grid" : "flex flex-wrap"}`}>
-                                    <div className="w-auto text-sm text-palette-primary font-bold px-5 m-2 -ml-4 text-2xl">
+                                <div className="sm:flex-col">
+                                    <div className="w-auto text-md text-palette-primary font-bold px-5 mt-12">
                                         Ordenar por:
                                     </div>
                                     <select
-                                        className="text-palette-primary px-5 h-12 bg-gray-200"
+                                        className="text-palette-primary ml-4 mt-4 px-6 h-6"
                                         id="orderBy"
                                         value={selectedOrderCol}
                                         onChange={handleChangeColumn}>
@@ -181,7 +153,8 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
                                             </option>
                                         ))}
                                     </select>
-                                    <label className="flex items-center mt-2 px-2 lg:pb-3">
+                                    <div >
+                                    <label className="flex items-center mt-2 ml-4 px-2 lg:pb-3">
                                         <input
                                             type="radio"
                                             className="form-radio rounded text-red-500"
@@ -192,7 +165,7 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
                                         />
                                         <span className="ml-2">Mayor a menor</span>
                                     </label>
-                                    <label className="flex items-center mt-2 px-2 lg:pb-3">
+                                    <label className="flex items-center ml-4 px-2 lg:pb-3">
                                         <input
                                             type="radio"
                                             className="form-radio rounded text-red-500"
@@ -204,8 +177,47 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
                                         <span className="ml-2">Menor a mayor</span>
                                     </label>
                                 </div>
+                                </div>
                             ) : <></>}
                         </div>
+                            {filterParams
+                                ?
+                                filterParams.map((category, arrayIndex) => (
+                                    <div className={`flex-center  rounded ml-6
+                                            ${category.column ?'':''
+                                              }`}
+                                        style={{
+                                            minWidth: windowWidth < 768 ? "50%" : "auto",
+                                            maxHeight: windowWidth < 768 ? "52vh" : "45vh"
+                                        }}>
+                                        <div className="w-auto bg-white text-md text-palette-primary font-bold px-5 py-2 m-2 -ml-4">
+                                            {category.type}
+                                        </div>
+                                        <div
+                                            style={{ maxHeight: "50%" }}
+                                            className={`overflow-y-auto no-scrollbar lg:grid md:grid w-full'
+                                                ${category.column ? "" : ""}`}>
+
+                                            {category.elements
+                                                ?
+                                                category.elements.map((subcategory, index) => (
+                                                    <div key={index} className="mt-2" >
+                                                        <label className="inline-flex items-center">
+                                                            <input type="checkbox"
+                                                                className="ml-1 form-checkbox rounded text-red-500 "
+                                                                onChange={(e) => handleChangeSubCat(e, arrayIndex)}
+                                                                value={subcategory.id} />
+                                                            <span className="ml-2">{subcategory.name}</span>
+                                                        </label>
+                                                    </div>
+                                                )) : <></>}
+                                        </div>
+                                    </div>
+                                )) : <></>}
+                           
+                        </div>
+
+                       
                     </div>
                 </div>
             </div>
