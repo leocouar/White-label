@@ -13,7 +13,9 @@ const Gallery = ({ productData }) => {
         groupedProducts.push(productData.slice(i, i + chunkSize));
     }
 
-    return (
+    return null;
+    
+    (
         <div>
             <Carousel
                 showArrows={true}
@@ -60,6 +62,7 @@ const Gallery = ({ productData }) => {
             </Carousel>
         </div>
     );
+    
 };
 
 export default Gallery
