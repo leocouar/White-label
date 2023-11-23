@@ -21,7 +21,7 @@ function IndexPage({brands, categories, stores}) {
                 <Banner stores={stores}/>
               </div>
             </div>
-              <ProductListings brands={brands} categories={categories} />
+              
             </div>
     </>
   )
