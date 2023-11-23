@@ -11,7 +11,6 @@ function ProductSection({ productData }) {
     useEffect(async () => {
         let products = await productService.getProductsRelated(productData)
         setProductsRelated(products)
-        debugger
     }, [])
 
     return (
