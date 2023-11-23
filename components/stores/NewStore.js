@@ -72,7 +72,7 @@ const NewStore = () => {
 
     //Guarda la tienda con su logo
     const saveNewStore = async () => {
-        console.log(session)
+        
         const newStore = {
             "name": name,
             "description": description,
@@ -82,7 +82,7 @@ const NewStore = () => {
         };
         const response = await saveStore(newStore, {
             params: {
-                creatorId: session?.user?.username
+                creatorId: session?.token?.token?.user?.username
             }});
         const folder = response.id;
         uploadFile("store", file, folder)

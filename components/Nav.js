@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { faDoorOpen, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen, faSignOutAlt, faBars } from "@fortawesome/free-solid-svg-icons";
 
 import logo from "/images/camara_bolivar_logo.png";
 import UserSession from "@/components/users/UserSession";
