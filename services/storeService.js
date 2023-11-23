@@ -23,10 +23,10 @@ export async function findByID(id) {
     }
 }
 
-export async function saveStore(store) {
+export async function saveStore(store, creator) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
     try {
-        let response = await axios.post(fetchUrl, store);
+        let response = await axios.post(fetchUrl, store, creator);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -63,6 +63,17 @@ export async function getAllProducts(id) {
         return response.data;
     } catch (error) {
         throw new Error("Could not get all products from that store !");
+    }
+}
+export async function getStoresByUser(id) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/${id}/stores`;
+
+    try {
+        let response = await axios.get(fetchUrl);
+        return response.data;
+    } catch (error) {
+        console.error(error)
+        throw new Error("Could not get the store!");
     }
 }
 

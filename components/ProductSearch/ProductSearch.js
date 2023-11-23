@@ -7,20 +7,12 @@ function NavSearch() {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
 
-    //Ejecuta la funcion de busqueda que se paso como parametro.
-    function searchButton() {
-        setShowFilter(false);
-        const updatedCustomParams = [...customParams];
-        updatedCustomParams[0] = searchTerm;
-        searchFunction(updatedCustomParams);
+  // Función para redirigir a los resultados de búsqueda
+  function redirectToSearchResults() {
+    if (searchTerm.trim() !== '') {
+      router.push(`/catalogue/ProductCatalog?query=${searchTerm}`);
     }
-
-    // Se ejecuta cada vez que el término de búsqueda cambia
-    useEffect(() => {
-        // Puedes agregar lógica adicional aquí si es necesario
-        // Por ahora, simplemente pasamos el término de búsqueda a la URL
-
-    }, [searchTerm, router]);
+  }
 
     return (
         <div className="flex items-center">
@@ -34,7 +26,7 @@ function NavSearch() {
     />
     
     <button className="justify-between my-auto border-l-0 border border-palette-primary placeholder-palette-slighter font-semibold hover:text-red active:bg-palette-slight font-bold uppercase text-xl p-2 my-auto rounded-xl rounded-tl-none rounded-bl-none shadow-lg shadow-indigo-500/50 outline-none focus:outline-none ease-linear transition-all duration-150"
-        onClick={() => searchButton()}
+        onClick={redirectToSearchResults}
     >
         <FontAwesomeIcon icon={faSearch} className="w-6 m-auto" />
     </button>

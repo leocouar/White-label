@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import ForbiddenPage from './ForbiddenPage';
 
 function AuthorizationWrapper({ children }) {
-  const [session, loading] = useSession();
+  const { data: session } = useSession()
   const [grantAccess, setGrantAccess] = useState(false);
-  const sessionUser = session?.user?.username;
+  const sessionUser = session?.token?.token?.token?.token?.user?.username
   let userAdmin, validUser, allowedUser;
 
   //Once that the page has finished loading and the user is known, deduces if the user should be allowed 
@@ -13,7 +13,11 @@ function AuthorizationWrapper({ children }) {
   useEffect(() => {
     if (!loading) {
       validUser = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-      userAdmin = session?.user?.role?.includes('ADMIN');
+      if (session?.token?.token?.token?.token?.user?.role =='ADMIN'){
+        userAdmin= true
+      }else{
+        userAdmin= false
+      }
 
       allowedUser = sessionUser === validUser || sessionUser === validUser + "#";
     }
