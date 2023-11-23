@@ -47,7 +47,7 @@ function Banner(stores) {
                     }
                   >
                       <img 
-                      src={store?.store?.logo?.link || DefaultImage}
+                      src={store?.logo?.link || DefaultImage}
                       alt={store.name}
                       className="rounded"
                        />
