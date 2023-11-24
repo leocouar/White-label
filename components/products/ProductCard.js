@@ -8,7 +8,7 @@ function ProductCard({ product }) {
   const title = product.name;
   const price = product.price;
   const promo = product.promo;
-  const storeLogo = product.store.logo;
+  const storeLogo = product.store?.logo;
 
   useEffect(() => {
     console.log(storeLogo)
@@ -44,7 +44,7 @@ function ProductCard({ product }) {
       <div className="flex items-center font-primary font-medium text-base bottom-0 left-0">
         <Price currency="&emsp;$" num={price} numSize="text-3xl" />
         <div className="flex-grow"></div>
-        <img className="w-14 max-w-14 my-2 mx-2 rounded" src={storeLogo.link} alt="Store Logo" />
+        <img className="w-14 max-w-14 my-2 mx-2 rounded" src={storeLogo?.link} alt="Store Logo" />
       </div>
 
     </Link>)
