@@ -8,7 +8,7 @@ import * as sizeService from "services/sizeService";
 
 
 
-const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
+const NewProduct = ({ categories, brands, sizes, handleCloseModal }) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
     const initialForm = useMemo(() => ({
         name: "",
@@ -34,41 +34,41 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         let errors = {};
 
         if (formSubmitted) {
-        if (!form.name.trim()) {
-            errors.name = "El campo 'Nombre' es requerido";
-        }
+            if (!form.name.trim()) {
+                errors.name = "El campo 'Nombre' es requerido";
+            }
 
-        if (!form.price.trim()) {
-            errors.price = "El campo 'Precio' es requerido";
-        }
+            if (!form.price.trim()) {
+                errors.price = "El campo 'Precio' es requerido";
+            }
 
-        if (!form.description.trim()) {
-            errors.description = "El campo 'Descripcion' es requerido";
-        }
-        if (form.category.id == "") {
-            errors.category = "El campo 'Categoria' es requerido";
-        }
+            if (!form.description.trim()) {
+                errors.description = "El campo 'Descripcion' es requerido";
+            }
+            if (form.category.id == "") {
+                errors.category = "El campo 'Categoria' es requerido";
+            }
 
-        if (form.brand.id == "") {
-            errors.brand = "El campo 'Marcas' es requerido";
-        }
+            if (form.brand.id == "") {
+                errors.brand = "El campo 'Marcas' es requerido";
+            }
 
-        if (!form.sizes[0] || form.sizes[0].id === 0) {
-            errors.sizes = "El campo 'Sizes' es requerido";
-        }
+            if (!form.sizes[0] || form.sizes[0].id === 0) {
+                errors.sizes = "El campo 'Sizes' es requerido";
+            }
 
-        if (!form.code.trim()) {
-            errors.code = "El campo 'Codigo' es requerido";
-        }
+            if (!form.code.trim()) {
+                errors.code = "El campo 'Codigo' es requerido";
+            }
 
-        if (!form.stock.trim()) {
-            errors.stock = "El campo 'Stock' es requerido";
-        }
+            if (!form.stock.trim()) {
+                errors.stock = "El campo 'Stock' es requerido";
+            }
 
-        if (!form.points.trim()) {
-            errors.points = "El campo 'Puntos' es requerido";
+            if (!form.points.trim()) {
+                errors.points = "El campo 'Puntos' es requerido";
+            }
         }
-    }
         return errors;
     };
 
@@ -97,7 +97,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
     }
 
     const handleClose = () => {
-        
+
         handleCloseModal();
     }
     return <>

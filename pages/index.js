@@ -1,4 +1,4 @@
-import ProductListings from '@/components/products/ProductListings'
+import ListProducts from "@/components/products/ListProducts";
 import Carrusel from "@/components/Carrusel";
 import { findAllStores } from "services/storeService";
 import * as brandsService from 'services/brandService';
@@ -21,7 +21,11 @@ function IndexPage({brands, categories, stores}) {
                 <Banner stores={stores}/>
               </div>
             </div>
-              
+            <div className="w-full h-full mt-10">
+              <div className='flex justify-center'>
+                <ListProducts/>
+              </div>
+            </div>
             </div>
     </>
   )

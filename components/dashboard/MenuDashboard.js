@@ -12,8 +12,8 @@ function MenuDashboard(store) {
             setVista('comercio');
         } else if (texto === 'Productos') {
             setVista('productos');
-        } else if (texto === 'Cerrar sesion') {
-            // Handle logout logic
+        } else if (texto === 'salir') {
+            
         }
     };
     return (
@@ -29,7 +29,7 @@ function MenuDashboard(store) {
                                 Productos
                             </div>
 
-                            <div onClick={() => handleClick('Cerrar sesion')} class="block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-red-400 hover:text-white cursor-pointer" >
+                            <div onClick={() => handleClick('salir')} class="block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-red-400 hover:text-white cursor-pointer" >
                                 Salir
                             </div>
                     </nav>
