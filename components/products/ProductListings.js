@@ -18,12 +18,12 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
 
     //Carga los productos y el total de paginas                             
     const [results, setResults] = useState({
-        products: initialSearch.content,
-        totalPages: initialSearch.totalPages,
+        products: initialSearch?.content,
+        totalPages: initialSearch?.totalPages,
         newSearch: null
     });
 
-    const [productsToShow, setProductsToShow] = useState(initialSearch.content);    //Muestra los productos obtenidos
+    const [productsToShow, setProductsToShow] = useState(initialSearch?.content);    //Muestra los productos obtenidos
     const [page, setPage] = useState(0);                                            //Pagina actual
 
     const columnList = [
@@ -135,7 +135,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
             <div className="mx-auto mt-3 w-11/12">
                 <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 ">
                     {
-                        productsToShow.map((product, index) => {
+                        productsToShow && productsToShow.map((product, index) => {
                             return <ProductCard key={index} product={product} />;
                         })
                     }

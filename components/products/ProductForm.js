@@ -28,7 +28,7 @@ function ProductForm({ productData, image}) {
 
   useEffect(async () => {
       const currentUser = session?.token?.token?.user;
-      const storeId = productData.store.id;
+      const storeId = productData.store?.id;
       const storesData = await getStoresByUser(currentUser?.username);
 
       currentUser && currentUser?.role?.includes("ADMIN") ?
