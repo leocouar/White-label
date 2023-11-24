@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCloudUploadAlt, faEdit, faTrash, faTag, faInfo} from '@fortawesome/free-solid-svg-icons'
-import { useCartContext, useAddToCartContext } from '@/context/Store'
+import { useAddToCartContext } from '@/context/Store'
 import UploadFile from "@/components/products/UploadFile";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -9,22 +9,38 @@ import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import {activateProduct, deleteProduct, updateAsAPromotion} from 'services/productService';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import ProductCard from "@/components/products/ProductCard";
-
+import { getStoresByUser } from 'services/storeService';
 
 function ProductForm({ productData, image}) {
-  const [title, setTitle] = useState(productData.name);
-  const [mainImg, setMainImg] = useState(image);
-  const [id, setID] = useState(productData.id);
-  const [price, setPrice] = useState(productData.price);
+  const title = useState(productData.name);
+  const mainImg = useState(image);
+  const id = useState(productData.id);
+  const price = useState(productData.price);
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
   const [openUploadFile, setOpenUploadFile] = useState(false);
-  const router = useRouter();
-  const { data: session } = useSession()
+  const router = useRouter();  
   const [promo, setPromo] = useState(productData.promo);
   const [status, setStatus] = useState(productData.deleted)
-  
+
+  const { data: session } = useSession()
+  const [userCanEdit, setUserCanEdit] = useState(false);
+
+  useEffect(async () => {
+      const currentUser = session?.token?.token?.user;
+      const storeId = productData.store.id;
+      const storesData = await getStoresByUser(currentUser?.username);
+
+      currentUser && currentUser?.role?.includes("ADMIN") ?
+          setUserCanEdit(true)
+          :
+          storesData && storesData.map((store) => {
+              if (store.id === storeId) {
+                  setUserCanEdit(true);
+              }
+          });
+
+  }, [])
    
  
   const handlePromo = async () => {
@@ -112,7 +128,7 @@ function ProductForm({ productData, image}) {
     <>
       <NotificationContainer/>
 
-      <div className="w-full">
+      <div id="productForm" className="w-full">
 
         <div className="w-full">
 
@@ -184,7 +200,7 @@ function ProductForm({ productData, image}) {
 
 
         {
-                session?.token?.token?.token?.token?.user?.role =='ADMIN'
+                userCanEdit
           
             ?
               <div className='display flex w-full justify-between h-12'>
