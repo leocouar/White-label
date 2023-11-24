@@ -1,22 +1,31 @@
 import ProductCard from '@/components/products/ProductCard'
 import FilterModal from '@/components/filter/FilterModal'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { searchList } from "../../services/productService"
 
-function ProductListings({ brands, categories }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [termToSearch, setTermToSearch] = useState("");
-    const [categoriesToSearch, setCategoriesToSearch] = useState([]);
-    const [brandsToSearch, setBrandsToSearch] = useState([]);
-    const [orderBy, setOrderBy] = useState("");
-    const [asc, setAsc] = useState(true);
-    
-    const [triggerSearch, setTriggerSearch] = useState(true);
+function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true }) {
+    //Control de pagina
+    const productListRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);         //Indica si esta cargando nuevos productos
+    const [scrolling, setScrolling] = useState(false)          //Indica si se esta scrolleando ahora o no
 
-    const [productsToShow, setProductsToShow] = useState([]);
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    
+    //Obtiene todos los parametros, posee parametros por defecto
+    const [q, setQ] = useState({term: initialTerm,
+                                params:[[],[]],
+                                orderBy: "sales",
+                                asc: false
+                            });
+
+    //Carga los productos y el total de paginas                             
+    const [results, setResults] = useState({
+        products: initialSearch.content,
+        totalPages: initialSearch.totalPages,
+        newSearch: null
+    });
+
+    const [productsToShow, setProductsToShow] = useState(initialSearch.content);    //Muestra los productos obtenidos
+    const [page, setPage] = useState(0);                                            //Pagina actual
+
     const columnList = [
         { value: 'sales', label: 'Popularidad' },
         { value: 'price', label: 'Precio' },
@@ -25,8 +34,8 @@ function ProductListings({ brands, categories }) {
     ];
 
     const filterParams = [
-        { "type": "Categorias", "elements": categories, "column": true },
-        { "type": "Marcas", "elements": brands, "column": false }
+        { type: "Categorias", elements: categories, column: true },
+        { type: "Marcas", elements: brands, column: false }
     ];
 
     //Vuelve al inicio de la pantalla
@@ -37,77 +46,98 @@ function ProductListings({ brands, categories }) {
         });
     }
 
-    //Realiza la busqueda inicial
-    const initialSearch = async (query) => {
-        if (query) {
-            setInitParams(query)
-            const result = await searchList(query[0], query[1][0], query[1][1], query[2], query[3] === "T", 1); // Fetch the first page
-            if (result.totalPages > 0) {
-                setTotalPages(result.totalPages);
-                setProductsToShow(result.content);
-            }else{
-                setTotalPages(0);
-                setProductsToShow([])
-            }
-        }
-    }
+    //NUEVA BUSQUEDA
+    //======================================================================================================
 
-    //Indica los parametros para la primer pagina y para las subsecuentes cada vez que hay cambios en el fitro o se hace clic en Buscar.
-    function setInitParams(query){
-        setPage(1);
-        setTermToSearch(query[0]);
-        setCategoriesToSearch(query[1][0] || []);
-        setBrandsToSearch(query[1][1] || []);
-        setOrderBy(query[2]);
-        setAsc(query[3] === "T");
-    }
-
-    // Obtiene las paginas posteriores a la primera, siempre y cuando haya mas paginas disponibles
-    const fetchNextPage = async () => {
-        if (page < totalPages) {
-            setIsLoading(true);
-            setPage(page + 1); 
-            const result = await searchList(termToSearch, categoriesToSearch, brandsToSearch, orderBy, asc, page + 1);
-            setProductsToShow([...productsToShow, ...result.content]);
-            setIsLoading(false);
-        }
-    };
-
-    /* triggerSearch cambia de valor de false a true una y otra vez cuando el scroll llega al final de la linea.
-     * Cuando eso suceda, el useEffect activa la funcion fetchNextPage();
-     */
-    useEffect(() => {
-        fetchNextPage();
-    }, [triggerSearch]);
-
-    //Cuando se hace scroll al fin de la pagina, carga la proxima pagina
-    let handleScroll = async (e) => {
-        if (window.innerHeight + e.target.documentElement.scrollTop + 1 > e.target.documentElement.scrollHeight && !isLoading ) {
-            setTriggerSearch((prevTriggerSearch) => {
-                return !prevTriggerSearch;
-            });
-        }
-    }
-
-    //Añade el listener de scroll a la pagina
+    //A - Añade el listener de scroll a la pagina
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return (() => { window.removeEventListener('scroll', handleScroll) });
     }, []);
 
-    return (
-        <div className='w-full'>
+    //1 - Obtiene los parametros de la nueva busqueda
+    const search = async (query) => {
+        await setQ(query);
+    }
+
+    //2 - Si hay consulta nueva, busca los resultados y los coloca en results.
+    useEffect(async () => {
+        if (q) {
+
+            const newData = await searchList(0, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false);
+            await setResults({
+                products: newData.content,
+                totalPages: newData.totalPages
+            });
+            await setPage(0);
+            await goBackToTheTop();
+        }
+    }, [q]);
+
+    //3 - Genera la lista de productos nueva desde cero
+    useEffect(() => {
+        setProductsToShow(results.products);
+    }, [results])
+
+    //Habia que esperar a que cargue bien cada detalle antes de que esto se ejecute
+    async function goBackToTheTop(){
+        productListRef.current.scrollIntoView({
+            behavior: "smooth", block: "start"
+        });
+    }
+
+    //------------------------------------- SCROLLING -------------------------------------
+
+    //1 - Inicia el scrolling
+    const handleScroll = async (e) => {
+        if (window.innerHeight + e.target.documentElement.scrollTop + 1 > e.target.documentElement.scrollHeight && !isLoading) {
+            await setScrolling(true);
+        }
+    }
+
+    //2 - Añade una pagina mas para scrollear (si se hizo scroll)
+    useEffect(() => {
+        if (scrolling) {
+            if (page < results.totalPages) setPage((prevPage) => prevPage + 1);
+        }
+    }, [scrolling]);
+
+    //3 - Si esta haciendo scroll trae mas resultados y los añade a la lista de productos a mostrar.
+    useEffect(() => {
+        console.log("Pag.:", page, "; Total pag.: ", results.totalPages)
+        if (scrolling) {
+            setIsLoading(true);
+            (async () => {
+                if (page !== 0) {
+                    const newResults = q ?
+                        await searchList(page, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false)
+                        :
+                        await searchList(page, "", [], [], "sales", false);
+                    const products = [...productsToShow, ...newResults.content];
+                    setProductsToShow(products);
+                }
+            })();
+            setScrolling(false);
+            setIsLoading(false);
+        }
+    }, [page]);
+
+    return (        
+        <div  className='w-full'>
+            <div  ref={productListRef}>&nbsp;</div>
             <FilterModal
                 filterParams={filterParams}
-                searchFunction={initialSearch}
+                searchFunction={search}
+                searchTerm={initialTerm}
                 columnList={columnList}
+                showFilters={showFilters}
             ></FilterModal>
             <div className="mx-auto mt-3 w-11/12">
                 <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 ">
                     {
-                        productsToShow.map((product, index) => (
-                            <ProductCard key={index} product={product} />
-                        ))
+                        productsToShow.map((product, index) => {
+                            return <ProductCard key={index} product={product} />;
+                        })
                     }
                 </div>
                 <button
@@ -148,3 +178,13 @@ function ProductListings({ brands, categories }) {
 }
 
 export default ProductListings;
+
+//Utilizado para preparar la consulta a utilizar con este componente.
+export const prepareDefaultParams = async (query = "") => {
+    try {
+        const results = await searchList(0, query);
+        return results;
+      } catch (error) {
+        console.error('Error fetching initial search results:', error);
+      }
+}
