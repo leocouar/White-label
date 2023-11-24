@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import { saveStore } from "/services/storeService";
 import { uploadFile } from 'services/fileService';
 
 const NewStore = () => {
-    const [session, loading] = useSession();
+    const { data: session } = useSession()
     //Datos de texto
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -72,7 +72,7 @@ const NewStore = () => {
 
     //Guarda la tienda con su logo
     const saveNewStore = async () => {
-        console.log(session)
+        
         const newStore = {
             "name": name,
             "description": description,
@@ -82,7 +82,7 @@ const NewStore = () => {
         };
         const response = await saveStore(newStore, {
             params: {
-                creatorId: session?.user?.username
+                creatorId: session?.token?.token?.user?.username
             }});
         const folder = response.id;
         uploadFile("store", file, folder)

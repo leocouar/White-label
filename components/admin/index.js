@@ -5,9 +5,9 @@ const Index = ({session}) => {
     return (
         <>
             {
-                session?.user?.role?.includes("ADMIN")
+                session?.token?.token?.token?.token?.user?.role =='ADMIN'
                     ?
-                    <Link href="/admin">
+                    <Link legacyBehavior href="/admin">
                         <a className=" text-smw block mt-4 lg:inline-block lg:mt-0 mr-4">
                             <h1 >
                                   <span className="text-xl font-primary font-bold tracking-tight pt-1">

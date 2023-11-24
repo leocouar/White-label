@@ -1,5 +1,6 @@
 import ProductListings from '@/components/products/ProductListings'
 import Carrusel from "@/components/Carrusel";
+import { findAllStores } from "services/storeService";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
 import Banner from '@/components/products/CommerceBanner.js';
@@ -25,13 +26,13 @@ function IndexPage({ brands, categories, initialSearch }) {
 export async function getServerSideProps() {
   const brands = await brandsService.findAll();
   const categories = await categoriesService.findAll();
-  const initialSearch = await prepareDefaultParams();
+  const stores  = await findAllStores();
 
   return {
     props: {
       brands,
       categories,
-      initialSearch
+      stores,
     },
   }
 }

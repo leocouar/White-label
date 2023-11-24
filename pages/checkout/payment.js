@@ -4,7 +4,7 @@ import pointCard from '../../images/pointCard.svg';
 import cash from '../../images/cash.svg';
 import mercadoPago from "../../images/MercadoPago.svg";
 import CreditCard from "@/components/cart/CreditCard";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { getBilling } from "../../services/billingService";
 import { useRouter } from "next/router";
 import { buyWithPoints, createCheckout } from "../../services/productService";
