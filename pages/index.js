@@ -6,7 +6,7 @@ import * as categoriesService from 'services/categoriesService'
 import Banner from '@/components/products/CommerceBanner.js';
 import { prepareDefaultParams } from '@/components/products/ProductListings';
 
-function IndexPage({ brands, categories, initialSearch }) {
+function IndexPage({ brands, categories, initialSearch, stores}) {
   return (
     <div className='bg-white'>
       <div >
@@ -15,7 +15,7 @@ function IndexPage({ brands, categories, initialSearch }) {
       </div>
       <div className="w-full h-full">
         <div className='flex justify-center'>
-          <Banner />
+          <Banner stores={stores} />
         </div>
       </div>
       <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} showFilters={false}/>
