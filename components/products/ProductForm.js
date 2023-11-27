@@ -27,7 +27,7 @@ function ProductForm({ productData, image}) {
   const [userCanEdit, setUserCanEdit] = useState(false);
 
   const evaluateUser = async () => {
-    const currentUser = session?.token?.token?.user;
+    const currentUser = session?.user;
     const storeId = productData.store?.id;
     const storesData = await getStoresByUser(currentUser?.username);
 
