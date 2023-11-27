@@ -82,7 +82,7 @@ const NewStore = () => {
         };
         const response = await saveStore(newStore, {
             params: {
-                creatorId: session?.token?.token?.user?.username
+                creatorId: session?.user?.username
             }});
         const folder = response.id;
         uploadFile("store", file, folder)

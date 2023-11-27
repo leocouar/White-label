@@ -8,13 +8,14 @@ const nextConfig = {
     disable: process.env.NODE_ENV === 'development',
   },
   env: {
+    NEXTAUTH_SECRET: 'ecomm',
     siteTitle: 'e-commerce',
-    siteDescription: 'Tienda On line!',
+    siteDescription: 'Catalogo',
     siteKeywords: 'Camara Comercial',
-    siteUrl: 'https://www.dulcebebe.com',
+    siteUrl: 'https://www.camaracomercial.com',
     siteImagePreviewUrl: '/images/main.jpg',
     twitterHandle: '@CamaraComercialBolivar',
-    backend: 'http://localhost:8888/eComm'
+    backend: 'https://vps-2124680-x.dattaweb.com:8887/eComm'
   },
   images: {
     domains: ['vps-2124680-x.dattaweb.com', 'localhost'],

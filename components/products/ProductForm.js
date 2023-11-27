@@ -200,8 +200,7 @@ function ProductForm({ productData, image}) {
 
 
         {
-                userCanEdit
-          
+          userCanEdit       
             ?
               <div className='display flex w-full justify-between h-12'>
 
