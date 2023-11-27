@@ -26,22 +26,25 @@ function ProductForm({ productData, image}) {
   const { data: session } = useSession()
   const [userCanEdit, setUserCanEdit] = useState(false);
 
-  useEffect(async () => {
-      const currentUser = session?.token?.token?.user;
-      const storeId = productData.store?.id;
-      const storesData = await getStoresByUser(currentUser?.username);
+  const evaluateUser = async () => {
+    const currentUser = session?.token?.token?.user;
+    const storeId = productData.store?.id;
+    const storesData = await getStoresByUser(currentUser?.username);
 
-      currentUser && currentUser?.role?.includes("ADMIN") ?
-          setUserCanEdit(true)
-          :
-          storesData && storesData.map((store) => {
-              if (store.id === storeId) {
-                  setUserCanEdit(true);
-              }
-          });
-
+    currentUser && currentUser?.role?.includes("ADMIN") ?
+        setUserCanEdit(true)
+        :
+        storesData && storesData.map((store) => {
+            if (store.id === storeId) {
+                setUserCanEdit(true);
+            }
+        });
+  }
+  
+  useEffect(() => {
+    evaluateUser();
   }, [])
-   
+  
  
   const handlePromo = async () => {
     let producToUpdate = {
