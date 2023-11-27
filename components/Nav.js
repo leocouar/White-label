@@ -82,7 +82,7 @@ function Nav() {
     <header className={color ? "w-full sticky  lg:static top-0 z-50 bg-white ease-in duration-300" : "w-full sticky lg:static top-0 z-50 bg-palette-bg ease-in duration-300"}>
 
       <div >
-        <div className="flex items-center justify-between flex-wrap p-2">
+        <div className="flex items-center flex-wrap p-2">
 
           <div className="block lg:hidden">
             <button onClick={handleMenu} className="flex py-2 hover:border-grey">
@@ -97,19 +97,19 @@ function Nav() {
 
 
 
-          <div className="flex-1" style={{ margin: "0 auto" }}>
+          <div className="flex-1">
             <NavSearch />
           </div>
 
           <div
             id="menu"
-            className={` flex-grow ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
+            className={`flex ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
           >
             
            
             <Link legacyBehavior href="/stores/list">
                 <div
-            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary">
+            className={session?"text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer":"hidden"}>
             
                 TUS COMERCIOS
 
@@ -120,7 +120,7 @@ function Nav() {
             <Link legacyBehavior href="/about/inicio"
             >
               <div
-            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
+            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
             >
                 NOSOTROS
 
