@@ -101,7 +101,8 @@ function Nav() {
             <NavSearch />
           </div>
 
-          <div
+          {!session ?(
+            <div
             id="menu"
             className={`flex ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
           >
@@ -123,9 +124,7 @@ function Nav() {
             className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
             >
                 NOSOTROS
-
-              </div>
-              
+              </div> 
             </Link>
             
             {!session ? (
@@ -141,19 +140,12 @@ function Nav() {
           <Link href="/"
           className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
             title="Sign Out"
-            onClick={handleSignOut}>
-            
-            
-          
-            
+            onClick={handleSignOut}>  
             <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
           
           </Link>
-          
-        )}
-
-          </div>
-
+            </div>
+          )}
           {
             load ?
               <Loading>

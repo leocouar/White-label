@@ -6,7 +6,7 @@ import ForbiddenPage from './ForbiddenPage';
 function AuthorizationWrapper({ children }) {
   const { data: session } = useSession()
 
-  if (session?.token?.token?.token?.token?.user?.role =='ADMIN') return <ForbiddenPage />;
+  if (!session?.user?.role?.includes('ADMIN')) return <ForbiddenPage />;
   return <>{children}</>;
 }
 
