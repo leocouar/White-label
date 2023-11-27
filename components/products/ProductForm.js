@@ -184,7 +184,7 @@ function ProductForm({ productData, image}) {
 
 
         {
-                session?.token?.token?.token?.token?.user?.role =='ADMIN'
+                session?.user?.role?.includes('ADMIN')
           
             ?
               <div className='display flex w-full justify-between h-12'>

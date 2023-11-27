@@ -1,25 +1,25 @@
-import { useSession,getSession, getCsrfToken, signIn } from "next-auth/react";
+import { useSession, getSession, getCsrfToken, signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import login from "/images/login.png";
 
-const Login = ({ csrfToken, session }) => {
+const Login = ({ csrfToken }) => {
   const router = useRouter()
+  const { data: session, user } = useSession()
 
   if (session) {
   router.push('/stores/list'); // Redirigir al dashboard si está autenticado
   return null; // O puedes renderizar un componente de carga aquí
   }
-  const [credentials,setCredentials]= useState({username:"",password:"",csrfToken: csrfToken,remember:true})
+  const [credentials, setCredentials] = useState({ username: "", password: "", csrfToken: csrfToken, remember: true })
 
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(credentials);
-    signIn('credentials',{
+    signIn('credentials', {
       username: credentials.username,
       password: credentials.password,
       csrfToken: csrfToken,
-      remember:true,
+      remember: true,
     })
   }
 
@@ -29,7 +29,6 @@ const Login = ({ csrfToken, session }) => {
   const handleFacebookSignIn = () => {
     signIn('facebook'); // 'facebook' es el ID del proveedor de Facebook configurado en NextAuth.js
   };
-  
 
 
   return (
@@ -55,7 +54,7 @@ const Login = ({ csrfToken, session }) => {
               <label htmlFor="email-address" className="sr-only">Usuario</label>
               <input name="username"
                 value={credentials.username}
-                onChange={({target})=>setCredentials({...credentials,username: target.value})}
+                onChange={({ target }) => setCredentials({ ...credentials, username: target.value })}
                 required
                 type="type"
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-palette-slight placeholder-palette-slight text-palette-sdark rounded-t-md focus:outline-none focus:ring-palette-secondary focus:border-palette-sdark focus:z-10 sm:text-sm"
@@ -65,7 +64,7 @@ const Login = ({ csrfToken, session }) => {
               <label htmlFor="password" className="sr-only">Password</label>
               <input name="password"
                 value={credentials.password}
-                onChange={({target})=>setCredentials({...credentials,password: target.value})}
+                onChange={({ target }) => setCredentials({ ...credentials, password: target.value })}
                 type="password"
                 autoComplete="current-password"
                 required
@@ -117,7 +116,6 @@ const Login = ({ csrfToken, session }) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  
   if (session) {
     return {
       redirect: {
