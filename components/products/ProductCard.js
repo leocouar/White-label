@@ -10,10 +10,6 @@ function ProductCard({ product }) {
   const promo = product.promo;
   const storeLogo = product.store?.logo;
 
-  useEffect(() => {
-    console.log(storeLogo)
-  })
-
   let defaultImage = {
     "url": "default.jpeg",
     "link": logo,
