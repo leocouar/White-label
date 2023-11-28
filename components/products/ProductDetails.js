@@ -29,9 +29,11 @@ function ProductDetails({ productData}) {
         productData={productData}
         image={image}
       />
+      {/*
       <div className=''>
         <BackToProductButton />
       </div>
+      */}
     </div>
     
   )
