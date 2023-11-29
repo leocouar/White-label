@@ -59,7 +59,7 @@ const VistaProductos = ({ store, brands, categories, sizes }) => {
   const handleAddClick = () => {
     setView('add');
   };
-  const handleCancelClick = () => {
+  const onCancel = () => {
     setView('productos');
   };
   const columns = [
@@ -151,7 +151,7 @@ const VistaProductos = ({ store, brands, categories, sizes }) => {
       
       {view === 'add' && (
         
-        <NewProduct categories={categories} brands={brands} sizes={sizes} handleCancelClick={handleCancelClick} />         
+        <NewProduct categories={categories} brands={brands} sizes={sizes} onCancel={onCancel} />         
       )}
       
     </div>

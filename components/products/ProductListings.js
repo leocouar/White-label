@@ -23,7 +23,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
         newSearch: null
     });
 
-    const [productsToShow, setProductsToShow] = useState(initialSearch?.content);    //Muestra los productos obtenidos
+    const [productsToShow, setProductsToShow] = useState(initialSearch?.content);   //Muestra los productos obtenidos
     const [page, setPage] = useState(0);                                            //Pagina actual
 
     const columnList = [
@@ -61,16 +61,20 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
     }
 
     //2 - Si hay consulta nueva, busca los resultados y los coloca en results.
-    useEffect(async () => {
-        if (q) {
+    const setNewSearch = async () => {
+        const newData = await searchList(0, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false);
+        await setResults({
+            products: newData.content,
+            totalPages: newData.totalPages
+        });
+        await setPage(0);
+        await goBackToTheTop();
+    }
 
-            const newData = await searchList(0, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false);
-            await setResults({
-                products: newData.content,
-                totalPages: newData.totalPages
-            });
-            await setPage(0);
-            await goBackToTheTop();
+    //2A - Al cambiar el  parametro de busqueda, se define una nueva busqueda
+    useEffect(() => {
+        if (q) {
+            setNewSearch();
         }
     }, [q]);
 
@@ -80,10 +84,12 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
     }, [results])
 
     //Habia que esperar a que cargue bien cada detalle antes de que esto se ejecute
-    async function goBackToTheTop(){
-        productListRef.current.scrollIntoView({
-            behavior: "smooth", block: "start"
-        });
+    const goBackToTheTop = () => {
+        if (productListRef.current) {
+            productListRef.current.scrollIntoView({
+                behavior: "smooth", block: "start"
+            });
+        }
     }
 
     //------------------------------------- SCROLLING -------------------------------------
@@ -103,23 +109,26 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
     }, [scrolling]);
 
     //3 - Si esta haciendo scroll trae mas resultados y los añade a la lista de productos a mostrar.
-    useEffect(() => {
-        console.log("Pag.:", page, "; Total pag.: ", results.totalPages)
+    const loadNewPage = async () => {
         if (scrolling) {
             setIsLoading(true);
-            (async () => {
-                if (page !== 0) {
-                    const newResults = q ?
-                        await searchList(page, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false)
-                        :
-                        await searchList(page, "", [], [], "sales", false);
-                    const products = [...productsToShow, ...newResults.content];
-                    setProductsToShow(products);
-                }
-            })();
+            if (page !== 0) {
+                const newResults = q ?
+                    await searchList(page, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false)
+                    :
+                    await searchList(page, "", [], [], "sales", false);
+                const products = [...productsToShow, ...newResults.content];
+                setProductsToShow(products);
+            }
             setScrolling(false);
             setIsLoading(false);
         }
+    }
+
+    //3A - Cuando detecte un cambio de pagina, ejecutara la carga de una nueva pagina (de ser posible)
+    useEffect(() => {
+        console.log("Pag.:", page, "; Total pag.: ", results.totalPages)
+        loadNewPage();
     }, [page]);
 
     return (        
