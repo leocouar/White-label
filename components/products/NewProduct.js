@@ -35,7 +35,7 @@ const NewProduct =({ store,onCancel}) => {
             id: ""
         },
         store: {
-            id: store.id || ""
+            id: store?.id || ""
         },
         sizes: [{
             id: ""
@@ -44,7 +44,7 @@ const NewProduct =({ store,onCancel}) => {
         stock: "",
         points: "",
         promo: false,
-    }), [store.id]);
+    }), [store?.id]);
 
     const validationsForm = (form) => {
         let errors = {};
