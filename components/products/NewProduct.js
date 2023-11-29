@@ -1,16 +1,30 @@
-
 import { NotificationContainer } from "react-notifications";
 import useForm from "../../hooks/useForm";
-import { useState, useMemo } from "react";
+import { useState, useMemo,useEffect } from "react";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
 
-
-
-const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
+const NewProduct =({ store,onCancel}) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
-    const initialForm = useMemo(() => ({
+    const[categories,setCategories]= useState()
+    const[brands,setBrands]= useState()
+    const[sizes,setSizes]= useState()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const categorieList= await categoriesService.findAll()
+            const brandList=await brandsService.findAll()
+            const sizeList= await sizeService.findAll()
+
+            setCategories(categorieList);
+            setBrands(brandList);
+            setSizes(sizeList);
+        };
+    
+        fetchData();
+      }, []);
+      const initialForm = useMemo(() => ({
         name: "",
         price: "",
         description: "",
@@ -20,6 +34,9 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         brand: {
             id: ""
         },
+        store: {
+            id: store?.id || ""
+        },
         sizes: [{
             id: ""
         }],
@@ -27,13 +44,10 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         stock: "",
         points: "",
         promo: false,
-    })
-    );
+    }), [store?.id]);
 
     const validationsForm = (form) => {
         let errors = {};
-
-        if (formSubmitted) {
         if (!form.name.trim()) {
             errors.name = "El campo 'Nombre' es requerido";
         }
@@ -68,7 +82,6 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         if (!form.points.trim()) {
             errors.points = "El campo 'Puntos' es requerido";
         }
-    }
         return errors;
     };
 
@@ -98,7 +111,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
 
     const handleClose = () => {
         
-        handleCloseModal();
+        onCancel();
     }
     return <>
         <NotificationContainer />
@@ -143,7 +156,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                         </div>
 
                         <div className="w-full">
-                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="codigo">
                                 C&oacute;digo
                             </label>
@@ -163,7 +176,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                     </div>
                     <div className="w-full md:w-1/2 px-3 mb-4">
                         <div className="w-full">
-                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="category">
                                 Categoria
                             </label>
@@ -178,7 +191,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             {errors.category && <p className={`text-red-500 text-xs italic`}>{errors.category}</p>}
                         </div>
                         <div className="w-full">
-                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="brand">
                                 Marcas
                             </label>
@@ -269,17 +282,5 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
             </form>
         </div>
     </>;
-}
-export async function getServerSideProps() {
-    const categories = await categoriesService.findAll();
-    const brands = await brandsService.findAll();
-    const sizes = await sizeService.findAll();
-    return {
-        props: {
-            brands,
-            categories,
-            sizes
-        },
-    }
 }
 export default NewProduct;
