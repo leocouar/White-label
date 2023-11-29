@@ -12,6 +12,7 @@ import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
 
 const VistaProductos = ({ store, brands, categories, sizes }) => {
+  const [view, setView] = useState('productos');
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prod,setProd]= useState(store.store.store)
@@ -55,14 +56,12 @@ const VistaProductos = ({ store, brands, categories, sizes }) => {
     }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleAddClick = () => {
+    setView('add');
   };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleCancelClick = () => {
+    setView('productos');
   };
-
   const columns = [
     {
       name: 'Id',
@@ -128,32 +127,33 @@ const VistaProductos = ({ store, brands, categories, sizes }) => {
 
   return (
     <div className="min-h-80 max-w-12 my-4 sm:my-8 mx-auto w-full">
-      <div className="mb-4 flex justify-end">
+      {view === 'productos' && (
+        <div>
 
-        <button onClick={handleOpenModal} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded mb-4">
+        <div className="mb-4 flex justify-end">
+
+        <button onClick={handleAddClick} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded mb-4">
           Agregar Producto
         </button>
 
       </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center">
-          <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div> 
-          <div className="md:col-span-2 text-left relative">
-            
-            <NewProduct categories={categories} brands={brands} sizes={sizes} handleCloseModal={handleCloseModal} />
-          </div>
-        </div>
-
-      )}
       <div className="overflow-hidden">
-        <DataTable
-          columns={columns}
-          data={products}
-          pagination
-          subHeader
-          subHeaderComponent={subHeaderComponentMemo}
-        />
-      </div>
+      <DataTable
+        columns={columns}
+        data={products}
+        pagination
+        subHeader
+        subHeaderComponent={subHeaderComponentMemo}
+      />
+    </div>
+        </div>
+      )}
+      
+      {view === 'add' && (
+        
+        <NewProduct categories={categories} brands={brands} sizes={sizes} handleCancelClick={handleCancelClick} />         
+      )}
+      
     </div>
   );
 };

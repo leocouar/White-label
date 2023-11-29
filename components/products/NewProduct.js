@@ -8,7 +8,7 @@ import * as sizeService from "services/sizeService";
 
 
 
-const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
+const NewProduct = ({ categories, brands, sizes, handleCancelClick}) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
     const initialForm = useMemo(() => ({
         name: "",
@@ -96,14 +96,14 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         }
     }
 
-    const handleClose = () => {
+    const handleCancel = () => {
         
-        handleCloseModal();
+        handleCancelClick();
     }
     return <>
         <NotificationContainer />
-        <div className="flex justify-center bg-white p-8 rounded shadow-lg ">
-            <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
+        <div className="inset-0 z-10 flex items-center justify-center ">
+            <form className="w-full px-6 " onSubmit={handleSubmit}>
                 <h2 className="text-black text-center font-bold text-xl mb-5">Agregar Producto</h2>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full md:w-1/2 px-3 mb-4">
@@ -192,8 +192,9 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             </select>
                             {errors.brand && <p className={`text-red-500 text-xs italic`}>{errors.brand}</p>}
                         </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
 
-                        <div className="w-full">
+                        <div className="w-full md:w-1/2 px-3 mb-4">
                             <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                 Precio
                             </label>
@@ -223,9 +224,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                                 {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
                             </div>
                         </div>
-
-
-                        <div className="w-full">
+                        <div className="w-full md:w-1/2 px-3 mb-4">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="Stock">
                                 Stocks
@@ -249,20 +248,21 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             {errors.stock && <p className={`text-red-500 text-xs italic`}>{errors.stock}</p>}
 
                         </div>
+                        </div>
 
 
                     </div>
                 </div>
 
-                <div className="flex justify-center space-x-4 mt-8">
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                        Guardar
-                    </button>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleClose}
+                <div className="flex space-x-2 mt-8 justify-end">
+                    <button className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"
+                        onClick={handleCancel}
                     >
                         Cancelar
+                    </button>
+                    <button type="submit" className="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-md"
+                    >
+                        Guardar
                     </button>
                 </div>
 
