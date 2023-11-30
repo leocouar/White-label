@@ -1,18 +1,31 @@
 import NewStore from "@/components/stores/NewStore";
-import { getSession, getCsrfToken, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import StoreHeading from "@/components/StoreHeading";
 import ListStores from "@/components/stores/ListStore";
 import Banner from '@/components/products/CommerceBanner.js';
-import { findAllStores } from "services/storeService";
+import { findAllStores, getStoresByUser } from "services/storeService";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-function StoreList({ stores }) {
+import { useState ,useEffect} from "react";
+
+function StoreList() {
+  const {data :session} =useSession()
+  console.log(session?.user?.username);
+  const [youStores, setYouStores]=useState()
+  useEffect(() => {
+    const fetchData = async () => {
+        const listStore = await getStoresByUser(session?.user.username)
+        setYouStores(listStore)
+    };
+
+    fetchData();
+  }, []);
   return (
     <div className="h-full items-center">
       <StoreHeading title="Tus Comercios" />
       <div className='flex justify-center'>
-        <Banner stores={stores} />
+        <Banner stores={youStores} />
       </div>
       <div className="flex justify-center mt-20">
         <Link legacyBehavior href={'/stores/create'}>
@@ -23,27 +36,6 @@ function StoreList({ stores }) {
       </div>
     </div>
   )
-
-}
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  const stores = await findAllStores();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/", // Redirigir al dashboard si está autenticado
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-      stores
-    },
-  };
 
 }
 export default StoreList;
