@@ -19,22 +19,22 @@ function MenuDashboard(store) {
     return (
         <>
             <div className="bg-gray-100 flex">
-                <div class="p-2 relative bg-white h-screen w-40 hidden sm:block shadow-xl" id="sideNav">
+                <div className="p-2 relative bg-white h-screen w-40 hidden sm:block shadow-xl" id="sideNav">
                     <nav>         
-                            <div onClick={() => handleClick('Comercio')} class={vista==='comercio'?"block text-black-500 font-semibold py-2.5 px-4 my-4 rounded bg-blue-400 hover:text-white cursor-pointer":"block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200  hover:bg-blue-400 hover:text-white cursor-pointer"}>
+                            <div onClick={() => handleClick('Comercio')} className={vista==='comercio'?"block text-black-500 font-semibold py-2.5 px-4 my-4 rounded bg-blue-400 hover:text-white cursor-pointer":"block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200  hover:bg-blue-400 hover:text-white cursor-pointer"}>
                                 Comercio
                             </div>
 
-                            <div onClick={() => handleClick('Productos')} class={vista==='productos'?"block text-black-500 font-semibold py-2.5 px-4 my-4 rounded bg-blue-400 hover:text-white cursor-pointer":"block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white cursor-pointer"}>
+                            <div onClick={() => handleClick('Productos')} className={vista==='productos'?"block text-black-500 font-semibold py-2.5 px-4 my-4 rounded bg-blue-400 hover:text-white cursor-pointer":"block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-blue-400 hover:text-white cursor-pointer"}>
                                 Productos
                             </div>
 
-                            <div onClick={() => handleClick('Salir')} class="block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-red-400 hover:text-white cursor-pointer" >
+                            <div onClick={() => handleClick('Salir')} className="block text-black-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-red-400 hover:text-white cursor-pointer" >
                                 Salir
                             </div>
                     </nav>
                     
-                    <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+                    <div className="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
                 </div>
                 <div className="flex-1 p-8">
                     {vista === 'comercio' && (
