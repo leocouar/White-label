@@ -1,16 +1,32 @@
-
 import { NotificationContainer } from "react-notifications";
 import useForm from "../../hooks/useForm";
-import { useState, useMemo } from "react";
+import { useState, useMemo,useEffect } from "react";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
 
 
 
-const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
+const NewProduct = ({ store,onCancel}) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
-    const initialForm = useMemo(() => ({
+    const[categories,setCategories]= useState()
+    const[brands,setBrands]= useState()
+    const[sizes,setSizes]= useState()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const categorieList= await categoriesService.findAll()
+            const brandList=await brandsService.findAll()
+            const sizeList= await sizeService.findAll()
+
+            setCategories(categorieList);
+            setBrands(brandList);
+            setSizes(sizeList);
+        };
+    
+        fetchData();
+      }, []);
+      const initialForm = useMemo(() => ({
         name: "",
         price: "",
         description: "",
@@ -20,6 +36,9 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         brand: {
             id: ""
         },
+        store: {
+            id: store?.id || ""
+        },
         sizes: [{
             id: ""
         }],
@@ -27,13 +46,10 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         stock: "",
         points: "",
         promo: false,
-    })
-    );
+    }), [store?.id]);
 
     const validationsForm = (form) => {
         let errors = {};
-
-        if (formSubmitted) {
         if (!form.name.trim()) {
             errors.name = "El campo 'Nombre' es requerido";
         }
@@ -68,7 +84,6 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         if (!form.points.trim()) {
             errors.points = "El campo 'Puntos' es requerido";
         }
-    }
         return errors;
     };
 
@@ -96,14 +111,14 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
         }
     }
 
-    const handleClose = () => {
+    const handleCancel = () => {
         
-        handleCloseModal();
+        onCancel();
     }
     return <>
         <NotificationContainer />
-        <div className="flex justify-center bg-white p-8 rounded shadow-lg ">
-            <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
+        <div className="inset-0 z-10 flex items-center justify-center ">
+            <form className="w-full px-6 " onSubmit={handleSubmit}>
                 <h2 className="text-black text-center font-bold text-xl mb-5">Agregar Producto</h2>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full md:w-1/2 px-3 mb-4">
@@ -143,7 +158,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                         </div>
 
                         <div className="w-full">
-                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="codigo">
                                 C&oacute;digo
                             </label>
@@ -163,7 +178,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                     </div>
                     <div className="w-full md:w-1/2 px-3 mb-4">
                         <div className="w-full">
-                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="category">
                                 Categoria
                             </label>
@@ -178,7 +193,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             {errors.category && <p className={`text-red-500 text-xs italic`}>{errors.category}</p>}
                         </div>
                         <div className="w-full">
-                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="brand">
                                 Marcas
                             </label>
@@ -192,8 +207,9 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             </select>
                             {errors.brand && <p className={`text-red-500 text-xs italic`}>{errors.brand}</p>}
                         </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
 
-                        <div className="w-full">
+                        <div className="w-full md:w-1/2 px-3 mb-4">
                             <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                 Precio
                             </label>
@@ -223,9 +239,7 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                                 {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
                             </div>
                         </div>
-
-
-                        <div className="w-full">
+                        <div className="w-full md:w-1/2 px-3 mb-4">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="Stock">
                                 Stocks
@@ -249,37 +263,26 @@ const NewProduct = ({ categories, brands, sizes, handleCloseModal}) => {
                             {errors.stock && <p className={`text-red-500 text-xs italic`}>{errors.stock}</p>}
 
                         </div>
+                        </div>
 
 
                     </div>
                 </div>
 
-                <div className="flex justify-center space-x-4 mt-8">
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                        Guardar
-                    </button>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleClose}
+                <div className="flex space-x-2 mt-8 justify-end">
+                    <button className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"
+                        onClick={handleCancel}
                     >
                         Cancelar
+                    </button>
+                    <button type="submit" className="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-md"
+                    >
+                        Guardar
                     </button>
                 </div>
 
             </form>
         </div>
     </>;
-}
-export async function getServerSideProps() {
-    const categories = await categoriesService.findAll();
-    const brands = await brandsService.findAll();
-    const sizes = await sizeService.findAll();
-    return {
-        props: {
-            brands,
-            categories,
-            sizes
-        },
-    }
 }
 export default NewProduct;
