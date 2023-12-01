@@ -37,15 +37,18 @@ function Banner(stores) {
           {stores.stores && stores.stores.map((store, index) => (
             <div className="flex-shrink-0 mx-3 max-w-full" key={index}>
               <div className="bg-gray-200 relative mb-4 h-auto w-36 lg:w-48 border-4 border-gray-200 shadow-lg rounded-lg group-hover:opacity-75 sm:w-40 transition-transform duration-300 transform origin-center hover:scale-110">
-              <Link
-                    href={
-                      router.pathname === '/stores/list'
-                        ? `/dashboard/${store.id}`
-                        : 
-                        `/commerce/${store.id}`
-                      
-                    }
-                  >
+                      <Link
+                          href={
+                              router.pathname === '/stores/list'
+                                  ? `/dashboard/[storeId]`
+                                  : `/commerce/[storeId]`
+                          }
+                          as={
+                              router.pathname === '/stores/list'
+                                  ? `/dashboard/${store.id}`
+                                  : `/commerce/${store.id}`
+                          }
+                      >
                       <img 
                       src={store?.logo?.link || DefaultImage}
                       alt={store.name}
@@ -58,7 +61,6 @@ function Banner(stores) {
             </div>
           ))}
         </div>
-            
       </div>
       
     </div>

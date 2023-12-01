@@ -1,20 +1,32 @@
 import ComercioUnico from "@/components/commerce/ComercioUnico";
-import ProductListings from "@/components/products/ProductListings";
-import { findByID } from "services/storeService"; 
+import ProductByStoreId from "@/components/commerce/ProductByStoreId";
+import { findByID } from "services/storeService";
 
-
-function Commerce({ brands, categories, initialSearch, stores}) {
-
+function Commerce(store) {
     return (
-        <>
         <div>
-            <ComercioUnico/>
+            <div>
+                {/* Pass the stores data to the ComercioUnico component */}
+                <ComercioUnico store={store.store} />
+            </div>
+            <div>
+                <ProductByStoreId storeId={store.store.id} />
+            </div>
         </div>
-        <div>
-            <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} showFilters={false}/>
-        </div>
-        </>
-    )
+    );
 }
 
 export default Commerce;
+
+export async function getServerSideProps({query}) {
+    const store  = await findByID(query.id);
+  
+    return {
+        props: {
+            store
+        }
+    }
+}
+
+
+
