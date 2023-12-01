@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import { saveStore } from "/services/storeService";
 import { uploadFile } from 'services/fileService';
+import imageResizer from '../uploadFile/ImageResizer';
 
 const NewStore = () => {
     const { data: session } = useSession()
@@ -16,7 +17,7 @@ const NewStore = () => {
     const [file, setFile] = useState();
 
     //Imagenes a visualizar
-    const [resizedImageUrl, setResizedImageUrl] = useState(null);
+    const [resizedImageUrl, setResizedImageUrl] = useState();
 
     //Errores
     const [errName, setErrName] = useState(false);
@@ -72,7 +73,7 @@ const NewStore = () => {
 
     //Guarda la tienda con su logo
     const saveNewStore = async () => {
-        
+
         const newStore = {
             "name": name,
             "description": description,
@@ -83,49 +84,17 @@ const NewStore = () => {
         const response = await saveStore(newStore, {
             params: {
                 creatorId: session?.user?.username
-            }});
+            }
+        });
         const folder = response.id;
         uploadFile("store", file, folder)
     };
 
     //Selecciona una imagen a cargar  
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = (upload) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                // Set the new width and height for the image
-                const sides = 368;
-
-                // Draw the image with the new dimensions
-                canvas.width = sides;
-                canvas.height = sides;
-                ctx.drawImage(img, 0, 0, sides, sides);
-
-                // Convert the canvas to a Blob
-                canvas.toBlob((blob) => {
-                    const type = file.type === 'image/jpeg' ? 'image/jpeg' : 'image/png';
-                    const resizedImageFile = new File([blob], file.name, {
-                        type: type,
-                        lastModified: Date.now(),
-                    });
-
-                    // Set the resized file in state
-                    setFile(resizedImageFile);
-
-                    // Convert Blob to data URL
-                    const imageUrl = URL.createObjectURL(blob);
-                    setResizedImageUrl(imageUrl);
-                }, 'image/jpeg');
-            };
-            img.src = upload.target.result;
-        };
-        reader.readAsDataURL(file);
+    const handleImageUpload = async (event) => {
+        const resizedData = await imageResizer(event);
+        setFile(resizedData.fileData);
+        setResizedImageUrl(resizedData.returnedURL);
     };
 
     useEffect(() => {
@@ -147,10 +116,6 @@ const NewStore = () => {
     useEffect(() => {
         if (!emailRegex.test(!email.trim())) setErrEmail(false);
     }, [email]);
-
-    useEffect(() => {
-        console.log(errEmail)
-    })
 
     useEffect(() => {
         if (file) setErrImg(false);
@@ -258,7 +223,7 @@ const NewStore = () => {
                             type="file"
                             id="upload"
                             accept="image/*"
-                            onChange={handleImageUpload}
+                            onChange={(e) => handleImageUpload(e)}
                             style={{ display: 'none' }}
                         />
                         <p className={`text-blue-500 text-xs italic`}>

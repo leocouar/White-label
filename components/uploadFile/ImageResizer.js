@@ -1,11 +1,11 @@
 const imageResizer = (event) => {
-    return new Promise((resolve, reject) => {
-        const dataToReturn = {};
+    return new Promise((resolve) => {
         const file = event.target.files[0];
         const reader = new FileReader();
-
+        
         reader.onload = (upload) => {
             const img = new Image();
+
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
@@ -26,26 +26,15 @@ const imageResizer = (event) => {
                         lastModified: Date.now(),
                     });
 
-                    // Set the resized file in the dataToReturn object
-                    dataToReturn.file = resizedImageFile;
-
                     // Convert Blob to data URL
                     const imageUrl = URL.createObjectURL(blob);
-                    dataToReturn.resizedUrl = imageUrl;
 
-                    // Resolve the Promise with the dataToReturn object
-                    resolve(dataToReturn);
+                    // Resolve the promise with the result
+                    resolve({ fileData: resizedImageFile, returnedURL: imageUrl });
                 }, 'image/jpeg');
             };
             img.src = upload.target.result;
         };
-
-        // Handle FileReader errors
-        reader.onerror = (error) => {
-            reject(error);
-        };
-
-        // Read the file as a data URL
         reader.readAsDataURL(file);
     });
 };
