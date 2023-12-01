@@ -11,6 +11,13 @@
 html {
   scroll-behavior: smooth;
 }
+.parallax-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 
 .triangle::before {
   content: '';
@@ -38,6 +45,7 @@ html {
 #card:hover { transform: rotateY(180deg); }
 */
 #card > div:nth-child(1) { transition-delay: 150ms;}
+
 
 
 /*
