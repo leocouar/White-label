@@ -87,3 +87,13 @@ export async function getOwner(id) {
         throw new Error("Could not get the owner of that store !");
     }
 }
+
+export async function deleteStoreLogo(storeId, image) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/delete/${storeId}/${image}`;
+    try {
+        let response = await axios.delete(fetchUrl);
+        return response;
+    } catch (error) {
+        throw new Error("Could not delete the logo of the store!");
+    }
+}

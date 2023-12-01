@@ -281,7 +281,6 @@ export async function updateTwinsCard(user) {
 }
 
 export async function deletedImagen(productId, image) {
-    debugger
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/product/delete/${productId}/${image}`;
     try {
         let response = await axios.delete(fetchUrl);
