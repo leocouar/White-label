@@ -7,7 +7,7 @@ import { faDoorOpen, faSignOutAlt, faBars } from "@fortawesome/free-solid-svg-ic
 import logo from "/images/camara_bolivar_logo.png";
 import UserSession from "@/components/users/UserSession";
 
-import { useSession,signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 import Loading from "./utils/Loading";
 import { findAll } from "services/categoriesService";
@@ -29,9 +29,9 @@ function Nav() {
 
   const handleSignOut = async () => {
     try {
-      await signOut(); 
+      await signOut();
     } catch (error) {
-      
+
       console.error("Error al cerrar sesión:", error);
     }
   };
@@ -100,68 +100,41 @@ function Nav() {
           <div className="flex-1">
             <NavSearch />
           </div>
-
-          {!session ?(
-            <div
+          <div
             id="menu"
             className={`flex ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
           >
-            
-           
-            <Link legacyBehavior href="/stores/list">
-                <div
-            className={session?"text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer":"hidden"}>
-            
-                TUS COMERCIOS
+            <Link legacyBehavior href="/admin">
+              <div
+                className={session?.user?.role.includes("ADMIN") ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
+              >
+                ADMINISTRACIÓN
+              </div>
+            </Link>
 
-                </div>
-              
-              
-            </Link>
-            <Link legacyBehavior href="/about"
-            >
-              <div
-            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
-            >
-                NOSOTROS
-              </div> 
-            </Link>
-            <Link href="/login"
-          title={session ? "Sign Out" : "Sign On"}
-          className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary">
-            <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
-            
-          </Link>
-            </div>
-          ):(
-            <div
-            id="menu"
-            className={` flex ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
-          >
             <Link legacyBehavior href="/stores/list">
-                <div
-            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer">
-            
-                TUS COMERCIOS
-                </div> 
-            </Link>
-            <Link legacyBehavior href="/about"
-            >
               <div
-            className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
-            >
-                NOSOTROS
-              </div> 
+                className={session ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
+              >
+                TUS COMERCIOS
+              </div>
             </Link>
-            <Link href="/"
-          className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
-            title="Sign Out"
-            onClick={handleSignOut}>  
-            <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
-          
-          </Link>
-            </div>
-          )}
+
+            <Link legacyBehavior href="/about">
+              <div
+                className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
+              >
+                NOSOTROS
+              </div>
+            </Link>
+
+            <Link href={session ? "/" : "/login"}
+              title={session ? "Sign Out" : "Sign On"}
+              className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
+              onClick={session && handleSignOut}>              
+              <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
+            </Link>
+          </div>
           {
             load ?
               <Loading>
