@@ -37,10 +37,10 @@ const ComercioUnico = ({store}) => {
                 <div className="flex w-full justify-around">
                     <div className="w-1/2 shadow-dark">     
 
-                    <div className="mt-8 space-y-5">
+                    <div className="lg:mt-8 space-y-5">
                         {/* Descripcion */}
 
-                        <div className={`flex ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
+                        <div className={`flex hidden sm:block ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
                             <div className="flex">
                             <FontAwesomeIcon icon={faAddressCard} className="w-4" />
                             <div className="pl-2">
@@ -55,7 +55,7 @@ const ComercioUnico = ({store}) => {
 
                         <div className={`flex ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
                             <div className="flex">
-                            <FontAwesomeIcon icon={faLocationArrow} className="w-4" />
+                            <FontAwesomeIcon icon={faLocationArrow} className="w-4 hidden sm:block" />
                             <div className="pl-2">
                                 <span className="font-bold uppercase">Direccion:</span>
                                 {store.address}
@@ -64,7 +64,7 @@ const ComercioUnico = ({store}) => {
                         </div>
                         <div className={`flex ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
                             <div className="flex">
-                            <FontAwesomeIcon icon={faClock} className="w-4" />
+                            <FontAwesomeIcon icon={faClock} className="w-4 hidden sm:block" />
                             <div className="pl-2">
                                 <span className="font-bold uppercase">Horarios:</span>
                                 {store.time}
@@ -74,7 +74,7 @@ const ComercioUnico = ({store}) => {
 
                         {/* Contacto */}
 
-                        <div className={`flex ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
+                        <div className={`flex hidden sm:block ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
                             <div className="flex">
                             <FontAwesomeIcon icon={faEnvelope} className="w-4" />
                             <div className="pl-2">
@@ -85,7 +85,7 @@ const ComercioUnico = ({store}) => {
                         </div>
                         <div className={`flex ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
                             <div className="flex">
-                            <FontAwesomeIcon icon={faPhone} className="w-4" />
+                            <FontAwesomeIcon icon={faPhone} className="w-4 hidden sm:block " />
                             <div className="pl-2">
                                 <span className="font-bold uppercase">Telefono:</span>
                                 {store.telephone}
@@ -101,7 +101,7 @@ const ComercioUnico = ({store}) => {
                         <img
                             src={store.logo?.link || DefaultImage} // Utilizar logo predeterminado si no hay uno en la tienda
 
-                            className="mb-24 mt-6 ml-28 rounded-xl  max-h-52  shadow-2xl transition-transform duration-300 transform origin-center hover:scale-110"
+                            className="lg:mb-24 mt-6 lg:ml-28 rounded-xl  max-h-52  shadow-2xl transition-transform duration-300 transform origin-center hover:scale-110"
                         />
                     </div>
                 </div>
