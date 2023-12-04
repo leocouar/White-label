@@ -9,6 +9,7 @@ function ProductCard({ product }) {
   const price = product.price;
   const promo = product.promo;
   const storeLogo = product.store?.logo;
+  const storeID = product.store.id
 
   let defaultImage = {
     "url": "default.jpeg",
@@ -40,7 +41,12 @@ function ProductCard({ product }) {
       <div className="flex items-center font-primary font-medium text-base bottom-0 left-0">
         <Price currency="&emsp;$" num={price} numSize="text-3xl" />
         <div className="flex-grow"></div>
-        <img className="w-14 max-w-14 my-2 mx-2 rounded" src={storeLogo?.link} alt="Store Logo" />
+        <Link
+        href={`/commerce/${storeID}`}
+        passHref
+        className="hover:bg-indigo-200 mb-2 mr-2 rounded">
+          <img className="w-14 max-w-14 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
+        </Link>
       </div>
 
     </Link>)
