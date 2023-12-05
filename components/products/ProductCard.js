@@ -23,29 +23,32 @@ function ProductCard({ product }) {
     (<Link
       href={`/products/${product.id}`}
       passHref
-      className="w-80 max-w-80 bg-white overflow-hidden rounded-lg shadow-lg mx-auto border border-palette-lighter transform transition duration-500 ease-in-out hover:scale-110"
+      className="w-60 max-w-60 bg-white overflow-visible rounded-lg shadow-lg mx-auto border-2 transform transition duration-200 ease-in-out hover:scale-110"
     >
-      <div className="m-2 border-palette-lighter relative">
-        <img className="transform imgproduct" src={image.src ? image.src : image}></img>
+      <div className="relative">
+        <div className="m-2">
+          <img className="imgproduct rounded-lg" src={image.src ? image.src : image}></img>
+        </div>
+        
         {
           promo
             ?
-            <span className={'absolute py-2 px-8 text-sm text-white bottom-2 right-2 bg-palette-secondary rounded-md'}>Promo</span>
+            <span className={'absolute py-6 px-3 text-xs text-white -bottom-4 -right-4 bg-palette-secondary rounded-full'}><p className="-rotate-45">Promo!</p></span>
             :
             <></>
         }
       </div>
-      <div className="w-full bg-white text-center font-primary truncate text-palette-primary text-2xl py-4 px-4 font-bold">
+      <div className="w-full bg-white text-left font-primary truncate text-palette-primary text-lg px-2">
         {title}
       </div>
-      <div className="flex items-center font-primary font-medium text-base bottom-0 left-0">
-        <Price currency="&emsp;$" num={price} numSize="text-3xl" />
+      <div className="flex relative items-center font-primary bottom-0 left-0">
+        <Price currency="&emsp;$" num={price} numSize="text-xl" />
         <div className="flex-grow"></div>
         <Link
         href={`/commerce/${storeID}`}
         passHref
         className="hover:bg-indigo-200 mb-2 mr-2 rounded">
-          <img className="w-14 max-w-14 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
+          <img className="w-20 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
         </Link>
       </div>
 
