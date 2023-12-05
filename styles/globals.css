@@ -55,9 +55,6 @@ html {
 }
 */
 .imgproduct {
-  padding: 10px;
-  margin-bottom: 2px;
-  overflow: hidden;
   width: 100%;  
   height: 65vh;
   min-height: 300px;
