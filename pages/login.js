@@ -1,38 +1,27 @@
 import { useSession, getSession, getCsrfToken, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import login from "/images/login.png";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Login = ({ csrfToken }) => {
-  const router = useRouter()
+  const router = useRouter();
   const { data: session, user } = useSession()
   const [showPassword, setShowPassword] = useState(false);
 
-  if (session) {
-    router.push('/stores/list'); // Redirigir al dashboard si está autenticado
-    return null; // O puedes renderizar un componente de carga aquí
-  }
   const [credentials, setCredentials] = useState({ username: "", password: "", csrfToken: csrfToken, remember: true })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    signIn('credentials', {
+    await signIn('credentials', {
       username: credentials.username,
       password: credentials.password,
       csrfToken: csrfToken,
       remember: true,
     })
+    router.push('/stores/list');
   }
-
-  const handleGoogleSignIn = () => {
-    signIn('google'); // 'google' es el ID del proveedor de Google configurado en NextAuth.js
-  };
-  const handleFacebookSignIn = () => {
-    signIn('facebook'); // 'facebook' es el ID del proveedor de Facebook configurado en NextAuth.js
-  };
-
 
   return (
     <div className="min-h-full flex  items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -91,23 +80,22 @@ const Login = ({ csrfToken }) => {
       </div>
     </div>
   )
-
 }
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  if (session) {
+
+  if (!session)
     return {
-      redirect: {
-        destination: "/stores/list", // Redirigir al dashboard si está autenticado
-        permanent: false,
+      props: {
+        csrfToken: await getCsrfToken(context),
       },
     };
-  }
   return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
+    redirect: {
+      destination: "/stores/list", // Redirigir al dashboard si está autenticado
+      permanent: false,
+    }
   };
 }
 

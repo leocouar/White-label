@@ -7,20 +7,23 @@ import { findAllStores, getStoresByUser } from "services/storeService";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 
 function StoreList() {
-  const {data :session} =useSession()
-  console.log(session?.user?.username);
-  const [youStores, setYouStores]=useState()
-  useEffect(() => {
-    const fetchData = async () => {
-        const listStore = await getStoresByUser(session?.user.username)
-        setYouStores(listStore)
-    };
+  const { data: session } = useSession()
+  const [youStores, setYouStores] = useState()
 
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    const listStore = await getStoresByUser(session?.user.username)
+    setYouStores(listStore)
+  };
+
+  useEffect(()=> {
+    if (session){
+      fetchData();
+    }
+  },[session])
+
   return (
     <div className="h-full items-center">
       <StoreHeading title="Tus Comercios" />
