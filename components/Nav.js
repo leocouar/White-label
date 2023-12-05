@@ -3,18 +3,14 @@ import Link from "next/link";
 import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDoorOpen, faSignOutAlt, faBars } from "@fortawesome/free-solid-svg-icons";
-
 import logo from "/images/camara_bolivar_logo.png";
-import UserSession from "@/components/users/UserSession";
-
 import { useSession, signOut } from "next-auth/react";
-
 import Loading from "./utils/Loading";
-import { findAll } from "services/categoriesService";
-import { findAllStores } from "services/storeService";
 import NavSearch from "./ProductSearch/ProductSearch";
+import { useRouter } from "next/router";
 
 function Nav() {
+  const router = useRouter();
   const cart = useCartContext()[0];
   const [cartItems, setCartItems] = useState(0);
   const { data: session, status } = useSession()
@@ -27,13 +23,22 @@ function Nav() {
 
   const [color, setColor] = useState(false)
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-
-      console.error("Error al cerrar sesión:", error);
-    }
+  const handleSession = async () => {
+    if (session) {
+      try{
+        await router.push("/");
+      }catch (error){
+        console.error(error);
+      }
+      try {
+        await signOut();
+        
+      } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+      }
+    } else {
+      router.push("/login");
+    };
   };
 
   useEffect(() => {
@@ -59,10 +64,6 @@ function Nav() {
     });
     setCartItems(numItems);
   }, [cart]);
-
-  const showCategories = (() => {
-    setCategoriesVisible(!categoriesVisible)
-  })
 
   const handleDocumentClick = (e) => {
     if (categoriesVisible) {
@@ -95,8 +96,6 @@ function Nav() {
             </div>
           </Link>
 
-
-
           <div className="flex-1">
             <NavSearch />
           </div>
@@ -128,12 +127,12 @@ function Nav() {
               </div>
             </Link>
 
-            <Link href={session ? "/" : "/login"}
+            <div
               title={session ? "Sign Out" : "Sign On"}
-              className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
-              onClick={session && handleSignOut}>              
+              className="cursor-pointer text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary"
+              onClick={handleSession}>
               <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
-            </Link>
+            </div>
           </div>
           {
             load ?
