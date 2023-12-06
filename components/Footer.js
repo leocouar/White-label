@@ -6,7 +6,7 @@
  
  function Footer() {
    return (
-     <footer className="flex h-64 justify-center font-primary items-center w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" }}>
+     <footer id="myFooter" className="flex h-64 justify-center font-primary items-center w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" }}>
        <div className="w-full max-w-screen-xl">
          <div className="flex  items-center">
  
