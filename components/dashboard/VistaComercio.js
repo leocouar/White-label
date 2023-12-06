@@ -9,6 +9,7 @@ import { findByID } from 'services/storeService.js';
 
 const VistaComercio = ({ commerceData }) => {
   const [view, setView] = useState('commerce');
+  //(No preguntar porque dice store.store: funciona y ya.)
   const [storeToUpdate, setStoreToUpdate] = useState(commerceData.store.store);
   const [storeToShow, setStoreToShow] = useState(commerceData.store.store)
   const [currentLogoURL, setCurrentLogoURL] = useState("https://i.pinimg.com/564x/56/02/c2/5602c21e0b1cc147c5c7f7ad36e688da.jpg");
