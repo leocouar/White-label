@@ -9,6 +9,37 @@ function NavSearch() {
     const [isFocused, setIsFocused] = useState(false);
     const searchInputRef = useRef(null);
 
+    //Identifica si la URL ha cambiado (para determinar searchTerm y pasar su valor al text input)
+    useEffect(() => {
+      const getQueryFromURL = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryParam = urlParams.get('query');
+        return queryParam || '';
+      };
+  
+      const handleURLChange = () => {
+        const newQuery = getQueryFromURL();
+        setSearchTerm(newQuery);
+      };
+  
+      const pushStateHandler = () => {
+        handleURLChange();
+      };
+  
+      window.addEventListener('popstate', pushStateHandler);
+      handleURLChange();
+      const originalPushState = window.history.pushState;
+      window.history.pushState = function (...args) {
+        originalPushState.apply(window.history, args);
+        pushStateHandler();
+      };
+  
+      return () => {
+        window.removeEventListener('popstate', pushStateHandler);
+        window.history.pushState = originalPushState;
+      };
+    }, []); 
+
   // Función para redirigir a los resultados de búsqueda
   function redirectToSearchResults() {
     if (searchTerm.trim() !== '') {
@@ -16,21 +47,12 @@ function NavSearch() {
     }
   }
   // Handle 'Enter' key press for form submission
-  function handleKeyPress(event) {
-    if (event.key === 'Enter' && isFocused) {
+  const handleKeyPress = async (e) => {
+    if (e.key === 'Enter' && isFocused) {
+      await setSearchTerm(e.target.value);
       redirectToSearchResults();
     }
   }
-
-  useEffect(() => {
-    // Adding event listener on mount
-    document.addEventListener('keydown', handleKeyPress);
-
-    // Cleaning up the event listener on unmount
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [isFocused]); // Re-adds listener when focus state changes
     
   return (
       <div className="flex items-center"
@@ -41,6 +63,7 @@ function NavSearch() {
           ref={searchInputRef}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => handleKeyPress(e)}
           className={`border border-gray-400 ${isFocused ? "w-2/3" : "w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
           placeholder="Buscar"
           id="search"
