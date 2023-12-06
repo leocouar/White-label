@@ -8,7 +8,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
     const productListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);         //Indica si esta cargando nuevos productos
     const [scrolling, setScrolling] = useState(false)          //Indica si se esta scrolleando ahora o no
-
+    const [backToTopVisible, setBackToTopVisible] = useState(false)
     //Obtiene todos los parametros, posee parametros por defecto
     const [q, setQ] = useState({term: initialTerm,
                                 params:[[],[]],
@@ -121,10 +121,22 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
         console.log("Pag.:", page, "; Total pag.: ", results.totalPages)
         loadNewPage();
     }, [page]);
+    
+    useEffect(() => {
+        const changeVisibility = () => {
+          if (window.scrollY >= 90) {
+            setBackToTopVisible(true)
+          } else {
+            setBackToTopVisible(false)
+          }
+        }
+    
+        window.addEventListener('scroll', changeVisibility)
+      }, [])
 
     return (        
-        <div  className='w-full'>
-            <div  ref={productListRef}>&nbsp;</div>
+        <div  className="w-full">
+            <div  ref={productListRef}></div>
             <FilterModal
                 filterParams={filterParams}
                 searchFunction={search}
@@ -132,8 +144,8 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 columnList={columnList}
                 showFilters={showFilters}
             ></FilterModal>
-            <div className="mx-auto mt-3 w-11/12">
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 ">
+            <div className="mx-auto">
+                <div className="flex flex-wrap justify-evenly">
                     {
                         productsToShow && productsToShow.map((product, index) => {
                             return <ProductCard key={index} product={product} />;
@@ -145,14 +157,14 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                     data-mdb-ripple="true"
                     onClick={backToTopButton}
                     data-mdb-ripple-color="light"
-                    className="z-0 -mx-9 md:-mx-7 shadow-lg invisible md:visible ease-out duration-500 sticky p-2 bg-palette-secondary animate-bounce text-white font-medium text-xs leading-tight uppercase rounded-full hover:bg-palette-sdark hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg bottom-5 right-2"
+                    className={backToTopVisible?"z-0 shadow-lg invisible ml-2 md:visible ease-out duration-300 sticky p-2 bg-palette-secondary animate-bounce text-white font-medium text-xs leading-tight uppercase rounded-full hover:bg-palette-sdark hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg bottom-5 right-2":""}
                     id="btn-back-to-top"
                 >
                     <svg
                         aria-hidden="true"
                         focusable="false"
                         data-prefix="fas"
-                        className="w-5 h-5"
+                        className={backToTopVisible?"w-5 h-5":""}
                         role="img"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 448 512"

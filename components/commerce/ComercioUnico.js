@@ -26,7 +26,7 @@ const ComercioUnico = ({store}) => {
     return (
         <div
         className={` ${
-          isLoading ? 'opacity-0 transform -translate-y-full' : 'opacity-100 transform translate-y-0 transition-all ease-out duration-1000'
+          isLoading ? 'opacity-0 transform -translate-y-full' : 'opacity-100 transform translate-y-0 transition-all ease-out duration-300'
         }`}
         onTransitionEnd={handleAnimationEnd}
       >
