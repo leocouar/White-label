@@ -68,7 +68,6 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
             totalPages: newData.totalPages
         });
         await setPage(0);
-        await goBackToTheTop();
     }
 
     //2A - Al cambiar el  parametro de busqueda, se define una nueva busqueda
@@ -83,14 +82,6 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
         setProductsToShow(results.products);
     }, [results])
 
-    //Habia que esperar a que cargue bien cada detalle antes de que esto se ejecute
-    const goBackToTheTop = () => {
-        if (productListRef.current) {
-            productListRef.current.scrollIntoView({
-                behavior: "smooth", block: "start"
-            });
-        }
-    }
 
     //------------------------------------- SCROLLING -------------------------------------
 
