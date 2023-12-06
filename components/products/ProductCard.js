@@ -23,7 +23,7 @@ function ProductCard({ product }) {
     (<Link
       href={`/products/${product.id}`}
       passHref
-      className="w-60 max-w-60 bg-white overflow-visible rounded-lg shadow-lg mx-auto border-2 transform transition duration-200 ease-in-out hover:scale-110"
+      className="w-56 max-w-56 bg-white overflow-visible rounded-lg shadow-lg mx-4 my-2 border-2 transform transition duration-200 ease-in-out hover:scale-110"
     >
       <div className="relative">
         <div className="m-2">
@@ -48,7 +48,7 @@ function ProductCard({ product }) {
         href={`/commerce/${storeID}`}
         passHref
         className="hover:bg-indigo-200 mb-2 mr-2 rounded">
-          <img className="w-20 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
+          <img className="w-16 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
         </Link>
       </div>
 
