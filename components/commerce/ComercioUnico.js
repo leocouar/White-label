@@ -67,7 +67,7 @@ const ComercioUnico = ({store}) => {
                             <FontAwesomeIcon icon={faClock} className="w-4 hidden sm:block" />
                             <div className="pl-2">
                                 <span className="font-bold uppercase">Horarios:</span>
-                                {store.time}
+                                {store.schedule}
                             </div>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ const NewStore = () => {
     const [description, setDescription] = useState('');
     const [email, setEmail] = useState('');
     const [telephone, setTelephone] = useState('');
+    const [schedule, setSchedule] = useState('');
     const [address, setAddress] = useState('');
 
     //Datos para endpoints
@@ -24,6 +25,7 @@ const NewStore = () => {
     const [errDesc, setErrDesc] = useState(false);
     const [errAddr, setErrAdd] = useState(false);
     const [errEmail, setErrEmail] = useState(false);
+    const [errSch, setErrSch] = useState(false);
     const [errTel, setErrTel] = useState(false);
     const [errImg, setErrImg] = useState(false);
 
@@ -59,10 +61,15 @@ const NewStore = () => {
             setErrEmail(true);
         }
 
+        if (!schedule.trim()) {
+            errorDetected = true;
+            setErrSch(true)
+        }
+
         if (!file) {
             errorDetected = true;
             setErrImg(true)
-        }
+        }        
 
         //De lo contrario, continuamos
         if (!errorDetected) {
@@ -73,12 +80,12 @@ const NewStore = () => {
 
     //Guarda la tienda con su logo
     const saveNewStore = async () => {
-
         const newStore = {
             "name": name,
             "description": description,
             "telephone": telephone,
             "email": email,
+            "schedule": schedule,
             "address": address
         };
         const response = await saveStore(newStore, {
@@ -87,7 +94,7 @@ const NewStore = () => {
             }
         });
         const folder = response.id;
-        uploadFile("store", file, folder)
+        uploadFile("commerce", file, folder)
     };
 
     //Selecciona una imagen a cargar  
@@ -108,6 +115,10 @@ const NewStore = () => {
     useEffect(() => {
         if (address.trim()) setErrAdd(false);
     }, [address]);
+
+    useEffect(() => {
+        if (schedule.trim()) setErrSch(false);
+    }, [schedule]);
 
     useEffect(() => {
         if (phoneRegex.test(telephone.trim())) setErrTel(false);
@@ -182,7 +193,7 @@ const NewStore = () => {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                         htmlFor="telephone">Tel&eacute;fono:</label>
                     <input
-                        type="tel"
+                        type="text"
                         id="telephone"
                         className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                         placeholder="Número de teléfono"
@@ -191,6 +202,23 @@ const NewStore = () => {
                     />
                     {errTel && <p className={`text-red-500 text-xs italic`}>
                         "Telefono invalido"
+                    </p>}
+                </div>
+
+                {/*HORARIOS*/}
+                <div className="w-full">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                        htmlFor="schedule">Horarios:</label>
+                    <input
+                        type="text"
+                        id="schedule"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        placeholder="Horarios de apertura"
+                        value={schedule}
+                        onChange={(e) => setSchedule(e.target.value)}
+                    />
+                    {errSch && <p className={`text-red-500 text-xs italic`}>
+                        "Por favor, ingrese los horarios de apertura."
                     </p>}
                 </div>
 

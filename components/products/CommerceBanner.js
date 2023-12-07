@@ -31,7 +31,7 @@ function Banner({stores, centrado = false}) {
     };
   }, []);
     return (
-      <div className="bg-white max-h-96 w-full overflow-x-auto scrollbar">
+      <div className="bg-gray-400 max-h-96 w-full overflow-x-auto scrollbar">
       <div className="mx-auto px-2 sm:px-4">
         <div className={`${centrado?"justify-evenly":""} mx-auto max-h-96 py-4 sm:py-8 flex flex-nowrap overflow-x-auto scrollbar`}>
           {stores && stores.map((store, index) => (

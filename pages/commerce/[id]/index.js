@@ -4,7 +4,7 @@ import { findByID } from "services/storeService";
 
 function Commerce(store) {
     return (
-        <div>
+        <div className="" style={{ backgroundImage: `url('/images/bgcatalog.jpg')` }}>
             <div>
                 {/* Pass the stores data to the ComercioUnico component */}
                 <ComercioUnico store={store.store} />

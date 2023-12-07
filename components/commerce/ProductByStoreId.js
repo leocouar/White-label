@@ -47,7 +47,7 @@ function ProductByStoreId({ storeId }) {
       }, [])
 
     return (
-        <div className='w-full'>
+        <div className='w-full' >
             <div className="mx-auto mt-5">
                 <div className="flex flex-wrap justify-evenly">
                     {
