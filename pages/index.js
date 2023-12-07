@@ -8,7 +8,7 @@ import { prepareDefaultParams } from '@/components/products/ProductListings';
 
 function IndexPage({ brands, categories, initialSearch, stores}) {
   return (
-    <div className='bg-white'>
+    <div className='bg-white' style={{ backgroundImage: `url('/images/bgcatalog.jpg')` }}>
       <div >
         <Carrusel />
         {/*<img src="images/inicio.jpg" className="w-full h-screen"></img>*/}
