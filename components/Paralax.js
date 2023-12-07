@@ -20,7 +20,7 @@ const Parallax = ({ children }) => {
   }, []);
 
   return (
-    <div className="parallax-container" style={{ transform: `translateY(-${offset * 0.5}px)` }}>
+    <div className="parallax-container" style={{ transform: `translateY(-${offset * 0.15}px)` }}>
       <div className="parallax-content w-screen">
         {children}
       </div>
