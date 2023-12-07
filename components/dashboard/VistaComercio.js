@@ -6,6 +6,7 @@ import imageResizer from '../uploadFile/ImageResizer';
 import { deleteStoreLogo } from 'services/storeService.js';
 import { uploadFile } from 'services/fileService';
 import { findByID } from 'services/storeService.js';
+import { useRouter } from "next/router";
 
 const VistaComercio = ({ commerceData }) => {
   const [view, setView] = useState('commerce');
@@ -13,12 +14,18 @@ const VistaComercio = ({ commerceData }) => {
   const [storeToUpdate, setStoreToUpdate] = useState(commerceData.store.store);
   const [storeToShow, setStoreToShow] = useState(commerceData.store.store)
   const [currentLogoURL, setCurrentLogoURL] = useState("https://i.pinimg.com/564x/56/02/c2/5602c21e0b1cc147c5c7f7ad36e688da.jpg");
-
+  const [logoWasUpdated, setLogoWasUpdated] = useState(false);
   const [newLogoFile, setNewLogoFile] = useState();
   const [editLogoURL, setEditLogoURL] = useState(null);
+  const router = useRouter();
+
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const phoneRegex = /^[\+#*0-9-]+$/;
+
+  const [errEmail, setErrEmail] = useState(false);
+  const [errTel, setErrTel] = useState(false);
 
   useEffect(() => {
-    console.log(storeToShow)
     if (storeToShow && storeToShow.logo) {
       const logoURL = storeToShow?.logo?.link;
       setCurrentLogoURL(logoURL);
@@ -26,19 +33,15 @@ const VistaComercio = ({ commerceData }) => {
     }
   }, [storeToShow])
 
+ 
+
   //Selecciona una imagen a cargar  
   const handleImageUpload = async (event) => {
     const resizedData = await imageResizer(event);
     setNewLogoFile(resizedData.fileData);
     setEditLogoURL(resizedData.returnedURL);
+    setLogoWasUpdated(true);
   };
-
-  const updateStoreData = async () => {
-    const updatedStore = await findByID(storeToUpdate.id);
-    await setStoreToShow(updatedStore)
-    await setCurrentLogoURL(updatedStore?.logo?.link);
-  }
-
 
   const handleEditClick = () => {
     setView('edit');
@@ -61,20 +64,40 @@ const VistaComercio = ({ commerceData }) => {
     return filename;
   }
 
-  const handleSave = async () => {
-    //Actualizamos los datos de texto
-    await updateStore(storeToUpdate);
-    //Si hay un logo previo, se elimina
-    if(storeToShow?.logo?.link) 
-      await deleteStoreLogo(storeToUpdate.id, extractFilename(currentLogoURL));
-    //Se sube el nuevo logo
-    await uploadFile("store", newLogoFile, storeToUpdate.id, false);
-    //Se indica que se deben refrescar los datos
-    await updateStoreData();
-    setView('commerce');
+  const updateStoreData = async () => {
+    const updatedStore = await findByID(storeToUpdate.id);
+    await setStoreToShow(updatedStore)
+    await setCurrentLogoURL(updatedStore?.logo?.link);
   }
 
-  useEffect(()=>{console.log("CurrentLogoURL:\n", currentLogoURL)},[currentLogoURL])
+  const verifyData = async () => {
+    const checkTel = !phoneRegex.test(storeToUpdate.telephone.trim());
+    await setErrTel(checkTel);
+
+    const checkEmail = !emailRegex.test(storeToUpdate.email.trim());
+    await setErrEmail(checkEmail);
+    return {checkTel, checkEmail};
+  }
+
+  useEffect(()=>{console.log("ESTADO REAL:",errEmail, errTel)},[errEmail, errTel]);
+
+  const handleSave = async () => {
+    const errors = await verifyData();
+    
+    if (!errors.checkEmail && !errors.checkTel) {
+      await updateStore(storeToUpdate);
+      if (logoWasUpdated) {
+        if (storeToShow?.logo?.link)
+          await deleteStoreLogo(storeToUpdate.id, extractFilename(currentLogoURL));
+        await uploadFile("store", newLogoFile, storeToUpdate.id, false);
+      }
+
+      await setView("commerce");
+      await router.push(`/dashboard/${storeToShow.id}`);
+      await updateStoreData();
+      setLogoWasUpdated(false);
+    }
+  }
 
   return (
     <div className="bg-white p-4 rounded-md">
@@ -128,7 +151,7 @@ const VistaComercio = ({ commerceData }) => {
 
       {view === 'edit' && (
         <div className="inset-0 z-10 flex items-center justify-center">
-          <div className="bg-white w-full mx-auto rounded-lg overflow-y-auto">
+          <div className="bg-white w-full mx-auto rounded-lg">
             <h2 className="text-lg font-semibold mb-3">Editar información del comercio</h2>
             <div className="flex flex-wrap -mx-3">
               <div className="w-full md:w-1/2 px-3 mb-4">
@@ -164,6 +187,9 @@ const VistaComercio = ({ commerceData }) => {
                   id="email"
                   name="email"
                 />
+                {errEmail && <p className={`text-red-500 text-xs italic`}>
+                  "E-mail invalido. Verifique este campo"
+                </p>}
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
                 <label className="block text-sm font-medium mb-1">Teléfono:</label>
@@ -175,6 +201,9 @@ const VistaComercio = ({ commerceData }) => {
                   id="telephone"
                   name="telephone"
                 />
+                {errTel && <p className={`text-red-500 text-xs italic`}>
+                  "Telefono invalido"
+                </p>}
               </div>
             </div>
             <div className="flex flex-wrap -mx-3">
@@ -208,7 +237,8 @@ const VistaComercio = ({ commerceData }) => {
                 />
                 }
                 <div>
-                  <label htmlFor="upload" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                  <label htmlFor="upload"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
                     Subir imagen
                   </label>
                   <input
