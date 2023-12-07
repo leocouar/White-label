@@ -108,37 +108,38 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
 
     useEffect(() => {
         const handleScroll = () => {
-          const footer = document.getElementById("myFooter"); // Reemplaza "footer" con el ID real de tu footer
+          const footer = document.getElementById("Footer"); // Reemplaza "footer" con el ID real de tu footer
           const filterContainer = filterElementRef.current;
-    
+      
           if (footer && filterContainer) {
             const footerRect = footer.getBoundingClientRect();
             const filterRect = filterContainer.getBoundingClientRect();
-    
-            // Si el filtro se superpone con el footer, ciérralo
-            if (filterRect.bottom > footerRect.top) {
+      
+            // Si el filtro se superpone con el footer y el modal está abierto, ciérralo
+            if (filterRect.bottom > footerRect.top && modalVisible) {
               setModalVisible(false);
             }
           }
         };
-    
+      
         window.addEventListener("scroll", handleScroll);
-    
+      
         // Limpia el event listener cuando el componente se desmonta
         return () => {
           window.removeEventListener("scroll", handleScroll);
         };
-      }, [isFilterVisible]);
+      }, [modalVisible]);
+      
     
     return (
         
         <div
             ref={filterElementRef}
-            className='h-full fixed inset-0' style={{ zIndex: 2 }}> 
-                   <div className={`absolute top-4 transform fixed left-0 transition-transform ease-in-out duration-300 ${modalVisible ? "" : "-translate-x-full"}`}>     
+            className='w-10 h-full fixed inset-0' style={{ zIndex: 2 }}> 
+                   <div className={`fixed top-6 transform left-0 transition-transform ease-in-out duration-300 ${modalVisible ? "" : "-translate-x-full"}`}>     
                     <div style={{ height: '100vh'}} className="shadow-2xl h-full bg-gray-300 flex shadow-xl items-center rounded-lg justify-center text-center sm: max-w-auto">
                                     <div className="text-left">
-                                    <div className="flex justify-end pr-4 pt-6">
+                                    <div className="flex justify-end pr-4 mt-4">
                                     <button
                                         className="hover:text-palette-secondary"
                                         onClick={handleCloseModal}
