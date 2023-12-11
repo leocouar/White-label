@@ -2,21 +2,26 @@ import FilterComponent from  "@/components/filter/FilterComponent";
 import DataTable  from "react-data-table-component";
 import Link from 'next/link'
 import { deleteStore } from "services/storeService";
-import {useState, useMemo} from "react";
+import {useState, useEffect, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faEye, faEdit, faTrash, faTag, faInfo} from '@fortawesome/free-solid-svg-icons'
+import filterFunction from "../filter/FilterFunction";
 
 const Stores = ({stores}) => {
-    const [filterText, setFilterText]= useState ('')
-    const filteredItems = stores.filter(item=> filterText.toLowerCase() == '' || filterText.includes(item.id));
-    console.log(stores);
-    const [data,setData]= useState(filteredItems)
+    const [filterText, setFilterText]= useState("");
+    const [data,setData]= useState(stores)
 
     const handleDelete = (rowId) => {
         const updatedData = data.filter(row => row.id !== rowId);
         setData(updatedData);
         deleteStore(rowId)
-      };
+    };
+
+    useEffect(() => {
+        const updatedData = filterFunction(stores, filterText);
+        setData(updatedData);
+    }, [filterText]);
+    
 
 
     const columns = [
@@ -97,9 +102,7 @@ const Stores = ({stores}) => {
  
     return (
         <div className="min-h-80 max-w-12 my-4 sm:my-8 mx-auto w-full">
-
              <div className="overflow-hidden">
-
                 <DataTable
                     columns={columns}
                     data={data}
