@@ -151,7 +151,7 @@ const VistaProductos = ({ store, brands, categories, sizes }) => {
       
       {view === 'add' && (
         
-        <NewProduct categories={categories} brands={brands} sizes={sizes} onCancel={onCancel} />         
+        <NewProduct store={prod} onCancel={onCancel} />         
       )}
       
     </div>

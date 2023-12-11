@@ -18,10 +18,10 @@ const useForm = (initialState, validateForm, submitForm) => {
     });
   };
 
-  const handleBlur = (e) => {
-    handleChange(e);
-    setErrors(validateForm(form));
-  };
+  // const handleBlur = (e) => {
+  //   handleChange(e);
+  //   setErrors(validateForm(form));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +53,7 @@ const useForm = (initialState, validateForm, submitForm) => {
     loading,
     response,
     handleChange,
-    handleBlur,
+    // handleBlur,
     handleSubmit,
   };
 };

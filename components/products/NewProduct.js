@@ -4,6 +4,7 @@ import { useState, useMemo,useEffect } from "react";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
+import { save } from "services/productService";
 
 
 
@@ -40,11 +41,11 @@ const NewProduct = ({ store,onCancel}) => {
             id: store?.id || ""
         },
         sizes: [{
-            id: ""
+            id: "1" // queda '1' hardcodeado para evitar errores de campo not null en el back, ID=1 pertenece a sin talle
         }],
         code: "",
         stock: "",
-        points: "",
+        points: "0", //queda '0' hardcodeado para evitar que el formulario valide error en este campo
         promo: false,
     }), [store?.id]);
 
@@ -92,7 +93,7 @@ const NewProduct = ({ store,onCancel}) => {
         errors,
         handleChange,
         handleBlur,
-        handleSubmit } = useForm(initialForm, validationsForm);
+        handleSubmit } = useForm(initialForm, validationsForm, save);
 
     const handleChangeSize = (e) => {
         if (e.target.checked) {
