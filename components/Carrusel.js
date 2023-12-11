@@ -10,6 +10,7 @@ function Carousel() {
   const [windowDimensions, setWindowDimensions] = useState([0, 0]);
   const [imgs, setImgs] = useState([]);
   const [initialHeight, setInitialHeight] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -38,6 +39,22 @@ function Carousel() {
       imgs[1] && imgs[1].scrollIntoView({ block: 'nearest', inline: 'start' });
     };
 
+    const handleVisibilityChange = (entries) => {
+      entries.forEach(entry => {
+        setIsVisible(entry.isIntersecting);
+      });
+    };
+
+    const observer = new IntersectionObserver(handleVisibilityChange, {
+      root: null, // use the viewport as the root
+      rootMargin: '0px', // no margin
+      threshold: 0.5, // 50% of the target element must be visible
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
     window.addEventListener('resize', updateWindowDimensions);
     updateWindowDimensions();
 
@@ -45,36 +62,39 @@ function Carousel() {
 
     return () => {
       window.removeEventListener('resize', updateWindowDimensions);
+      observer.disconnect();
     };
   }, [imgs, initialHeight]);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const nextImgIndex = currentImage !== images.length - 1 ? currentImage + 1 : 0;
-      setCurrentImage(nextImgIndex);
-      imgs[2].setAttribute('src', `${images[nextImgIndex]}`);
+    if (isVisible) {
+      const intervalId = setInterval(() => {
+        const nextImgIndex = currentImage !== images.length - 1 ? currentImage + 1 : 0;
+        setCurrentImage(nextImgIndex);
+        imgs[2].setAttribute('src', `${images[nextImgIndex]}`);
 
-      const temp = imgs[0].cloneNode(true);
+        const temp = imgs[0].cloneNode(true);
 
-      for (let i = 0; i < imgs.length - 1; i++) {
-        const nextElement = imgs[i + 1].cloneNode(true);
-        imgs[i].parentNode.replaceChild(nextElement, imgs[i]);
-      }
-      imgs[imgs.length - 1].parentNode.replaceChild(temp, imgs[imgs.length - 1]);
-      containerRef.current.scrollTo({ left: 0 });
+        for (let i = 0; i < imgs.length - 1; i++) {
+          const nextElement = imgs[i + 1].cloneNode(true);
+          imgs[i].parentNode.replaceChild(nextElement, imgs[i]);
+        }
+        imgs[imgs.length - 1].parentNode.replaceChild(temp, imgs[imgs.length - 1]);
+        containerRef.current.scrollTo({ left: 0 });
 
-      imgs[1].scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'start',
-        height: '200',
-      });
-    }, 3000); // Cambia aquí el intervalo de tiempo en milisegundos (actualmente 5000 ms o 5 segundos)
+        imgs[1].scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'start',
+          height: '200',
+        });
+      }, 3000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [currentImage, imgs, images]);
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [isVisible, currentImage, imgs, images]);
 
   const spin = (backwards) => {
     const numimgs = imgs.length;

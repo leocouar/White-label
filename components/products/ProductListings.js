@@ -153,6 +153,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                     }
                 </div>
                 <button
+                    style={{ zIndex: 9999 }} // Set a high z-index value
                     type="button"
                     data-mdb-ripple="true"
                     onClick={backToTopButton}
