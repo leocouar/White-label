@@ -6,7 +6,7 @@ import imageResizer from '../uploadFile/ImageResizer';
 import { getByUsername } from 'services/userService';
 
 const NewStore = () => {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [firstLoad, setFirstLoad] = useState(true);
     //Datos de texto
     const [name, setName] = useState('');
@@ -153,12 +153,14 @@ const NewStore = () => {
     }
 
     useEffect(() => {
-        if (firstLoad) {
-            const userIsAdmin = session?.user?.role.includes('ADMIN');
-            setOwnerIds(!userIsAdmin && [session?.user?.username]);
+        if (firstLoad && !(status === 'loading')) {
+            const userIsntAdmin = !session.user.role.includes('ADMIN');
+            if (userIsntAdmin) {
+                setOwnerIds([session.user.username]);
+            }
             setFirstLoad(false);
         }
-    }, [session])
+    }, [session, firstLoad, setOwnerIds]);
 
     useEffect(() => {
         if (name.trim()) setErrName(false);
