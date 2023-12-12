@@ -41,7 +41,7 @@ const NewProduct = ({ store,onCancel}) => {
             id: store?.id || ""
         },
         sizes: [{
-            id: "1" // queda '1' hardcodeado para evitar errores de campo not null en el back, ID=1 pertenece a sin talle
+            id: "1814" // queda '1814' hardcodeado para evitar errores de campo not null en el back, ID=1814 pertenece a sin talle tanto en produccion como en local
         }],
         code: "",
         stock: "",
