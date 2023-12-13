@@ -11,5 +11,7 @@ const CreateStore = () => {
     )
 }
 
+export default CreateStore;
+/*
 export default withAuthorization(CreateStore);
-
+*/

@@ -23,10 +23,10 @@ export async function findByID(id) {
     }
 }
 
-export async function saveStore(store, creator) {
+export async function saveStore(store, ownerIds) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store`;
     try {
-        let response = await axios.post(fetchUrl, store, creator);
+        let response = await axios.post(fetchUrl, store, ownerIds);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -44,6 +44,19 @@ export async function updateStore(store) {
         throw new Error("Could not update store !");
     }
 }
+
+export async function updateStoreOwners(storeId, ownerIds) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/owners?storeId=${storeId}&ownerIds=${ownerIds.join(',')}`;
+    
+    try {
+        let response = await axios.get(fetchUrl);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Could not update the owners of the store!");
+    }
+}
+
 
 export async function deleteStore(id) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}`;
@@ -77,14 +90,14 @@ export async function getStoresByUser(id) {
     }
 }
 
-export async function getOwner(id) {
-    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}/owner`;
+export async function getOwnerIds(id) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}/owners`;
 
     try {
         let response = await axios.get(fetchUrl);
         return response.data;
     } catch (error) {
-        throw new Error("Could not get the owner of that store !");
+        throw new Error("Could not get the owners of that store !");
     }
 }
 

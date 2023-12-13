@@ -4,7 +4,7 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
         className="w-full p-2 bg-gray-100 border border-purple-500 border-gray-200 rounded-lg"
             id="search"
             type="text"
-            placeholder="Buscar por id"
+            placeholder="Buscar"
             aria-label="Search Input"
             value={filterText}
             onChange={onFilter}

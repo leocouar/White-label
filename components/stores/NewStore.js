@@ -3,9 +3,12 @@ import { useSession } from "next-auth/react";
 import { saveStore } from "/services/storeService";
 import { uploadFile } from 'services/fileService';
 import imageResizer from '../uploadFile/ImageResizer';
+import { getByUsername } from 'services/userService';
+import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
 
 const NewStore = () => {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession();
+    const [firstLoad, setFirstLoad] = useState(true);
     //Datos de texto
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -13,6 +16,10 @@ const NewStore = () => {
     const [telephone, setTelephone] = useState('');
     const [schedule, setSchedule] = useState('');
     const [address, setAddress] = useState('');
+
+    //Datos para propietarios
+    const [newOwner, setNewOwner] = useState('');
+    const [ownerIds, setOwnerIds] = useState([]);
 
     //Datos para endpoints
     const [file, setFile] = useState();
@@ -28,9 +35,9 @@ const NewStore = () => {
     const [errSch, setErrSch] = useState(false);
     const [errTel, setErrTel] = useState(false);
     const [errImg, setErrImg] = useState(false);
-
-    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const phoneRegex = /^\+?[0-9]+$/;
+    const [errNewOwn, setErrNewOwn] = useState(false)   //Cuando se intenta agregar un propietario inexistente
+    const [errRepOwn, setErrRepOwn] = useState(false)   //Cuando el usuario ya se ingreso a la lista
+    const [errOwn, setErrOwn] = useState(false);        //Cuando no se agrego ningun propietario al comercio
 
     const handleFormSubmit = async (event) => {
         event.preventDefault(); // Prevent the form from submitting
@@ -69,7 +76,12 @@ const NewStore = () => {
         if (!file) {
             errorDetected = true;
             setErrImg(true)
-        }        
+        }
+
+        if (ownerIds.length == 0) {
+            errorDetected = true;
+            setErrOwn(true);
+        }
 
         //De lo contrario, continuamos
         if (!errorDetected) {
@@ -90,7 +102,7 @@ const NewStore = () => {
         };
         const response = await saveStore(newStore, {
             params: {
-                creatorId: session?.user?.username
+                "ownerIds": ownerIds.join(',')
             }
         });
         const folder = response.id;
@@ -103,6 +115,50 @@ const NewStore = () => {
         setFile(resizedData.fileData);
         setResizedImageUrl(resizedData.returnedURL);
     };
+
+    const handleAddUser = async () => {
+        const owner = await getByUsername(newOwner.trim());
+        const ownerId = owner?.username;
+        if (ownerId) {
+
+            if (!ownerIds.some(existingId => existingId === ownerId)) {
+                const updatedIds = [...ownerIds, ownerId];
+                setOwnerIds(updatedIds);
+                setErrOwn(false);
+                setNewOwner("");
+            } else {
+                setNewOwner("");
+                setErrRepOwn(true)
+            }
+        }
+        else {
+            console.log("I went here...")
+            setNewOwner("");
+            setErrNewOwn(true);
+        }
+    }
+
+    const editNewOwner = (value) => {
+        setErrNewOwn(false);
+        setErrRepOwn(false);
+        setNewOwner(value);
+    }
+
+    const cleanOwners = () => {
+        setErrNewOwn(false);
+        setErrRepOwn(false);
+        setOwnerIds([]);
+    }
+
+    useEffect(() => {
+        if (firstLoad && !(status === 'loading')) {
+            const userIsntAdmin = !session.user.role.includes('ADMIN');
+            if (userIsntAdmin) {
+                setOwnerIds([session.user.username]);
+            }
+            setFirstLoad(false);
+        }
+    }, [session, firstLoad, setOwnerIds]);
 
     useEffect(() => {
         if (name.trim()) setErrName(false);
@@ -236,6 +292,53 @@ const NewStore = () => {
                     />
                     {errEmail && <p className={`text-red-500 text-xs italic`}>
                         "E-mail invalido. Verifique este campo"
+                    </p>}
+                </div>
+
+                {/*PROPIETARIOS*/}
+                <div className="w-full mb-3">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                        htmlFor="ownerIds">Propietarios:</label>
+                    <input
+                        type="text"
+                        id="newOwner"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white"
+                        placeholder="Ingrese el nombre de usuario de un propietario"
+                        value={newOwner}
+                        onChange={(e) => editNewOwner(e.target.value)}
+                    />
+                    <div>
+                        <div className="flex items-center">
+                            <input
+                                className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm"
+                                value="Añadir propietario"
+                                type="button"
+                                id="addOwner"
+                                onClick={handleAddUser}
+                            />
+                            <input
+                                className={`${ownerIds.length === 0 ? "hidden" : ""
+                                    } ml-2 inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm`}
+                                value="Limpiar lista"
+                                type="button"
+                                id="clean"
+                                onClick={cleanOwners}
+                            />
+                        </div>
+                        {ownerIds && ownerIds.map((owner, index) => (
+                            <p className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-1 py-1 bg-gray-400 text-base font-medium text-black hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 sm:w-auto sm:text-sm mr-1 my-2"
+                                key={index}>{owner}</p>
+                        ))}
+                    </div>
+
+                    {errNewOwn && <p className={`text-red-500 text-xs italic`}>
+                        "Error: el usuario ingresado no existe"
+                    </p>}
+                    {errRepOwn && <p className={`text-red-500 text-xs italic`}>
+                        "Error: el usuario ya fue ingresado"
+                    </p>}
+                    {errOwn && <p className={`text-red-500 text-xs italic`}>
+                        "Debe escoger al menos un propietario para su comercio"
                     </p>}
                 </div>
 
