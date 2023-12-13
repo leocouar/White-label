@@ -45,6 +45,19 @@ export async function updateStore(store) {
     }
 }
 
+export async function updateStoreOwners(storeId, ownerIds) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/owners?storeId=${storeId}&ownerIds=${ownerIds.join(',')}`;
+    
+    try {
+        let response = await axios.get(fetchUrl);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Could not update the owners of the store!");
+    }
+}
+
+
 export async function deleteStore(id) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/store/${id}`;
     try {

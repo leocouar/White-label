@@ -7,6 +7,7 @@ import { deleteStoreLogo } from 'services/storeService.js';
 import { uploadFile } from 'services/fileService';
 import { findByID } from 'services/storeService.js';
 import { useRouter } from "next/router";
+import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
 
 const VistaComercio = ({ commerceData }) => {
   const [view, setView] = useState('commerce');
@@ -18,9 +19,6 @@ const VistaComercio = ({ commerceData }) => {
   const [newLogoFile, setNewLogoFile] = useState();
   const [editLogoURL, setEditLogoURL] = useState(null);
   const router = useRouter();
-
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  const phoneRegex = /^[\+#*0-9-]+$/;
 
   const [errEmail, setErrEmail] = useState(false);
   const [errTel, setErrTel] = useState(false);

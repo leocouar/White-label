@@ -1,11 +1,11 @@
 
 import { findByID } from "services/storeService";
 import { getOwnerIds } from "services/storeService";
-import { updateStore } from "services/storeService";
+import { updateStore, updateStoreOwners } from "services/storeService";
 import { NotificationContainer } from 'react-notifications';
 import { NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-import * as usersServices from 'services/userService'
+import { getByUsername, findAll } from "services/userService";
 import { useState, useEffect } from "react";
 import { emailRegex, phoneRegex } from "@/components/stores/FieldRegexs";
 import withAuthorization from 'components/withAuthorization';
@@ -13,18 +13,17 @@ import withAuthorization from 'components/withAuthorization';
 
 const Update = ({ store, ownerIds, users }) => {
     const [data, setData] = useState({
+        id: store.id,
         name: store.name ? store.name : "Comercio",
         description: store.description ? store.description : "Descripcion",
         address: store.address ? store.address : "Dirección",
         telephone: store.telephone ? store.telephone : "Telefono",
         schedule: store.schedule ? store.schedule : "Horarios",
-        email: store.email ? store.email : "E-mail",
-        logo: store.logo.link ? store.logo.link : null,
-        owners: ownerIds ? ownerIds : []
+        email: store.email ? store.email : "E-mail"
     })
-
-    useEffect(() => { console.log(data) }, [data])
+    const [dataOwnerIds, setDataOwnerIds] = useState ({ids: ownerIds ? ownerIds : []})
     const [errors, setErrors] = useState({});
+
     const validationsForm = (form) => {
         let errors = {};
 
@@ -33,26 +32,28 @@ const Update = ({ store, ownerIds, users }) => {
         }
 
         if (!form.description.trim()) {
-            errors.description = "El campo 'Descripcion' es requerido";
+            errors.description = "El campo 'Descripción' es requerido";
+        }
+
+        if (!form.address.trim()) {
+            errors.address = "El campo 'Dirección' es requerido";
         }
 
         if (!phoneRegex.test(form.telephone.trim())) {
-            errors.description = "El campo 'Telefono' esta vacio o mal escrito";
+            errors.telephone = "El campo 'Teléfono' esta vacio o mal escrito";
         }
 
-        if (!emailRegex.test(form.description.trim())) {
-            errors.description = "El campo 'E-mail' esta vacio o mal escrito";
-        }
+        if (!form.schedule.trim()) {
+            errors.schedule = "El campo 'Horarios' es requerido";
+        }       
 
-        if (!form.description.trim()) {
-            errors.description = "El campo 'Descripcion' es requerido";
-        }
+        if (!emailRegex.test(form.email.trim())) {
+            errors.email = "El campo 'E-mail' esta vacio o mal escrito";
+        }        
 
-        if (form.owners.length == 0) {
+        if (dataOwnerIds.ids.length == 0) {
             errors.owners = "El comercio debe tener al menos un propietario";
         }
-
-        //implementar logo aqui...
 
         return errors
     };
@@ -70,30 +71,26 @@ const Update = ({ store, ownerIds, users }) => {
     const handleChangeOwners = (e) => {
         const value = e.target.value;
 
-        const selectedUserId = users.find(owner => owner.username === value).username;
+        if (value != "Seleccionar") {
+            const selectedUserId = users.find(owner => owner.username === value).username;
 
-        if (selectedUserId && !data.owners.some(ownerId => ownerId === selectedUserId)) {
-            setData({
-                ...data,
-                owners: [
-                    ...data.owners,
-                    selectedUserId
-                ]
-            });
+            if (selectedUserId && !dataOwnerIds.ids.some(ownerId => ownerId === selectedUserId)) {
+
+                setDataOwnerIds({
+                    ids: [
+                        ...dataOwnerIds.ids,
+                        selectedUserId
+                    ]
+                });
+            }
+            setErrors(validationsForm(data));
         }
-
-        setErrors(validationsForm(data));
     };
-
-
-
-
 
     const deleteOwner = (e) => {
         const value = e.target.value;
-        setData({
-            ...data,
-            owners: data.owners.filter(owner => owner !== value)
+        setDataOwnerIds({
+            ids: dataOwnerIds.ids.filter(owner => owner !== value)
         })
         setErrors(validationsForm(data))
 
@@ -104,18 +101,25 @@ const Update = ({ store, ownerIds, users }) => {
         setErrors(validationsForm(data));
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors(validationsForm(data));
-        if (errors.name || errors.code || errors.category || errors.brand || errors.price || errors.stock || errors.points || errors.sizes || data.sizes.length == 0 || data.category.id == "" || data.brand.id == "") {
+        if (errors.name ||
+            errors.description ||
+            errors.address ||
+            errors.telephone ||
+            errors.email ||
+            errors.schedule ||
+            errors.owners) {
             NotificationManager.info('No fue posible actualizar el articulo: ' + '\"' + store.name + '\"', 'Administracion de comercios', 2000)
         } else {
-            update(store.id, data).then((result) => {
+            await updateStore(data);
+            console.log(dataOwnerIds.ids.join(','))
+            await updateStoreOwners(data.id, dataOwnerIds.ids).then((result) => {
                 NotificationManager.info('El articulo: ' + '\"' + data.name + '\"' + "se actualizo correctamente", 'Administracion de comercios', 2000);
             })
             window.location.href = '/stores/'
         }
-
     }
 
 
@@ -208,23 +212,6 @@ const Update = ({ store, ownerIds, users }) => {
                         {errors.telephone && <p className={`text-red-500 text-xs italic`}>{errors.telephone}</p>}
                     </div>
 
-                    {/*HORARIOS*/}
-                    <div className="w-full">
-                        <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2"
-                            htmlFor="grid-last-name">
-                            Horarios
-                        </label>
-                        <textarea
-                            autoComplete="off" value={data.schedule}
-                            className="resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-last-name" placeholder="Horarios del comercio" name="schedule" rows="3"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            required
-                        />
-                        {errors.schedule && <p className={`text-red-500 text-xs italic`}>{errors.schedule}</p>}
-                    </div>
-
                     {/*E-MAIL*/}
                     <div className="w-full">
                         <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2"
@@ -241,6 +228,23 @@ const Update = ({ store, ownerIds, users }) => {
                         />
                         {errors.email && <p className={`text-red-500 text-xs italic`}>{errors.email}</p>}
                     </div>
+
+                    {/*HORARIOS*/}
+                    <div className="w-full">
+                        <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2"
+                            htmlFor="grid-last-name">
+                            Horarios
+                        </label>
+                        <textarea
+                            autoComplete="off" value={data.schedule}
+                            className="resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="grid-last-name" placeholder="Horarios del comercio" name="schedule" rows="3"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            required
+                        />
+                        {errors.schedule && <p className={`text-red-500 text-xs italic`}>{errors.schedule}</p>}
+                    </div>                    
 
                     {/*PROPIETARIOS*/}
                     <div className="w-full">
@@ -268,7 +272,7 @@ const Update = ({ store, ownerIds, users }) => {
                         </select>
                         <div className="flex grid grid-cols-4 gap-8 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight">
                             {
-                                data.owners?.map((owner) => {
+                                dataOwnerIds.ids?.map((owner) => {
                                     return (
                                         <div className="flex w-32 justify-between mx-2 rounded shadow-xl bg-blue-500 text-white" key={owner} onBlur={handleBlur}>
                                             <div className="flex w-3/4 m-auto text-xs p-2">{owner}</div>
@@ -277,7 +281,7 @@ const Update = ({ store, ownerIds, users }) => {
                                     )
                                 })
                             }
-                            {errors.sizes && <p className={`text-red-500 text-xs italic`}>{errors.sizes}</p>}
+                            {errors.owners && <p className={`text-red-500 text-xs italic`}>{errors.owners}</p>}
                         </div>
                     </div>
                 </div>
@@ -291,13 +295,12 @@ const Update = ({ store, ownerIds, users }) => {
                     </a>
                     {
                         errors.name ||
-                            errors.code ||
-                            errors.category ||
-                            errors.brand ||
-                            errors.price ||
-                            errors.stock ||
-                            errors.points ||
-                            errors.sizes
+                            errors.description ||
+                            errors.address ||
+                            errors.telephone ||
+                            errors.email ||
+                            errors.schedule ||
+                            errors.owners 
                             ?
                             <button type="submit"
                                 className={`bg-palette-lighter text-white font-bold py-2 px-4 m-auto rounded`} disabled>
@@ -322,7 +325,7 @@ const Update = ({ store, ownerIds, users }) => {
 export async function getServerSideProps({ params }) {
     const store = await findByID(params.id);
     const ownerIds = await getOwnerIds(params.id);
-    const users = await usersServices.findAll();
+    const users = await findAll();
 
     return {
         props: {

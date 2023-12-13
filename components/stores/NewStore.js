@@ -4,6 +4,7 @@ import { saveStore } from "/services/storeService";
 import { uploadFile } from 'services/fileService';
 import imageResizer from '../uploadFile/ImageResizer';
 import { getByUsername } from 'services/userService';
+import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
 
 const NewStore = () => {
     const { data: session, status } = useSession();
@@ -37,9 +38,6 @@ const NewStore = () => {
     const [errNewOwn, setErrNewOwn] = useState(false)   //Cuando se intenta agregar un propietario inexistente
     const [errRepOwn, setErrRepOwn] = useState(false)   //Cuando el usuario ya se ingreso a la lista
     const [errOwn, setErrOwn] = useState(false);        //Cuando no se agrego ningun propietario al comercio
-
-    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const phoneRegex = /^\+?[0-9]+$/;
 
     const handleFormSubmit = async (event) => {
         event.preventDefault(); // Prevent the form from submitting
