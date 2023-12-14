@@ -135,8 +135,9 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
       }, [])
 
     return (        
-        <div  className="w-full">
-            <div  ref={productListRef}></div>
+        <div  className="">
+
+            <div ref={productListRef}></div>
             <FilterModal
                 filterParams={filterParams}
                 searchFunction={search}
@@ -144,6 +145,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 columnList={columnList}
                 showFilters={showFilters}
             ></FilterModal>
+
             <div className="mx-auto">
                 <div className="flex flex-wrap justify-evenly">
                     {
