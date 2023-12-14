@@ -107,7 +107,7 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
 
         <div
             ref={filterElementRef}
-            className={`ml-10 flex w-64 absolute left-0 transform transition-transform ease-in-out duration-300${modalVisible ? "" : "-translate-x-full"}`}
+            className={`ml-10 flex w-64 absolute left-0 transform transition-transform ease-in-out duration-300 ${modalVisible ? "" : "-translate-x-full"}`}
             style={{minHeight: "200vh"}}>
             <div className="text-left ">
                 <div
