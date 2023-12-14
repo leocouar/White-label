@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import Price from '@/components/products/Price'
 import logo from "../../images/default.jpeg";
@@ -23,7 +24,7 @@ function ProductCard({ product }) {
     (<Link
       href={`/products/${product.id}`}
       passHref
-      className="w-56 max-w-56 bg-white overflow-visible rounded-lg shadow-lg mx-8 my-4 border-2 transform transition duration-200 ease-in-out hover:scale-105"
+      className="w-56 max-w-56 bg-white overflow-visible rounded-lg shadow-lg mx-5 my-4 border-2 transform transition duration-200 ease-in-out hover:scale-105"
     >
       <div className="relative">
         <div className="m-2">
