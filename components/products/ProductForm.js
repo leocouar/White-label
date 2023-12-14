@@ -55,7 +55,6 @@ function ProductForm({ productData, image }) {
     setPromo(product.data.promo)
   }
 
-  /*
   async function handleAddToCart() {
     const element = document.getElementById('size');
     let selectElement = 0;
@@ -87,7 +86,6 @@ function ProductForm({ productData, image }) {
       });
     }
   }
-  */
 
   async function delateProduct() {
     try {
@@ -179,8 +177,7 @@ function ProductForm({ productData, image }) {
               </div>
             </div>
 
-
-            {/*
+            {
                 status == true
                     ?
                       <div className="bg-red-500 text-white p-4 rounded-lg">
@@ -196,14 +193,9 @@ function ProductForm({ productData, image }) {
                           Agregar al carrito
                         </button>
                       </div>
-                  */
             }
-
-
           </div>
-
         </div>
-
 
         {
           userCanEdit
