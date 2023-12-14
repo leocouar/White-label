@@ -33,7 +33,8 @@ const useForm = (initialState, validateForm, submitForm) => {
         const result = await submitForm(form);
         if (result.data.hasOwnProperty("name")) {
           NotificationManager.info('El artículo: ' + '\"' + form.name + '\"' + " se cargó correctamente", 'Administración de productos', 2000);
-          router.push(`/products`);
+          console.log(result);
+          router.push("/products/" + result.data.id);
         } else {
           NotificationManager.info(result.status + ' No fue posible cargar el artículo: ' + '\"' + form.name + '\"', 'Administración de productos', 2000);
         }
