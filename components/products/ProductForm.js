@@ -29,7 +29,6 @@ function ProductForm({ productData, image }) {
 
   const evaluateUser = async () => {
     const currentUser = session?.user;
-    console.log(currentUser)
     const storeId = productData.store?.id;
     const storesData = await getStoresByUser(currentUser?.username);
 
@@ -82,7 +81,7 @@ function ProductForm({ productData, image }) {
         price: price,
         size: 7
       })
-      NotificationManager.info(title, 'Agrado al carro de compras', 2000, () => {
+      NotificationManager.info(title, 'Agregado al carro de compras', 2000, () => {
         router.push('/cart')
       });
     }

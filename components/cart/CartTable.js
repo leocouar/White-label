@@ -35,7 +35,7 @@ function CartTable({ cart }) {
   //Items separados por tienda, asi despues se podra hacer el pedido de multiples items a la vez
   const gropeItems = cart.reduce((groups, item) => {
     const storeName = item.store[0].name;
-  
+
     if (!groups.some(store => store.name === storeName)) {
       groups.push({
         name: storeName,
@@ -45,14 +45,14 @@ function CartTable({ cart }) {
         message: ""
       });
     }
-  
+
     const store = groups.find(store => store.name === storeName);
     store.items.push(item);
     store.message = getMessage(store.items)
-  
+
     return groups;
   }, []);
-  
+
 
   useEffect(() => {
     setGroupedItems(gropeItems)
@@ -64,114 +64,116 @@ function CartTable({ cart }) {
     updateCartQuantity(id, quantity)
   }
 
-  
+
 
   const eraseStoreGroup = (i) => {
     const updatedGroupedItems = [...groupedItems];
     const storeRemoved = updatedGroupedItems.splice(i, 1)
-    storeRemoved[0].items.map((removed)=>{
+    storeRemoved[0].items.map((removed) => {
       updateCartQuantity(removed.id[0], 0);
     });
-    
+
     setGroupedItems(updatedGroupedItems);
   };
-  
-  
+
+
   return (
     <>
       {groupedItems.map((storeName, index) => (
-          <React.Fragment key={index}>
-            <table className="min-h-50 max-w-4xl my-4 sm:my-8 mx-auto w-full">
-              <thead>
-                <tr>
-                  <td colSpan="5" className="flex items-center font-primary font-semibold px-6 py-2">
-                    <img src={groupedItems[index].logoLink}
+        <React.Fragment key={index}>
+          <table className="min-h-50 max-w-4xl my-4 sm:my-8 mx-auto w-full">
+            <thead>
+              <tr>
+                <td colSpan="5">
+                  <div className="flex items-center font-primary font-semibold px-6 py-2">
+                    <img
+                      src={groupedItems[index].logoLink}
                       className="rounded-md mr-2"
                       style={{ width: "4rem" }}
-                      alt="Logo" />
+                      alt="Logo"
+                    />
                     <h1 className="text-xl">
                       {groupedItems[index].name}
                     </h1>
-                  </td>
-
-                </tr>
-                <tr className="uppercase text-xs sm:text-sm text-palette-primary border-b ">
-                  <th className="text-left font-primary font-normal px-6 py-4">Producto</th>
-                  <th className="font-primary font-normal px-6 py-4">Cantidad</th>
-                  <th className="font-primary font-normal px-6 py-4">Precio</th>
-                  <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Eliminar</th>
-                </tr>
-              </thead>
-              <tbody>
-                {groupedItems[index].items.map((item, index) => (
-                  item.quantity > 0 && (
-                    <tr key={index} className="text-sm sm:text-base text-gray-600 text-center">
-                      <td className="font-primary font-medium px-4 sm:px-6 py-4 flex items-center">
-                        <Image src={item.productImage[0] ? item.productImage[0] : defaultImage}
-                          width={50}
-                          height={50}
-                          className="w-12 h-12 rounded-full" />
-                        <Link legacyBehavior passHref href={`/products/${item.id[0]}`}>
-                          <a className="pt-1 hover:text-palette-dark ml-4 truncate hidden sm:table-cell">
-                            {item.productTitle[0]}
-                          </a>
-                        </Link>
-                      </td>
-                      <td className="font-primary font-medium px-4 sm:px-6 py-4">
-                        <input
-                          type="number"
-                          inputMode="numeric"
-                          id="variant-quantity"
-                          name="variant-quantity"
-                          min="1"
-                          step="1"
-                          value={item.quantity}
-                          maxLength={2}
-                          onChange={(e) => updateItem(item.id[0], e.target.value)}
-                          className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
-                          onKeyDown={(event) => {
-                            if (!/[0-9]/.test(event.key)) {
-                              event.preventDefault();
-                            }
-                          }}
-                        />
-                      </td>
-                      <td className="font-primary text-base font-light px-4 sm:px-6 py-4">
-                        <Price
-                          currency="$"
-                          num={item.price[0]}
-                          numSize="text-lg"
-                        />
-                      </td>
-                      <td className="font-primary font-medium px-4 sm:px-6 py-4 hidden sm:table-cell">
-                        <button
-                          aria-label="delete-item"
-                          className=""
-                          onClick={() => updateItem(item.id[0], 0)}
-                        >
-                          <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-palette-primary border border-palette-primary p-1 hover:bg-palette-lighter" />
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                ))}
-                <tr>
-                  <td colSpan="5" className="text-center font-primary font-semibold px-6 py-2">
-                    <div className="flex items-center justify-center">
-                      <WhatsAppButton
-                        key={index}
-                        phoneNumber={groupedItems[index].telephone}
-                        message={groupedItems[index].message}
-                        actionPostRedirect={() => eraseStoreGroup(index)}
+                  </div>
+                </td>
+              </tr>
+              <tr className="uppercase text-xs sm:text-sm text-palette-primary border-b ">
+                <th className="text-left font-primary font-normal px-6 py-4">Producto</th>
+                <th className="font-primary font-normal px-6 py-4">Cantidad</th>
+                <th className="font-primary font-normal px-6 py-4">Precio</th>
+                <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groupedItems[index].items.map((item, index) => (
+                item.quantity > 0 && (
+                  <tr key={index} className="text-sm sm:text-base text-gray-600 text-center">
+                    <td className="font-primary font-medium px-4 sm:px-6 py-4 flex items-center">
+                      <Image src={item.productImage[0] ? item.productImage[0] : defaultImage}
+                        width={50}
+                        height={50}
+                        className="w-12 h-12 rounded-full hidden sm:inline" />
+                      <Link legacyBehavior passHref href={`/products/${item.id[0]}`}>
+                        <a className="pt-1 hover:text-palette-dark ml-4 truncate">
+                          {item.productTitle[0]}
+                        </a>
+                      </Link>
+                    </td>
+                    <td className="font-primary font-medium px-4 sm:px-6 py-4">
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        id="variant-quantity"
+                        name="variant-quantity"
+                        min="1"
+                        step="1"
+                        value={item.quantity}
+                        maxLength={2}
+                        onChange={(e) => updateItem(item.id[0], e.target.value)}
+                        className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
+                        onKeyDown={(event) => {
+                          if (!/[0-9]/.test(event.key)) {
+                            event.preventDefault();
+                          }
+                        }}
                       />
-
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </React.Fragment>
-        ))
+                    </td>
+                    <td className="font-primary text-base font-light px-4 sm:px-6 py-4">
+                      <Price
+                        currency="$"
+                        num={item.price[0]}
+                        numSize="text-lg"
+                      />
+                    </td>
+                    <td className="font-primary font-medium px-4 sm:px-6 py-4 hidden sm:table-cell">
+                      <button
+                        aria-label="delete-item"
+                        className=""
+                        onClick={() => updateItem(item.id[0], 0)}
+                      >
+                        <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-palette-primary border border-palette-primary p-1 hover:bg-palette-lighter" />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              ))}
+              <tr>
+                <td colSpan="5" className="text-center font-primary font-semibold px-6 py-2">
+                  <div className="flex items-center justify-center">
+                    <WhatsAppButton
+                      key={index}
+                      phoneNumber={groupedItems[index].telephone}
+                      message={groupedItems[index].message}
+                      actionPostRedirect={() => eraseStoreGroup(index)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </React.Fragment>
+      ))
       }
     </>
   );

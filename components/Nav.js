@@ -140,11 +140,10 @@ function Nav() {
               </Loading>
               :
               <></>
-
           }
           <div className="lg:order-3">
             <Link href="/cart" passHref>
-              <div className="flex md:-mt-1 flex-wrap ml-2 md:ml-1 object-right p-6 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
+              <div className="flex md:-mt-1 flex-wrap ml-2 md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
                 <FontAwesomeIcon
                   className="text-palette-primary hover:text-palette-secondary h-6"
                   icon={faShoppingCart}
@@ -157,6 +156,7 @@ function Nav() {
               </div>
             </Link>
           </div>
+
         </div>
       </div>
     </header>

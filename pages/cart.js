@@ -66,9 +66,9 @@ function CartPage({ myPoints, user }) {
 
     return (
 
-        <div className='bg-blue-100 lg:px-6 '>
-            <div className='flex bg-white  sm:content-start'>
-                <div className="px-10 bg-white mx-auto">
+        <div className='bg-blue-100 lg:px-6'>
+            <div className='flex bg-white  sm:content-start '>
+                <div className="bg-white mx-auto mb-5">
                     <SEO title={pageTitle} />
                     <PageTitle text="Tu Compra" />
 
