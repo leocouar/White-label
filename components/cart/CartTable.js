@@ -15,7 +15,6 @@ function CartTable({ cart }) {
   const [groupedItems, setGroupedItems] = useState([]);         //Subdivide los items del carrito por tienda
   const [subtotal, setSubtotal] = useState(0)
 
-
   const defaultImage = {
     "url": "default.jpeg",
     "link": logo,
@@ -34,27 +33,29 @@ function CartTable({ cart }) {
 
 
   //Items separados por tienda, asi despues se podra hacer el pedido de multiples items a la vez
-  const groupedItemsObject = cart.reduce((groups, item) => {
+  const gropeItems = cart.reduce((groups, item) => {
     const storeName = item.store[0].name;
-
-    if (!groups[storeName]) {
-      groups[storeName] = {
+  
+    if (!groups.some(store => store.name === storeName)) {
+      groups.push({
+        name: storeName,
         items: [],
         logoLink: item.store[0].logo ? item.store[0].logo.link : null,
         telephone: item.store[0].telephone || null,
         message: ""
-      };
+      });
     }
-
-    groups[storeName].items.push(item);
-    groups[storeName].message = (getMessage(groups[storeName].items))
-
+  
+    const store = groups.find(store => store.name === storeName);
+    store.items.push(item);
+    store.message = getMessage(store.items)
+  
     return groups;
-  }, {});
-
+  }, []);
+  
 
   useEffect(() => {
-    setGroupedItems(groupedItemsObject)
+    setGroupedItems(gropeItems)
     setSubtotal(getCartSubTotal(cart))
   }, [cart])
 
@@ -63,38 +64,46 @@ function CartTable({ cart }) {
     updateCartQuantity(id, quantity)
   }
 
+  
 
-
-
+  const eraseStoreGroup = (i) => {
+    const updatedGroupedItems = [...groupedItems];
+    const storeRemoved = updatedGroupedItems.splice(i, 1)
+    storeRemoved[0].items.map((removed)=>{
+      updateCartQuantity(removed.id[0], 0);
+    });
+    
+    setGroupedItems(updatedGroupedItems);
+  };
+  
+  
   return (
     <>
-      {
-        Object.keys(groupedItems).map((storeName) => (
-          <React.Fragment key={storeName}>
+      {groupedItems.map((storeName, index) => (
+          <React.Fragment key={index}>
             <table className="min-h-50 max-w-4xl my-4 sm:my-8 mx-auto w-full">
               <thead>
                 <tr>
                   <td colSpan="5" className="flex items-center font-primary font-semibold px-6 py-2">
-                    <img src={groupedItems[storeName].logoLink}
+                    <img src={groupedItems[index].logoLink}
                       className="rounded-md mr-2"
                       style={{ width: "4rem" }}
                       alt="Logo" />
-                    <h1 className="text-lg">
-                      {storeName}
+                    <h1 className="text-xl">
+                      {groupedItems[index].name}
                     </h1>
                   </td>
 
                 </tr>
-                <tr className="uppercase text-xs sm:text-sm text-palette-primary border-b border-palette-light">
+                <tr className="uppercase text-xs sm:text-sm text-palette-primary border-b ">
                   <th className="text-left font-primary font-normal px-6 py-4">Producto</th>
                   <th className="font-primary font-normal px-6 py-4">Cantidad</th>
                   <th className="font-primary font-normal px-6 py-4">Precio</th>
-                  <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Talle</th>
                   <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Eliminar</th>
                 </tr>
               </thead>
               <tbody>
-                {groupedItems[storeName].items.map((item, index) => (
+                {groupedItems[index].items.map((item, index) => (
                   item.quantity > 0 && (
                     <tr key={index} className="text-sm sm:text-base text-gray-600 text-center">
                       <td className="font-primary font-medium px-4 sm:px-6 py-4 flex items-center">
@@ -134,9 +143,6 @@ function CartTable({ cart }) {
                           numSize="text-lg"
                         />
                       </td>
-                      <td className="font-primary text-base font-light px-4 sm:px-6 py-4 hidden sm:table-cell">
-                        <label>{item.sizeName[0]}</label>
-                      </td>
                       <td className="font-primary font-medium px-4 sm:px-6 py-4 hidden sm:table-cell">
                         <button
                           aria-label="delete-item"
@@ -150,8 +156,16 @@ function CartTable({ cart }) {
                   )
                 ))}
                 <tr>
-                  <td colSpan="5" className="flex font-primary font-semibold px-6 py-2">
-                    <WhatsAppButton phoneNumber={groupedItems[storeName].telephone} message={groupedItems[storeName].message} />
+                  <td colSpan="5" className="text-center font-primary font-semibold px-6 py-2">
+                    <div className="flex items-center justify-center">
+                      <WhatsAppButton
+                        key={index}
+                        phoneNumber={groupedItems[index].telephone}
+                        message={groupedItems[index].message}
+                        actionPostRedirect={() => eraseStoreGroup(index)}
+                      />
+
+                    </div>
                   </td>
                 </tr>
               </tbody>
