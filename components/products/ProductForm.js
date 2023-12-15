@@ -16,6 +16,7 @@ function ProductForm({ productData, image }) {
   const mainImg = useState(image);
   const id = useState(productData.id);
   const price = useState(productData.price);
+  const store = useState(productData.store)
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
   const [openUploadFile, setOpenUploadFile] = useState(false);
@@ -74,6 +75,7 @@ function ProductForm({ productData, image }) {
       addToCart({
         productTitle: title,
         productImage: mainImg,
+        store: store,
         quantity: quantity,
         id: id,
         price: price,

@@ -95,14 +95,14 @@ export function CartProvider({ children }) {
     }
     let newCart = [...cart]
     newCart.forEach(item => {
-      if (item.id === id) {
+      if (item.id[0] === id) {
         item.quantity = newQuantity
       }
     })
 
     // take out zeroes items
     newCart = newCart.filter(i => i.quantity !== 0)
-    setCart(newCart)
+    await setCart(newCart)
 
     //await updateShopifyCheckout(newCart, checkoutId)
     saveLocalData(newCart, checkoutId, checkoutUrl)

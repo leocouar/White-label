@@ -7,11 +7,14 @@ import Price from '@/components/products/Price'
 import { getCartSubTotal } from '@/utils/helpers'
 import logo from "../../images/default.jpeg";
 import Image from 'next/image'
+import React from 'react'
+import WhatsAppButton from '../whatsapp/WhatsAppButton'
 
 function CartTable({ cart }) {
   const updateCartQuantity = useUpdateCartQuantityContext()
-  const [cartItems, setCartItems] = useState([])
+  const [groupedItems, setGroupedItems] = useState([]);         //Subdivide los items del carrito por tienda
   const [subtotal, setSubtotal] = useState(0)
+
 
   const defaultImage = {
     "url": "default.jpeg",
@@ -19,99 +22,144 @@ function CartTable({ cart }) {
     "main": false
   };
 
+  //Genera el mensaje de WhatsApp a enviar...
+  const getMessage = (products) => {
+    let message = "¡Hola!, me comunico para comprar los siguientes productos: \n";
+
+    products.forEach((product) => {
+      message = message.concat("- ", product.quantity, " ", product.productTitle[0], '\n');
+    });
+    return message;
+  };
+
+
+  //Items separados por tienda, asi despues se podra hacer el pedido de multiples items a la vez
+  const groupedItemsObject = cart.reduce((groups, item) => {
+    const storeName = item.store[0].name;
+
+    if (!groups[storeName]) {
+      groups[storeName] = {
+        items: [],
+        logoLink: item.store[0].logo ? item.store[0].logo.link : null,
+        telephone: item.store[0].telephone || null,
+        message: ""
+      };
+    }
+
+    groups[storeName].items.push(item);
+    groups[storeName].message = (getMessage(groups[storeName].items))
+
+    return groups;
+  }, {});
+
+
   useEffect(() => {
-    setCartItems(cart)
+    setGroupedItems(groupedItemsObject)
     setSubtotal(getCartSubTotal(cart))
   }, [cart])
+
 
   function updateItem(id, quantity) {
     updateCartQuantity(id, quantity)
   }
 
 
+
+
   return (
-    <div className="min-h-50 max-w-4xl my-4 sm:my-8 mx-auto w-full">
-      <table className="mx-auto">
-        <thead>
-          <tr className="uppercase text-xs sm:text-sm text-palette-primary border-b border-palette-light">
-            <th className="text-left font-primary font-normal px-6 py-4">Producto</th>
-            <th className="font-primary font-normal px-6 py-4">Cantidad</th>
-            <th className="font-primary font-normal px-6 py-4">Precio</th>
-            <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Talle</th>
-            <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Eliminar</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y overscroll-auto justify-between divide-palette-lighter">
-          {cartItems.map((item, index) => (
-            <tr key={index} className="text-sm sm:text-base text-gray-600 text-center">
-              <td className="font-primary font-medium px-4 sm:px-6 py-4 flex items-center">
-                <Image src={item.productImage ? item.productImage : defaultImage}
-                       width={50}
-                       height={50}
-                  className="w-12 h-12 rounded-full"/>
+    <>
+      {
+        Object.keys(groupedItems).map((storeName) => (
+          <React.Fragment key={storeName}>
+            <table className="min-h-50 max-w-4xl my-4 sm:my-8 mx-auto w-full">
+              <thead>
+                <tr>
+                  <td colSpan="5" className="flex items-center font-primary font-semibold px-6 py-2">
+                    <img src={groupedItems[storeName].logoLink}
+                      className="rounded-md mr-2"
+                      style={{ width: "4rem" }}
+                      alt="Logo" />
+                    <h1 className="text-lg">
+                      {storeName}
+                    </h1>
+                  </td>
 
-                <Link legacyBehavior passHref href={`/products/${item.id}`}>
-                  <a className="pt-1 hover:text-palette-dark ml-4 truncate hidden sm:table-cell">
-                    {item.productTitle}
-                  </a>
-                </Link>
-              </td>
-              <td className="font-primary font-medium px-4 sm:px-6 py-4">
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  id="variant-quantity"
-                  name="variant-quantity"
-                  min="1"
-                  step="1"
-                  value={item.quantity}
-                  maxLength={2}
-                  onChange={(e) => updateItem(item.id, e.target.value)}
-                  className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
-                  onKeyPress={(event) => {
-                    if (!/[0-9]/.test(event.key)) {
-                      event.preventDefault();
-                    }
-                  }}
-                />
-              </td>
-              <td className="font-primary text-base font-light px-4 sm:px-6 py-4">
-                <Price
-                  currency="$"
-                  num={item.price}
-                  numSize="text-lg"
-                />
-              </td>
-              <td className="font-primary text-base font-light px-4 sm:px-6 py-4 hidden sm:table-cell">
-                <label>{item.sizeName}</label>
-              </td>
-              <td className="font-primary font-medium px-4 sm:px-6 py-4 hidden sm:table-cell">
-                <button
-                  aria-label="delete-item"
-                  className=""
-                  onClick={() => updateItem(item.id, 0)}
-                >
-                  <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-palette-primary border border-palette-primary p-1 hover:bg-palette-lighter" />
-                </button>
-              </td>
-            </tr>
-          ))}
-
-            <tr className="text-center">
-              <td></td>
-              <td className="font-primary text-base text-gray-600 font-semibold uppercase px-4 sm:px-6 py-4">Subtotal</td>
-              <td className="font-primary text-lg text-palette-primary font-medium px-4 sm:px-6 py-4">
-                <Price
-                  currency="$"
-                  num={subtotal}
-                  numSize="text-xl"
-                />
-              </td>
-              <td></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
+                </tr>
+                <tr className="uppercase text-xs sm:text-sm text-palette-primary border-b border-palette-light">
+                  <th className="text-left font-primary font-normal px-6 py-4">Producto</th>
+                  <th className="font-primary font-normal px-6 py-4">Cantidad</th>
+                  <th className="font-primary font-normal px-6 py-4">Precio</th>
+                  <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Talle</th>
+                  <th className="font-primary font-normal px-6 py-4 hidden sm:table-cell">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {groupedItems[storeName].items.map((item, index) => (
+                  item.quantity > 0 && (
+                    <tr key={index} className="text-sm sm:text-base text-gray-600 text-center">
+                      <td className="font-primary font-medium px-4 sm:px-6 py-4 flex items-center">
+                        <Image src={item.productImage[0] ? item.productImage[0] : defaultImage}
+                          width={50}
+                          height={50}
+                          className="w-12 h-12 rounded-full" />
+                        <Link legacyBehavior passHref href={`/products/${item.id[0]}`}>
+                          <a className="pt-1 hover:text-palette-dark ml-4 truncate hidden sm:table-cell">
+                            {item.productTitle[0]}
+                          </a>
+                        </Link>
+                      </td>
+                      <td className="font-primary font-medium px-4 sm:px-6 py-4">
+                        <input
+                          type="number"
+                          inputMode="numeric"
+                          id="variant-quantity"
+                          name="variant-quantity"
+                          min="1"
+                          step="1"
+                          value={item.quantity}
+                          maxLength={2}
+                          onChange={(e) => updateItem(item.id[0], e.target.value)}
+                          className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
+                          onKeyDown={(event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                              event.preventDefault();
+                            }
+                          }}
+                        />
+                      </td>
+                      <td className="font-primary text-base font-light px-4 sm:px-6 py-4">
+                        <Price
+                          currency="$"
+                          num={item.price[0]}
+                          numSize="text-lg"
+                        />
+                      </td>
+                      <td className="font-primary text-base font-light px-4 sm:px-6 py-4 hidden sm:table-cell">
+                        <label>{item.sizeName[0]}</label>
+                      </td>
+                      <td className="font-primary font-medium px-4 sm:px-6 py-4 hidden sm:table-cell">
+                        <button
+                          aria-label="delete-item"
+                          className=""
+                          onClick={() => updateItem(item.id[0], 0)}
+                        >
+                          <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-palette-primary border border-palette-primary p-1 hover:bg-palette-lighter" />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                ))}
+                <tr>
+                  <td colSpan="5" className="flex font-primary font-semibold px-6 py-2">
+                    <WhatsAppButton phoneNumber={groupedItems[storeName].telephone} message={groupedItems[storeName].message} />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </React.Fragment>
+        ))
+      }
+    </>
   );
 }
 
