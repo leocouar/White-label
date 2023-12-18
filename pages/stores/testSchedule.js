@@ -21,85 +21,89 @@ const TestSchedule = () => {
     }
 
     const testWithJSON = () => {
-        setScheduleData([
-            {
-              id: 1,
-              days: [
-                {
-                  day: "Lunes"
-                },
-                {
-                  day: "Miércoles"
-                }
-              ],
-              multiple : false,
-              "openingHours": [
-                {
-                  open: "08:00",
-                  close: "12:00"
-                },
-                {
-                  open: "14:30",
-                  close: "19:30"
-                }
-              ]
-            },
-            {
-              id: 2,
-              days: [
-                {
-                  day: "Lunes"
-                },
-                {
-                  day: "Miercoles"
-                },
-                {
-                  day: "Viernes"
-                }
-              ],
-              multiple : true,
-              "openingHours": [
-                {
-                  open: "09:00",
-                  close: "14:00"
-                }
-              ]
-            },
-            {
-              id: 3,
-              days: [
-                {
-                  day: "Sábado"
-                }
-              ],
-              multiple : true,
-              "openingHours": [
-                {
-                  open: "08:00",
-                  close: "12:00"
-                },
-                {
-                  open: "13:00",
-                  close: "15:00"
-                }
-              ]
-            },
-            {
-              id: 4,
-              days: [
-                {
-                  day: "Domingo"
-                }
-              ],
-              multiple : true,
-              "openingHours": [
-                {
-                  open: "10:00",
-                  close: "12:30"
-                }
-              ]
-            }
-          ]);
+        const importedSchedule = [
+          {
+            days: [
+              {
+                day: "Lunes"
+              },
+              {
+                day: "Miércoles"
+              }
+            ],
+            multiple : false,
+            openingHours: [
+              {
+                open: "08:00",
+                close: "12:00"
+              },
+              {
+                open: "14:30",
+                close: "19:30"
+              }
+            ]
+          },
+          {
+            days: [
+              {
+                day: "Lunes"
+              },
+              {
+                day: "Miercoles"
+              },
+              {
+                day: "Viernes"
+              }
+            ],
+            multiple : true,
+            "openingHours": [
+              {
+                open: "09:00",
+                close: "14:00"
+              }
+            ]
+          },
+          {
+            days: [
+              {
+                day: "Sábado"
+              }
+            ],
+            multiple : true,
+            openingHours: [
+              {
+                open: "08:00",
+                close: "12:00"
+              },
+              {
+                open: "13:00",
+                close: "15:00"
+              }
+            ]
+          },
+          {
+            days: [
+              {
+                day: "Domingo"
+              }
+            ],
+            multiple : true,
+            openingHours: [
+              {
+                open: "10:00",
+                close: "12:30"
+              }
+            ]
+          }
+        ];
+        const scheduleDataWithId = importedSchedule.map((item, index) => {
+          return {
+            id: index + 1,
+            ...item
+          };
+        });
+        console.log(scheduleDataWithId)
+        setScheduleData(scheduleDataWithId);
         setKey(key + 1);
     }
 
@@ -157,7 +161,6 @@ const TestSchedule = () => {
                             ))}
                         </div>
                     )}
-
                 </div>
             </div>
         </div>

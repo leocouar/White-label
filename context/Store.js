@@ -47,7 +47,6 @@ export function CartProvider({ children }) {
   async function addToCart(newItem) {
     setisLoading(true)
 
-    // empty cart
     if (cart.length === 0) {
       setCart([
         ...cart,
@@ -60,7 +59,8 @@ export function CartProvider({ children }) {
       // loop through all cart items to check if variant
       // already exists and update quantity
       newCart.map(item => {
-        if (item.id === newItem.id && item.size == newItem.size) {
+        if (item.id[0] === newItem.id[0]) {
+          console.log("I found a repeated one...")
           item.quantity += newItem.quantity
           itemAdded = true
         }
@@ -74,8 +74,6 @@ export function CartProvider({ children }) {
       }
 
       setCart(newCartWithItem)
-
-      console.log("newCartWithItem", newCartWithItem)
 
       //await updateShopifyCheckout(newCartWithItem, checkoutId)
       saveLocalData(newCartWithItem, checkoutId, checkoutUrl)
@@ -95,14 +93,14 @@ export function CartProvider({ children }) {
     }
     let newCart = [...cart]
     newCart.forEach(item => {
-      if (item.id === id) {
+      if (item.id[0] === id) {
         item.quantity = newQuantity
       }
     })
 
     // take out zeroes items
     newCart = newCart.filter(i => i.quantity !== 0)
-    setCart(newCart)
+    await setCart(newCart)
 
     //await updateShopifyCheckout(newCart, checkoutId)
     saveLocalData(newCart, checkoutId, checkoutUrl)

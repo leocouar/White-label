@@ -10,25 +10,27 @@ import { useRouter } from "next/router";
 import { activateProduct, deleteProduct, updateAsAPromotion } from 'services/productService';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getStoresByUser } from 'services/storeService';
+import WhatsAppButton from '../whatsapp/WhatsAppButton';
 
 function ProductForm({ productData, image }) {
   const title = useState(productData.name);
   const mainImg = useState(image);
   const id = useState(productData.id);
   const price = useState(productData.price);
+  const store = useState(productData.store)
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const router = useRouter();
   const [promo, setPromo] = useState(productData.promo);
   const [status, setStatus] = useState(productData.deleted)
+  const [wspMsj, setWspMsj] = useState("")
 
   const { data: session } = useSession()
   const [userCanEdit, setUserCanEdit] = useState(false);
 
   const evaluateUser = async () => {
     const currentUser = session?.user;
-    console.log(currentUser)
     const storeId = productData.store?.id;
     const storesData = await getStoresByUser(currentUser?.username);
 
@@ -41,6 +43,11 @@ function ProductForm({ productData, image }) {
         }
       });
   }
+
+  useEffect(()=>{
+    const wspMessage = "¡Hola!, me comunico para consultar acerca del producto " + productData.name;
+    setWspMsj(wspMessage);
+  },[productData])
 
   useEffect(() => {
     evaluateUser();
@@ -55,9 +62,8 @@ function ProductForm({ productData, image }) {
     setPromo(product.data.promo)
   }
 
-  /*
   async function handleAddToCart() {
-    const element = document.getElementById('size');
+    /*const element = document.getElementById('size');
     let selectElement = 0;
     let selectedOptionText = 'Talle Unico'
     if (element.tagName === "SELECT") {
@@ -70,32 +76,28 @@ function ProductForm({ productData, image }) {
     } else {
       console.log("Element is not a select or label");
     }
+    */
 
     if (quantity != '') {
       addToCart({
         productTitle: title,
         productImage: mainImg,
+        store: store,
         quantity: quantity,
         id: id,
         price: price,
-        size: selectElement,
-        sizeName: selectedOptionText
-
+        size: 7
       })
-      NotificationManager.info(title, 'Agrado al carro de compras' , 2000 ,  () => {
+      NotificationManager.info(title, 'Agregado al carro de compras', 2000, () => {
         router.push('/cart')
       });
     }
   }
-  */
 
-  async function delateProduct() {
+  async function deleteAProduct() {
     try {
-
       let result = await deleteProduct(id)
-
       setStatus(result.data.deleted)
-
       NotificationManager.error('No se mostrara en los resultados de busqueda', 'Baja de producto', 5000);
     }
     catch (error) {
@@ -105,11 +107,8 @@ function ProductForm({ productData, image }) {
 
   async function activeProduct() {
     try {
-
       let result = await activateProduct(id)
-
       setStatus(result.data.deleted)
-
       NotificationManager.info('Se mostrara en los resultados de busqueda', 'Producto Activo', 5000);
     }
     catch (error) {
@@ -132,14 +131,12 @@ function ProductForm({ productData, image }) {
   return (
     <>
       <NotificationContainer />
-
       <div id="productForm" className="w-full">
-
         <div className="w-full">
-
           <div className="flex flex-col space-y-2">
             <div className="flex">
-              <div className="flex-col items-start space-y-1 mr-2">
+              
+                <div className="flex-col items-start space-y-1 mr-2">
                 <input
                   type="number"
                   inputMode="numeric"
@@ -152,6 +149,7 @@ function ProductForm({ productData, image }) {
                   className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
                 />
               </div>
+              {/*
               <div className="flex-col items-start space-y-1">
 
                 {productData.sizes.length > 0 ? (
@@ -176,34 +174,34 @@ function ProductForm({ productData, image }) {
                 ) : (
                   <label id='size' className="block text-gray-700 text-sm font-bold mb-2 mt-3">Talle Único</label>
                 )}
-              </div>
+                </div>
+                */}
             </div>
 
-
-            {/*
-                status == true
-                    ?
-                      <div className="bg-red-500 text-white p-4 rounded-lg">
-                        Producto inactivo
-                      </div>
-                    :
-                      <div className="flex flex-col items-start space-y-1">
-                        <button
-                            onClick={handleAddToCart}
-                            aria-label="add-to-cart"
-                            className="border border-palette-primary bg-purple-500 hover:bg-purple-600 text-lg text-white font-primary font-semibold pt-2 pb-1 leading-relaxed flex justify-center items-center focus:ring-1 focus:ring-palette-light focus:outline-none w-full rounded-md cursor-pointer  pl-4 pr-4"
-                        >
-                          Agregar al carrito
-                        </button>
-                      </div>
-                  */
+            {
+              status == true
+                ?
+                <div className="bg-red-500 text-white p-4 rounded-lg">
+                  Producto inactivo
+                </div>
+                :
+                <div className="flex flex-col items-start space-y-1">
+                  <button
+                    onClick={handleAddToCart}
+                    aria-label="add-to-cart"
+                    className="border border-palette-primary bg-purple-500 hover:bg-purple-600 text-lg text-white font-primary font-semibold pt-2 pb-1 leading-relaxed flex justify-center items-center focus:ring-1 focus:ring-palette-light focus:outline-none w-full rounded-md cursor-pointer  pl-4 pr-4"
+                  >
+                    Agregar al carrito
+                  </button>
+                </div>
             }
 
-
+            <WhatsAppButton 
+                phoneNumber={productData.store.telephone}
+                message={wspMsj}
+            />                      
           </div>
-
         </div>
-
 
         {
           userCanEdit
@@ -214,7 +212,7 @@ function ProductForm({ productData, image }) {
 
                 status == false
                   ?
-                  <button onClick={delateProduct} className="bg-palette-primary text-white w-1/4 mt-2 mr-3  rounded-md font-primary font-semibold text-xs flex
+                  <button onClick={deleteAProduct} className="bg-palette-primary text-white w-1/4 mt-2 mr-3  rounded-md font-primary font-semibold text-xs flex
                           justify-center items-baselinetransform transition duration-500 group cursor-pointer">
                     <p className="hidden m-1 group-hover:block">Eliminar Producto</p>
                     <FontAwesomeIcon icon={faTrash} className="w-5 m-auto group-hover:hidden" />

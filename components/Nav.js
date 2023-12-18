@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDoorOpen, faSignOutAlt, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen, faSignOutAlt, faBars, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import logo from "/images/camara_bolivar_logo.png";
 import { useSession, signOut } from "next-auth/react";
 import Loading from "./utils/Loading";
@@ -25,14 +25,14 @@ function Nav() {
 
   const handleSession = async () => {
     if (session) {
-      try{
+      try {
         await router.push("/");
-      }catch (error){
+      } catch (error) {
         console.error(error);
       }
       try {
         await signOut();
-        
+
       } catch (error) {
         console.error("Error al cerrar sesión:", error);
       }
@@ -140,8 +140,23 @@ function Nav() {
               </Loading>
               :
               <></>
-
           }
+          <div className="lg:order-3">
+            <Link href="/cart" passHref>
+              <div className="flex md:-mt-1 flex-wrap ml-2 md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
+                <FontAwesomeIcon
+                  className="text-palette-primary hover:text-palette-secondary h-6"
+                  icon={faShoppingCart}
+                />
+                {cartItems === 0 ? null : (
+                  <div className=" text-xs bg-palette-secondary rounded-full text-white font-semibold py-1 px-2 ">
+                    {cartItems}
+                  </div>
+                )}
+              </div>
+            </Link>
+          </div>
+
         </div>
       </div>
     </header>
