@@ -18,10 +18,19 @@ const VistaComercio = ({ commerceData }) => {
   const [logoWasUpdated, setLogoWasUpdated] = useState(false);
   const [newLogoFile, setNewLogoFile] = useState();
   const [editLogoURL, setEditLogoURL] = useState(null);
+  const [isPopupOpen, setPopupOpen] = useState(false);
   const router = useRouter();
 
   const [errEmail, setErrEmail] = useState(false);
   const [errTel, setErrTel] = useState(false);
+
+  const openPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
 
   useEffect(() => {
     if (storeToShow && storeToShow.logo) {
@@ -30,8 +39,6 @@ const VistaComercio = ({ commerceData }) => {
       setEditLogoURL(logoURL)
     }
   }, [storeToShow])
-
- 
 
   //Selecciona una imagen a cargar  
   const handleImageUpload = async (event) => {
@@ -43,6 +50,11 @@ const VistaComercio = ({ commerceData }) => {
 
   const handleEditClick = () => {
     setView('edit');
+  };
+
+  const handleDeleteClick = () => {
+    
+    closePopup()
   };
 
   const handleCancelClick = () => {
@@ -74,14 +86,14 @@ const VistaComercio = ({ commerceData }) => {
 
     const checkEmail = !emailRegex.test(storeToUpdate.email.trim());
     await setErrEmail(checkEmail);
-    return {checkTel, checkEmail};
+    return { checkTel, checkEmail };
   }
 
-  useEffect(()=>{console.log("ESTADO REAL:",errEmail, errTel)},[errEmail, errTel]);
+  useEffect(() => { console.log("ESTADO REAL:", errEmail, errTel) }, [errEmail, errTel]);
 
   const handleSave = async () => {
     const errors = await verifyData();
-    
+
     if (!errors.checkEmail && !errors.checkTel) {
       await updateStore(storeToUpdate);
       if (logoWasUpdated) {
@@ -139,13 +151,39 @@ const VistaComercio = ({ commerceData }) => {
           {/* Edit button */}
           <div className="md:col-span-2 text-right">
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
+              className=" w-24 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
               onClick={handleEditClick}
             >
               Editar
             </button>
           </div>
+          {/* Delete button */}
+          <div className="md:col-span-2 text-right">
+            <button
+              className="w-24 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
+              onClick={openPopup}
+            >
+              Eliminar
+            </button>
+          </div>
         </div>)}
+
+      {isPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded">
+            <h1>¡Atención!</h1>
+            <p>Eliminar un comercio implica eliminar ademas todos sus productos</p>
+            <p>Ademas, es algo que no se puede deshacer.</p>
+            <h2>¿Esta seguro de que desea eliminar este comercio?</h2>
+            <button onClick={handleDeleteClick} className="mt-4 bg-red-500 text-white p-2">
+              Si
+            </button>
+            <button onClick={closePopup} className="mt-4 bg-red-500 text-white p-2">
+              No
+            </button>
+          </div>
+        </div>
+      )}
 
       {view === 'edit' && (
         <div className="inset-0 z-10 flex items-center justify-center">
