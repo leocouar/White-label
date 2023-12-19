@@ -59,7 +59,7 @@ export function CartProvider({ children }) {
       // loop through all cart items to check if variant
       // already exists and update quantity
       newCart.map(item => {
-        if (item.id[0] === newItem.id[0]) {
+        if (item.id === newItem.id) {
           console.log("I found a repeated one...")
           item.quantity += newItem.quantity
           itemAdded = true
@@ -93,7 +93,7 @@ export function CartProvider({ children }) {
     }
     let newCart = [...cart]
     newCart.forEach(item => {
-      if (item.id[0] === id) {
+      if (item.id === id) {
         item.quantity = newQuantity
       }
     })
