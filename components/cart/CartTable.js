@@ -13,7 +13,8 @@ import WhatsAppButton from '../whatsapp/WhatsAppButton'
 function CartTable({ cart }) {
   const updateCartQuantity = useUpdateCartQuantityContext()
   const [groupedItems, setGroupedItems] = useState([]);         //Subdivide los items del carrito por tienda
-  const [subtotal, setSubtotal] = useState(0)
+  const [subtotal, setSubtotal] = useState(0);
+  useEffect(()=>{console.log(cart)},[cart])
 
   const defaultImage = {
     "url": "default.jpeg",
@@ -26,7 +27,7 @@ function CartTable({ cart }) {
     let message = "¡Hola!, me comunico para comprar los siguientes productos: \n";
 
     products.forEach((product) => {
-      message = message.concat("- ", product.quantity, " ", product.productTitle[0], '\n');
+      message = message.concat("- ", product.quantity, " ", product.productTitle, '\n');
     });
     return message;
   };
@@ -34,14 +35,14 @@ function CartTable({ cart }) {
 
   //Items separados por tienda, asi despues se podra hacer el pedido de multiples items a la vez
   const gropeItems = cart.reduce((groups, item) => {
-    const storeName = item.store[0].name;
+    const storeName = item.store.name;
 
     if (!groups.some(store => store.name === storeName)) {
       groups.push({
         name: storeName,
         items: [],
-        logoLink: item.store[0].logo ? item.store[0].logo.link : null,
-        telephone: item.store[0].telephone || null,
+        logoLink: item.store?.logo ? item.store.logo.link : null,
+        telephone: item.store?.telephone || null,
         message: ""
       });
     }
@@ -68,9 +69,10 @@ function CartTable({ cart }) {
 
   const eraseStoreGroup = (i) => {
     const updatedGroupedItems = [...groupedItems];
-    const storeRemoved = updatedGroupedItems.splice(i, 1)
-    storeRemoved[0].items.map((removed) => {
-      updateCartQuantity(removed.id[0], 0);
+    console.log(updatedGroupedItems[i])
+    const storeRemoved = updatedGroupedItems.splice(i, 1)[0];
+    storeRemoved.items.map((removed) => {
+      updateCartQuantity(removed.id, 0);
     });
 
     setGroupedItems(updatedGroupedItems);
@@ -110,13 +112,13 @@ function CartTable({ cart }) {
                 item.quantity > 0 && (
                   <tr key={index} className="text-sm sm:text-base text-gray-600 text-center">
                     <td className="font-primary font-medium px-4 sm:px-6 py-4 flex items-center">
-                      <Image src={item.productImage[0] ? item.productImage[0] : defaultImage}
+                      <Image src={item.productImage ? item.productImage : defaultImage}
                         width={50}
                         height={50}
                         className="w-12 h-12 rounded-full hidden sm:inline" />
-                      <Link legacyBehavior passHref href={`/products/${item.id[0]}`}>
+                      <Link legacyBehavior passHref href={`/products/${item.id}`}>
                         <a className="pt-1 hover:text-palette-dark ml-4 truncate">
-                          {item.productTitle[0]}
+                          {item.productTitle}
                         </a>
                       </Link>
                     </td>
@@ -130,7 +132,7 @@ function CartTable({ cart }) {
                         step="1"
                         value={item.quantity}
                         maxLength={2}
-                        onChange={(e) => updateItem(item.id[0], e.target.value)}
+                        onChange={(e) => updateItem(item.id, e.target.value)}
                         className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
                         onKeyDown={(event) => {
                           if (!/[0-9]/.test(event.key)) {
@@ -142,7 +144,7 @@ function CartTable({ cart }) {
                     <td className="font-primary text-base font-light px-4 sm:px-6 py-4">
                       <Price
                         currency="$"
-                        num={item.price[0]}
+                        num={item.price}
                         numSize="text-lg"
                       />
                     </td>
@@ -150,7 +152,7 @@ function CartTable({ cart }) {
                       <button
                         aria-label="delete-item"
                         className=""
-                        onClick={() => updateItem(item.id[0], 0)}
+                        onClick={() => updateItem(item.id, 0)}
                       >
                         <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-palette-primary border border-palette-primary p-1 hover:bg-palette-lighter" />
                       </button>

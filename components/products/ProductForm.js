@@ -13,17 +13,12 @@ import { getStoresByUser } from 'services/storeService';
 import WhatsAppButton from '../whatsapp/WhatsAppButton';
 
 function ProductForm({ productData, image }) {
-  const title = useState(productData.name);
-  const mainImg = useState(image);
-  const id = useState(productData.id);
-  const price = useState(productData.price);
-  const store = useState(productData.store)
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const router = useRouter();
-  const [promo, setPromo] = useState(productData.promo);
-  const [status, setStatus] = useState(productData.deleted)
+  const [promo, setPromo] = useState(productData?.promo);
+  const [status, setStatus] = useState(productData?.deleted)
   const [wspMsj, setWspMsj] = useState("")
 
   const { data: session } = useSession()
@@ -31,7 +26,7 @@ function ProductForm({ productData, image }) {
 
   const evaluateUser = async () => {
     const currentUser = session?.user;
-    const storeId = productData.store?.id;
+    const storeId = productData?.store?.id;
     const storesData = await getStoresByUser(currentUser?.username);
 
     currentUser && currentUser?.role?.includes("ADMIN") ?
@@ -45,7 +40,7 @@ function ProductForm({ productData, image }) {
   }
 
   useEffect(()=>{
-    const wspMessage = "¡Hola!, me comunico para consultar acerca del producto " + productData.name;
+    const wspMessage = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
     setWspMsj(wspMessage);
   },[productData])
 
@@ -55,7 +50,7 @@ function ProductForm({ productData, image }) {
 
   const handlePromo = async () => {
     let producToUpdate = {
-      id: id,
+      id: productData?.id,
       promo: !promo
     }
     let product = await updateAsAPromotion(producToUpdate);
@@ -80,15 +75,15 @@ function ProductForm({ productData, image }) {
 
     if (quantity != '') {
       addToCart({
-        productTitle: title,
-        productImage: mainImg,
-        store: store,
+        productTitle: productData?.name,
+        productImage: image,
+        store: productData?.store,
         quantity: quantity,
-        id: id,
-        price: price,
+        id: productData?.id,
+        price: productData?.price,
         size: 7
       })
-      NotificationManager.info(title, 'Agregado al carro de compras', 2000, () => {
+      NotificationManager.info(productData?.name, 'Agregado al carro de compras', 2000, () => {
         router.push('/cart')
       });
     }
@@ -96,7 +91,7 @@ function ProductForm({ productData, image }) {
 
   async function deleteAProduct() {
     try {
-      let result = await deleteProduct(id)
+      let result = await deleteProduct(productData?.id)
       setStatus(result.data.deleted)
       NotificationManager.error('No se mostrara en los resultados de busqueda', 'Baja de producto', 5000);
     }
@@ -107,7 +102,7 @@ function ProductForm({ productData, image }) {
 
   async function activeProduct() {
     try {
-      let result = await activateProduct(id)
+      let result = await activateProduct(productData?.id)
       setStatus(result.data.deleted)
       NotificationManager.info('Se mostrara en los resultados de busqueda', 'Producto Activo', 5000);
     }
@@ -117,7 +112,7 @@ function ProductForm({ productData, image }) {
   }
 
   const goToEdit = () => {
-    window.location.href = '/products/update/' + id[0]
+    window.location.href = '/products/update/' + productData?.id
   }
 
   function updateQuantity(e) {
@@ -152,7 +147,7 @@ function ProductForm({ productData, image }) {
               {/*
               <div className="flex-col items-start space-y-1">
 
-                {productData.sizes.length > 0 ? (
+                {productData?.sizes.length > 0 ? (
                   <>
                     <select
                       name="category"
@@ -163,7 +158,7 @@ function ProductForm({ productData, image }) {
                         Seleccionar
                       </option>
                       {
-                        productData.sizes.map((provider) => (
+                        productData?.sizes.map((provider) => (
                           <option key={provider.id} name={provider.name} value={provider.id}>
                             {provider.name}
                           </option>
@@ -197,7 +192,7 @@ function ProductForm({ productData, image }) {
             }
 
             <WhatsAppButton 
-                phoneNumber={productData.store.telephone}
+                phoneNumber={productData?.store?.telephone}
                 message={wspMsj}
             />                      
           </div>
@@ -269,7 +264,7 @@ function ProductForm({ productData, image }) {
               <UploadFile
                 isOpen={openUploadFile}
                 setIsOpen={setOpenUploadFile}
-                folder={id[0]}
+                folder={productData?.id}
 
               />
             </div>
