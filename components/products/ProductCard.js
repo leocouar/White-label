@@ -10,7 +10,7 @@ function ProductCard({ product }) {
   const price = product.price;
   const promo = product.promo;
   const storeLogo = product.store?.logo;
-  const storeID = product.store.id
+  const storeID = product.store?.id
 
   let defaultImage = {
     "url": "default.jpeg",
@@ -21,7 +21,7 @@ function ProductCard({ product }) {
   let image = product.images && product.images.length != 0 ? product.images[0].link : defaultImage.link
 
   return (
-    (<Link
+    <Link
       href={`/products/${product.id}`}
       passHref
       className="w-56 max-w-56 bg-white overflow-visible rounded-lg shadow-lg mx-5 my-4 border-2 transform transition duration-200 ease-in-out hover:scale-105"
@@ -45,15 +45,17 @@ function ProductCard({ product }) {
       <div className="flex relative items-center font-primary bottom-0 left-0">
         <Price currency="&emsp;$" num={price} numSize="text-xl" />
         <div className="flex-grow"></div>
-        <Link
-        href={`/commerce/${storeID}`}
-        passHref
-        className="hover:bg-indigo-200 mb-2 mr-2 rounded">
-          <img className="w-16 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
-        </Link>
+        {storeLogo && 
+          <Link
+          href={`/commerce/${storeID}`}
+          passHref
+          className="hover:bg-indigo-200 mb-2 mr-2 rounded">
+            <img className="w-16 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
+          </Link>
+        }
       </div>
 
-    </Link>)
+    </Link>
   );
 }
 
