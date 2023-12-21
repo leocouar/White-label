@@ -235,7 +235,7 @@ const NewStore = () => {
                         type="text"
                         id="address"
                         className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                        placeholder="Direcci&oacute;n del comercio..."
+                        placeholder="Direcci&oacute;n del comercio"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                     />
@@ -246,18 +246,22 @@ const NewStore = () => {
 
                 {/*TELEFONO*/}
                 <div className="w-full">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold"
                         htmlFor="telephone">Tel&eacute;fono:</label>
+                    <p className="text-xs text-gray-400">Podrá ser utilizado como contacto de WhatsApp</p>
+                    <div className="flex items-center mb-3">
+                    <span className="absolute text-gray-500 pl-3">+54 9</span>
                     <input
                         type="text"
                         id="telephone"
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                        placeholder="Número de teléfono"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 pl-16 pr-3 leading-tight focus:outline-none focus:bg-white"
+                        placeholder="Ejemplo: 2314123456"
                         value={telephone}
                         onChange={(e) => setTelephone(e.target.value)}
-                    />
+                        />
+                    </div>
                     {errTel && <p className={`text-red-500 text-xs italic`}>
-                        "Telefono invalido"
+                        "Ingrese su número sin el 0 y sin el 15, y sin guiones en el medio"
                     </p>}
                 </div>
 
@@ -357,7 +361,7 @@ const NewStore = () => {
                             onChange={(e) => handleImageUpload(e)}
                             style={{ display: 'none' }}
                         />
-                        <p className={`text-blue-500 text-xs italic`}>
+                        <p className={`text-blue-500 text-xs italic mt-1`}>
                             El logo debe ser de 368x368 en formato .jpg o .png. <u>De no ser asi, sera redimensionada.</u>
                         </p>
                         {resizedImageUrl && <img className="w-1/2" src={resizedImageUrl} alt="Resized" />}
