@@ -64,15 +64,15 @@ function NavSearch() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => handleKeyPress(e)}
-          className={`border border-gray-400 ${isFocused ? "w-2/3" : "w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
+          className={`border border-gray-200 ${isFocused ? "w-2/3" : "w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
           placeholder="Buscar"
           id="search"
+          maxLength={32}
         />
-
-        <button className="justify-between my-auto border-l-0 border border-gray-400 p-2 rounded-xl rounded-tl-none rounded-bl-none shadow-lg shadow-indigo-500/50 outline-none"
+        <button className="justify-between my-auto border-l-0 border border-gray-200 p-2 rounded-xl rounded-tl-none rounded-bl-none shadow-lg shadow-indigo-500/50 outline-none"
           onClick={redirectToSearchResults}
         >
-          <FontAwesomeIcon icon={faSearch} className="w-6 m-auto" />
+        <FontAwesomeIcon icon={faSearch} style={{color: "#647187",}}  className="w-6 m-auto" />
         </button>
       </div>
 

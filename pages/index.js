@@ -18,7 +18,8 @@ function IndexPage({ brands, categories, initialSearch, stores}) {
           <Banner stores={stores} />
         </div>
       </div>
-      <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} showFilters={false}/>
+      <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} 
+      showFilters={false} showMsg = {false}/>
     </div>
   )
 }
