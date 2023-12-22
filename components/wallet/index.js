@@ -9,11 +9,13 @@ import AddPoints from "./AddPoints";
 import RemovePoints from "./RemovePoints";
 import { useSession } from "next-auth/react";
 import { getPoints } from "services/walletService";
+import Loading from "@/components/utils/Loading";
 
 
 
 
 const WalletOfUser = ({ walletOfUser, user }) => {
+    const [loading, isLoading] = useState(false);
     const [isWallet, setIsWallet] = useState(false);
     const [points, setPoints] = useState(0);
     const [addPoints, setAddPoints] = useState(false)
