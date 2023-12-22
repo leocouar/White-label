@@ -3,7 +3,7 @@ import FilterModal from '@/components/filter/FilterModal'
 import { useEffect, useState, useRef } from "react";
 import { searchList } from "../../services/productService"
 
-function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true }) {
+function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true, showMsg = true }) {
     //Control de pagina
     const productListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);         //Indica si esta cargando nuevos productos
@@ -134,9 +134,8 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
         window.addEventListener('scroll', changeVisibility)
       }, [])
 
-    return (        
-        <div  className="">
-
+      return (        
+        <div className="">
             <div ref={productListRef}></div>
             <FilterModal
                 filterParams={filterParams}
@@ -145,15 +144,28 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 columnList={columnList}
                 showFilters={showFilters}
             ></FilterModal>
-
+    
             <div className="mx-auto">
-                <div className="flex flex-wrap justify-evenly">
-                    {
-                        productsToShow && productsToShow.map((product, index) => {
-                            return <ProductCard key={index} product={product} />;
-                        })
-                    }
-                </div>
+                
+                {productsToShow && productsToShow.length > 0 ? (
+                    // Si hay productos cargados, mostrar el mensaje y la lista de productos
+                    <>
+                        { showMsg && <p className='text-center text-md text-palette-primary font-semibold mt-4 ' style={{color: "#5d5475",}}>
+                            Resultados para: "{q.term}"
+                        </p>}
+                        <div className="flex flex-wrap justify-evenly">
+                            {productsToShow.map((product, index) => (
+                                <ProductCard key={index} product={product} />
+                            ))} 
+                        </div>
+                    </>
+                ) : (
+                    // Si no hay productos cargados, mostrar el mensaje de que no hay productos
+                     showMsg && <p className='text-center text-md text-palette-primary font-semibold mt-4' style={{color: "#5d5475",}}>
+                        No se encontraron resultados para :  "{q.term}"
+                    </p>
+                )}
+    
                 <button
                     style={{ zIndex: 9999 }} // Set a high z-index value
                     type="button"
@@ -179,17 +191,16 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                     </svg>
                 </button>
             </div>
-            {
-                isLoading
-                    ?
-                    <div className='flex items-center justify-center py-6'>
-                        <div className='w-16 h-16 border-b-2 border-palette-secondary rounded-full animate-spin'></div>
-                    </div>
-                    :
-                    <></>
-            }
+            {isLoading ? (
+                <div className='flex items-center justify-center py-6'>
+                    <div className='w-16 h-16 border-b-2 border-palette-secondary rounded-full animate-spin'></div>
+                </div>
+            ) : (
+                <></>
+            )}
         </div>
     )
+    
 }
 
 export default ProductListings;

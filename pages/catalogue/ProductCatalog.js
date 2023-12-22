@@ -25,15 +25,11 @@ const ProductCatalog = ({ brands, categories }) => {
     <div className='h-full w-full flex flex-col'style={{ backgroundImage: `url('/images/bgcatalog.jpg')` }}>
       {query && initialSearch && (
         <div className='text-center'>
-        <h2 className='text-sm text-palette-primary font-semibold mt-4'style={{color: "#5d5475",}}>
-          Resultados para: "{query}"
-        </h2>
         </div>
       )}
            {initialSearch && (
         <div className='w-4/5 ml-auto h-full' style={{minHeight: "200vh"}}>
         <ProductListings
-          
           brands={brands}
           categories={categories}
           initialSearch={initialSearch}
@@ -41,13 +37,9 @@ const ProductCatalog = ({ brands, categories }) => {
           showFilters={true}
         />
         </div>
-        
       )}
       {(!query || !initialSearch) && (
            <div className='text-center'>
-           <h2 className='text-sm text-palette-primary font-semibold mt-4'style={{color: "#5d5475",}}>
-             No se encontraron resultados para: "{query}"
-           </h2>
            </div>
       )}
       {/* Muestra los productos si existen */}
