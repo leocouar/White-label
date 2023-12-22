@@ -290,8 +290,8 @@ export async function deletedImagen(productId, image) {
     }
 }
 
-export async function getProductsRelated(product) {
-    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/product/relationship/${product.id}`;
+export async function getProductsRelated(product,amount) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/product/recommended/${product.id}/${amount}`;
     try {
         let response = await axios.get(fetchUrl);
         return response.data;
