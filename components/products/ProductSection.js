@@ -1,19 +1,23 @@
 import ProductImage from '@/components/products/ProductImage'
 import ProductDetails from '@/components/products/ProductDetails'
 import Gallery from "@/components/products/Gallery";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as productService from "../../services/productService";
 
 
 function ProductSection({ productData }) {
     const [productsRelated, setProductsRelated] = useState([])
 
-    /*
-    useEffect(async () => {
-        let products = await productService.getProductsRelated(productData)
-        setProductsRelated(products)
-    }, [])
-    */
+    const fetchData = async () => {
+        let products = await productService.getProductsRelated(productData, 12);
+        setProductsRelated(products);
+
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [productData]);
+
 
     return (
         <>
@@ -25,12 +29,9 @@ function ProductSection({ productData }) {
                     <ProductDetails productData={productData} />
                 </div>
             </div>
-            {/*
-            <Gallery productData={productsRelated}/>
-            */}
-            
+            <Gallery productData={productsRelated} />
         </>
-  )
+    )
 }
 
 export default ProductSection
