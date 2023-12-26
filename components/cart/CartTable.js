@@ -35,7 +35,7 @@ function CartTable({ cart }) {
 
   //Items separados por tienda, asi despues se podra hacer el pedido de multiples items a la vez
   const gropeItems = cart.reduce((groups, item) => {
-    const storeName = item.store.name;
+    const storeName = item.store?.name;
 
     if (!groups.some(store => store.name === storeName)) {
       groups.push({
