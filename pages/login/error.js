@@ -26,17 +26,21 @@ const LoginError = ({ csrfToken }) => {
     })
   }
 
-  const handleGoogleSignIn = () => {
-    signIn('google'); // 'google' es el ID del proveedor de Google configurado en NextAuth.js
+  
+  const handleFacebookLogin = async () => {
+    await signIn('facebook');
+    router.push('/stores/list');
   };
-  const handleFacebookSignIn = () => {
-    signIn('facebook'); // 'facebook' es el ID del proveedor de Facebook configurado en NextAuth.js
+
+  const handleGoogleLogin = async () => {
+    await signIn('google');
+    router.push('/stores/list');
   };
 
 
   return (
     <div className="min-h-full flex  items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-1/2 flex  justify-center">
+      <div className="w-1/2 flex  justify-center bg-gray-200">
         <div className="w-auto mt-10 mb-10 space-y-4">
           <div>
             <img className="mx-auto h-12 w-auto"
@@ -82,7 +86,34 @@ const LoginError = ({ csrfToken }) => {
             </div>
             <div className="">
               <button type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium  text-white bg-gray-900 hover:bg-gray-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Iniciar sesion
+              </button>
+            </div>
+            <div className="w-full bg-white">
+              <div className="w-1/5 absolute mt-2 ml-2">
+                <img
+                  src="/icons/googlesesion.png"  // Reemplaza "your-icon.svg" con el nombre de tu archivo de icono
+                  alt="Icono"
+                  height="22"
+                  width="22"
+                />
+              </div>
+              <button
+                type="submit"
+                onClick={handleGoogleLogin}
+                className="ml-auto group relative w-4/5 flex justify-center py-2 px-4 border border-transparent text-sm font-medium text-white bg-green-600 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+            <div className="w-full bg-white">
+              <div className="w-1/5 absolute mt-2 ml-2">
+                <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" viewBox="0 0 512 512"><path fill="#023792" d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z" /></svg>
+              </div>
+              <button type="submit"
+                onClick={handleFacebookLogin}
+                className="ml-auto group relative w-4/5 flex justify-center py-2 px-4 border border-transparent text-sm font-medium text-white bg-blue-800 hover:bg-blue-900  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Iniciar sesion
               </button>
             </div>
