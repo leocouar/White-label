@@ -19,7 +19,7 @@ function ProductForm({ productData, image }) {
   const router = useRouter();
   const [promo, setPromo] = useState(productData?.promo);
   const [status, setStatus] = useState(productData?.deleted)
-  const [wspMsj, setWspMsj] = useState("")
+  const wspMsj = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
 
   const { data: session } = useSession()
   const [userCanEdit, setUserCanEdit] = useState(false);
@@ -38,11 +38,6 @@ function ProductForm({ productData, image }) {
         }
       });
   }
-
-  useEffect(()=>{
-    const wspMessage = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
-    setWspMsj(wspMessage);
-  },[productData])
 
   useEffect(() => {
     evaluateUser();
@@ -192,7 +187,7 @@ function ProductForm({ productData, image }) {
             }
 
             <WhatsAppButton 
-                phoneNumber={productData?.store?.telephone}
+                phoneNumber={"549"+productData?.store?.telephone}
                 message={wspMsj}
             />                      
           </div>
@@ -243,22 +238,22 @@ function ProductForm({ productData, image }) {
 
                 promo
                   ?
-                  <imput type='checkbox'
+                  <input type='checkbox'
                     className="bg-blue-300 text-white text-center w-1/4 mt-2 rounded-md font-primary font-semibold text-xs flex
                         justify-center items-baseline hover:scale-125 transform transition duration-500 group cursor-pointer"
                     onClick={handlePromo} >
                     <p className="hidden m-1 group-hover:block">Eliminar Promocion</p>
                     <FontAwesomeIcon icon={faTag} className="w-5 m-auto group-hover:hidden" />
-                  </imput>
+                  </input>
 
                   :
-                  <imput type='checkbox'
+                  <input type='checkbox'
                     className="bg-palette-secondary text-white text-center w-1/4 mt-2 rounded-md font-primary font-semibold text-xs flex
                         justify-center items-baseline hover:scale-125 transform transition duration-500 group cursor-pointer"
                     onClick={handlePromo} >
                     <p className="hidden m-1 group-hover:block">Añadir Promocion</p>
                     <FontAwesomeIcon icon={faTag} className="w-5 m-auto group-hover:hidden" />
-                  </imput>
+                  </input>
               }
 
               <UploadFile

@@ -3,7 +3,6 @@ import {useState} from "react";
 import {save} from "../../services/userService";
 
 const Create = () => {
-    const [formSubmitted, setFormSubmitted] = useState(false);
 
 
     const [enable, setEnable] = useState(false)
@@ -13,7 +12,7 @@ const Create = () => {
         lastName: "",
         cardId: "",
         password: "",
-        cuit: "",
+        cuil: "",
         phone: "",
         email: ""
     })
@@ -38,7 +37,7 @@ const Create = () => {
     function validate() {
         let isValidEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(user.email);
         let isValidPassword = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$/i.test(user.password);  
-        let isValidDNIoCUIL = /^[0-12.-]*$/i.test(user.cuil);  
+        let isValidDNIoCUIL = /^[0-9.-]+$/i.test(user.cuil);  
     
         let errors = {
             name: "",
@@ -48,11 +47,11 @@ const Create = () => {
             password: ""
         };
     
-        if (!user.name) {
+        if (!user.name.trim()) {
             errors.name = "Complete su Nombre.";
         }
     
-        if (!user.lastName) {
+        if (!user.lastName.trim()) {
             errors.lastName = "Complete su Apellido.";
         }
     
@@ -67,15 +66,13 @@ const Create = () => {
         if (!isValidPassword) {
             errors.password = "Complete su Contraseña (de 8 a 16 caracteres al menos 1 mayúscula y 1 dígito).";
         }
-    
-        if (user.name && user.lastName !== "" && isValidDNIoCUIL && isValidPassword && isValidEmail){
+        console.log(isValidPassword);
+        if (user.name && user.lastName  && isValidDNIoCUIL && isValidPassword && isValidEmail){
             setEnable(true)  
-        }  
-        else {
-            setEnable(false)
+        
         }
 
-        if (formSubmitted) {
+        else {
             setErrorMessages(errors); // Actualiza los mensajes de error solo si se intentó enviar el formulario
         }
     }
@@ -86,7 +83,6 @@ const Create = () => {
 
     const submit = (e) => {
         e.preventDefault();
-        setFormSubmitted(true); // Indica que se intentó enviar el formulario
         validate(); // Ejecuta la validación
         if (enable) {
             save(user).then((result) => {
@@ -167,7 +163,7 @@ const Create = () => {
                                 type="text" 
                                 placeholder="Ingrese un e-mail"/>  
                                 {
-                                   user.email && user.email.length > 10-1
+                                   user.email
                                    ?
                                    <></>     
                                    :
@@ -216,10 +212,7 @@ const Create = () => {
                                 type="text" 
                                 placeholder="Ingrese una contraseña"/> 
                                 {
-                                   user.password && user.password.length > 7
-                                   ?
-                                   <></>     
-                                   :
+
                                    errorMessages.password && <p className="text-red-500 text-xs italic">{errorMessages.password}</p>
                                    
                                 }

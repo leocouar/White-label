@@ -191,16 +191,20 @@ const VistaComercio = ({ commerceData }) => {
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
                 <label className="block text-sm font-medium mb-1">Teléfono:</label>
-                <input
-                  type="text"
-                  value={storeToUpdate?.telephone}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded-md"
-                  id="telephone"
-                  name="telephone"
-                />
+                  <div className="flex items-center">
+                    <span className="absolute text-gray-500 pl-3">+54 9</span>
+                    <input
+                    
+                    type="text"
+                    value={storeToUpdate?.telephone}
+                    onChange={handleChange}
+                    className="w-full pl-16 pr-3 py-2 border rounded-md"
+                    id="telephone"
+                    name="telephone"
+                    />
+                  </div>
                 {errTel && <p className={`text-red-500 text-xs italic`}>
-                  "Telefono invalido"
+                  "Ingrese su número sin el 0 y sin el 15, y sin guiones en el medio"
                 </p>}
               </div>
             </div>
