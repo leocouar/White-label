@@ -46,13 +46,14 @@ function ProductCard({ product }) {
         <Price currency="&emsp;$" num={price} numSize="text-xl" />
         <div className="flex-grow"></div>
         <Link
-        href={`/commerce/${storeID}`}
-        passHref
-        className="hover:bg-indigo-200 mb-2 mr-2 rounded">
-          <img className="w-16 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
-        </Link>
+            href={`/commerce/${storeID}`}
+            passHref
+            className="hover:bg-indigo-200 mb-2 mr-2 rounded">
+            <img className="max-w-20 my-1 mx-1 rounded"
+              style={{width:"4rem"}} //Esto va aqui porque si una card aparece en la galeria, el style del carrusel sobreescribe la clase de Tailwind.
+              src={storeLogo?.link} alt="Store Logo" />
+          </Link>
       </div>
-
     </Link>)
   );
 }
