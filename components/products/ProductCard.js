@@ -50,7 +50,11 @@ function ProductCard({ product }) {
           href={`/commerce/${storeID}`}
           passHref
           className="hover:bg-indigo-200 mb-2 mr-2 rounded">
-            <img className="w-16 max-w-20 my-1 mx-1 rounded" src={storeLogo?.link} alt="Store Logo" />
+            <img 
+            style={{width:"4rem"}}
+            className="max-w-20 my-1 mx-1 rounded" 
+            src={storeLogo?.link} 
+            alt="Store Logo" />
           </Link>
         }
       </div>
