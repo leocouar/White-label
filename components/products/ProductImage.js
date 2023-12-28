@@ -73,12 +73,13 @@ function ProductImage({ images, id }) {
         >
           {
             images.map((imgItem) => (
-              <div className="relative w-40 h-32 flex-shrink-0 rounded-sm ">
+              <div key={imgItem.url} className="relative w-40 h-32 flex-shrink-0 rounded-sm ">
                 <Image
                   src={imgItem.link}
                   layout="fill"
                   className=""
                   onClick={() => setMainImg(imgItem.link)}
+                  alt='Imagen de producto'
                 />
                 {
                   session?.user?.role?.includes('ADMIN')
