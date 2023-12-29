@@ -87,12 +87,7 @@ const Gallery = ({ productData }) => {
                     <div key={index}>
                         <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 mx-auto">
                             {products.map((product, innerIndex) => (
-                                <div
-                                    key={innerIndex}
-                                    className="flex justify-center mb-10"
-                                >
-                                    <ProductCard product={product} />
-                                </div>
+                                    <ProductCard key={innerIndex} product={product} />
                             ))}
                         </div>
                     </div>

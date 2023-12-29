@@ -7,6 +7,13 @@ import { useSession } from "next-auth/react";
 import * as productService from 'services/productService'
 
 function ProductImage({ images, id }) {
+  const [image,setImage]=useState(images && images.length != 0 ? images[0].link : defaultImage.link)
+  const [mainImg, setMainImg] = useState(image);
+   useEffect(() => {
+    setImage(images && images.length != 0 ? images[0].link : defaultImage.link)
+    setMainImg(image)
+    
+  },)
   const defaultImage =
   {
     "url": "Image 2021-08-10 at 11.20.24 (1).jpeg",
@@ -14,8 +21,8 @@ function ProductImage({ images, id }) {
     "main": false
   };
 
-  const image = images && images.length != 0 ? images[0].link : defaultImage.link
-  const [mainImg, setMainImg] = useState(image);
+  // const image = images && images.length != 0 ? images[0].link : defaultImage.link
+  
   const [delImg, setDelImg] = useState();
   const { data: session } = useSession();
   const ref = useRef();
@@ -36,10 +43,6 @@ function ProductImage({ images, id }) {
     await productService.deletedImagen(id, delImg.url)
     window.location.reload()
   }
-
-  useEffect(() => {
-    console.log(mainImg)
-  }, [mainImg])
 
   return (
 
