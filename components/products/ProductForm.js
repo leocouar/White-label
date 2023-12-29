@@ -197,13 +197,13 @@ function ProductForm({ productData, image }) {
                 status == false
                   ?
                   <button onClick={deleteAProduct} className="bg-palette-primary text-white w-1/4 mt-2 mr-3  rounded-md font-primary font-semibold text-xs flex
-                          justify-center items-baselinetransform transition duration-500 group cursor-pointer">
+                          justify-center items-baseline hover:scale-110 transform transition duration-200 group cursor-pointer">
                     <p className="hidden m-1 group-hover:block">Eliminar Producto</p>
                     <FontAwesomeIcon icon={faTrash} className="w-5 m-auto group-hover:hidden" />
                   </button>
                   :
                   <>
-                    <button onClick={activeProduct} className="bg-blue-500 text-white w-1/4 mt-2 mr-3 rounded-md font-primary font-semibold text-xs flex justify-center items-baseline transform transition duration-500 group cursor-pointer">
+                    <button onClick={activeProduct} className="bg-blue-500 text-white w-1/4 mt-2 mr-3 rounded-md font-primary font-semibold text-xs flex justify-center items-baseline hover:scale-110 transform transition duration-200 group cursor-pointer">
                       <p className="hidden m-1 group-hover:block">Activar Producto</p>
                       <FontAwesomeIcon icon={faPlus} className="w-5 m-auto group-hover:hidden" />
                     </button>
@@ -212,17 +212,17 @@ function ProductForm({ productData, image }) {
               <div
                 aria-label="upload-images"
                 className="bg-palette-primary text-white w-1/4 mt-2 mr-3 h-auto  font-primary font-semibold text-xs flex
-                   justify-center items-baseline group rounded-md cursor-pointer"
+                   justify-center items-baseline hover:scale-110 transform transition duration-200 group rounded-md cursor-pointer"
                 onClick={() => setOpenUploadFile(true)}
               >
                 <p className="hidden m-1 group-hover:block text-center">Subir Imagenes</p>
-                <FontAwesomeIcon icon={faCloudUploadAlt} className="w-5 m-auto group-hover:hidden" />
+                <FontAwesomeIcon icon={faImages} className="w-5 m-auto group-hover:hidden" />
               </div>
 
               <div
                 aria-label="edit-data"
                 className="bg-palette-primary text-white text-center w-1/4 mt-2 mr-3 rounded-md font-primary font-semibold text-xs flex
-                    justify-center items-baseline group  cursor-pointer"
+                    justify-center items-baseline hover:scale-110 transform transition duration-200 group  cursor-pointer"
                 onClick={goToEdit}>
                 <p className="hidden m-1  group-hover:block">Editar Producto</p>
                 <FontAwesomeIcon icon={faEdit} className="w-5 m-auto group-hover:hidden" />

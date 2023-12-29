@@ -59,9 +59,10 @@ const NewProduct = ({ store,onCancel}) => {
             errors.price = "El campo 'Precio' es requerido";
         }
 
-        if (!form.description.trim()) {
-            errors.description = "El campo 'Descripcion' es requerido";
-        }
+        // if (!form.description.trim()) {
+        //     errors.description = "El campo 'Descripcion' es requerido";
+        // }
+
         if (form.category.id == "") {
             errors.category = "El campo 'Categoria' es requerido";
         }
@@ -74,13 +75,13 @@ const NewProduct = ({ store,onCancel}) => {
             errors.sizes = "El campo 'Sizes' es requerido";
         }
 
-        if (!form.code.trim()) {
-            errors.code = "El campo 'Codigo' es requerido";
-        }
+        // if (!form.code.trim()) {
+        //     errors.code = "El campo 'Codigo' es requerido";
+        // }
 
-        if (!form.stock.trim()) {
-            errors.stock = "El campo 'Stock' es requerido";
-        }
+        // if (!form.stock.trim()) {
+        //     errors.stock = "El campo 'Stock' es requerido";
+        // }
 
         if (!form.points.trim()) {
             errors.points = "El campo 'Puntos' es requerido";
@@ -120,17 +121,17 @@ const NewProduct = ({ store,onCancel}) => {
         <NotificationContainer />
         <div className="inset-0 z-10 flex items-center justify-center ">
             <form className="w-full px-6 " onSubmit={handleSubmit}>
-                <h2 className="text-black text-center font-bold text-xl mb-5">Agregar Producto</h2>
+                <h2 className="text-black font-primary text-center font-bold text-xl mb-5 lg:text-3xl">Agregar Producto</h2>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full md:w-1/2 px-3 mb-4">
                         <div className="w-full">
                             <label className="block uppercase  text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="name">
-                                Nombre
+                                Nombre*
                             </label>
                             <input
                                 autoComplete="off"
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="name" type="text"
                                 placeholder="Nombre del Producto"
                                 name="name"
@@ -146,19 +147,21 @@ const NewProduct = ({ store,onCancel}) => {
                                 htmlFor="descripcion">
                                 Descripcion
                             </label>
-                            <textarea
+                            <input
                                 autoComplete="off"
-                                className="resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-6 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="descripcion" placeholder="Descripci&oacute;n del producto" name="description" rows="3"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="descripcion" 
+                                placeholder="Descripci&oacute;n del producto" 
+                                name="description"
                                 value={form.description}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                required
+                                // required
                             />
                             {errors.description && <p className={`text-red-500 text-xs italic`}>{errors.description}</p>}
                         </div>
 
-                        <div className="w-full">
+                        {/* <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="codigo">
                                 C&oacute;digo
@@ -174,14 +177,14 @@ const NewProduct = ({ store,onCancel}) => {
                                 required
                             />
                             {errors.code && <p className={`text-red-500 text-xs italic`}>{errors.code}</p>}
-                        </div>
+                        </div> */}
 
                     </div>
                     <div className="w-full md:w-1/2 px-3 mb-4">
                         <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="category">
-                                Categoria
+                                Categoria*
                             </label>
                             <select value={form.category.id} onChange={handleChange} name="category" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="category">
                                 <option disabled={true} value="">Seleccionar</option>
@@ -196,7 +199,7 @@ const NewProduct = ({ store,onCancel}) => {
                         <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="brand">
-                                Marcas
+                                Marcas*
                             </label>
                             <select value={form.brand.id} onChange={handleChange} name="brand" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="brand">
                                 <option disabled={true} value="">Seleccionar</option>
@@ -208,11 +211,11 @@ const NewProduct = ({ store,onCancel}) => {
                             </select>
                             {errors.brand && <p className={`text-red-500 text-xs italic`}>{errors.brand}</p>}
                         </div>
-                        <div className="flex flex-wrap -mx-3 mb-6">
+                        <div className="flex flex-wrap -mx-3">
 
-                        <div className="w-full md:w-1/2 px-3 mb-4">
+                        <div className="w-full md:w-1/2 px-3">
                             <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                Precio
+                                Precio*
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div>
@@ -223,7 +226,7 @@ const NewProduct = ({ store,onCancel}) => {
                                         type="number"
                                         id="price"
                                         autoComplete="off"
-                                        className="appearance-none block w-90 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 pl-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 pl-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         placeholder="0.00" name="price"
                                         value={form.price}
                                         onChange={handleChange}
@@ -240,7 +243,7 @@ const NewProduct = ({ store,onCancel}) => {
                                 {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
                             </div>
                         </div>
-                        <div className="w-full md:w-1/2 px-3 mb-4">
+                        {/* <div className="w-full md:w-1/2 px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="Stock">
                                 Stocks
@@ -250,11 +253,11 @@ const NewProduct = ({ store,onCancel}) => {
                                 placeholder="Stocks"
                                 name="stock"
                                 autoComplete="off"
-                                className="appearance-none block w-90 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 value={form.stock}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                required
+                                // required
                                 onKeyPress={(event) => {
                                     if (!/[0-9]/.test(event.key)) {
                                         event.preventDefault();
@@ -263,7 +266,7 @@ const NewProduct = ({ store,onCancel}) => {
                             />
                             {errors.stock && <p className={`text-red-500 text-xs italic`}>{errors.stock}</p>}
 
-                        </div>
+                        </div> */}
                         </div>
 
 

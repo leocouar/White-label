@@ -38,12 +38,12 @@ function MenuDashboard(store) {
                 </div>
                 <div className="flex-1 p-8">
                     {vista === 'comercio' && (
-                        <div className="mt-8 p-4 bg-white shadow-md rounded-md">
+                        <div className="p-4 bg-white shadow-md rounded-md">
                             <VistaComercio commerceData={store}/>
                         </div>
                     )}
                     {vista === 'productos' && (
-                        <div className="mt-8 p-4 bg-white shadow-md rounded-md">
+                        <div className="p-4 bg-white shadow-md rounded-md">
                             <VistaProductos store={store}/>
                         </div>
                     )}
