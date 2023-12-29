@@ -7,6 +7,13 @@ import { useSession } from "next-auth/react";
 import * as productService from 'services/productService'
 
 function ProductImage({ images, id }) {
+  const defaultImage =
+  {
+    "url": "Image 2021-08-10 at 11.20.24 (1).jpeg",
+    "link": logo,
+    "main": false
+  };
+  
   const [image,setImage]=useState(images && images.length != 0 ? images[0].link : defaultImage.link)
   const [mainImg, setMainImg] = useState(image);
    useEffect(() => {
@@ -14,12 +21,7 @@ function ProductImage({ images, id }) {
     setMainImg(image)
     
   },)
-  const defaultImage =
-  {
-    "url": "Image 2021-08-10 at 11.20.24 (1).jpeg",
-    "link": logo,
-    "main": false
-  };
+
 
   // const image = images && images.length != 0 ? images[0].link : defaultImage.link
   
