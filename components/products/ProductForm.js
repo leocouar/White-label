@@ -53,36 +53,30 @@ function ProductForm({ productData, image }) {
   }
 
   async function handleAddToCart() {
-    /*const element = document.getElementById('size');
-    let selectElement = 0;
-    let selectedOptionText = 'Talle Unico'
-    if (element.tagName === "SELECT") {
-      const selectedOption = element.options[element.selectedIndex];
-      selectElement = selectedOption.value;
-      selectedOptionText = selectedOption.text;
-    } else if (element.tagName === "LABEL") {
-      selectedOptionText = element.textContent;
-      selectElement = 0
+    if (session) {
+      if (quantity !== '') {
+        addToCart({
+          productTitle: productData?.name,
+          productImage: image,
+          store: productData?.store,
+          quantity: quantity,
+          id: productData?.id,
+          price: productData?.price,
+          size: 7
+        });
+        NotificationManager.info(productData?.name, 'Agregado al carro de compras', 2000, () => {
+          router.push('/cart');
+        });
+      }
     } else {
-      console.log("Element is not a select or label");
-    }
-    */
-
-    if (quantity != '') {
-      addToCart({
-        productTitle: productData?.name,
-        productImage: image,
-        store: productData?.store,
-        quantity: quantity,
-        id: productData?.id,
-        price: productData?.price,
-        size: 7
-      })
-      NotificationManager.info(productData?.name, 'Agregado al carro de compras', 2000, () => {
-        router.push('/cart')
-      });
+      // Si el usuario no está logueado, redirige a la página de inicio de sesión.
+      router.push('/login');
+      
+      // También puedes mostrar un mensaje antes de redirigir, si lo prefieres.
+      // NotificationManager.warning('Inicia sesión para agregar productos al carrito', '¡Atención!', 2000);
     }
   }
+  
 
   async function deleteAProduct() {
     try {
