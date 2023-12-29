@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCloudUploadAlt, faEdit, faTrash, faTag, faInfo } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faTag, faImages } from '@fortawesome/free-solid-svg-icons'
 import { useAddToCartContext } from '@/context/Store'
 import UploadFile from "@/components/products/UploadFile";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
@@ -71,12 +71,12 @@ function ProductForm({ productData, image }) {
     } else {
       // Si el usuario no está logueado, redirige a la página de inicio de sesión.
       router.push('/login');
-      
+
       // También puedes mostrar un mensaje antes de redirigir, si lo prefieres.
       // NotificationManager.warning('Inicia sesión para agregar productos al carrito', '¡Atención!', 2000);
     }
   }
-  
+
 
   async function deleteAProduct() {
     try {
@@ -119,8 +119,7 @@ function ProductForm({ productData, image }) {
         <div className="w-full">
           <div className="flex flex-col space-y-2">
             <div className="flex">
-              
-                <div className="flex-col items-start space-y-1 mr-2">
+              <div className="flex-col items-start space-y-1 mr-2">
                 <input
                   type="number"
                   inputMode="numeric"
@@ -180,10 +179,10 @@ function ProductForm({ productData, image }) {
                 </div>
             }
 
-            <WhatsAppButton 
-                phoneNumber={"549"+productData?.store?.telephone}
-                message={wspMsj}
-            />                      
+            <WhatsAppButton
+              phoneNumber={"549" + productData?.store?.telephone}
+              message={wspMsj}
+            />
           </div>
         </div>
 
