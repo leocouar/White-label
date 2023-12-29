@@ -6,19 +6,6 @@ import * as productService from "../../services/productService";
 
 
 function ProductSection({ productData }) {
-    const [productsRelated, setProductsRelated] = useState([])
-
-    const fetchData = async () => {
-        let products = await productService.getProductsRelated(productData, 12);
-        setProductsRelated(products);
-
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, [productData]);
-
-
     return (
         <>
             <div className="flex flex-wrap my-4 bg-white justify-evenly md:flex-row">
@@ -29,7 +16,6 @@ function ProductSection({ productData }) {
                     <ProductDetails productData={productData} />
                 </div>
             </div>
-            <Gallery productData={productsRelated} />
         </>
     )
 }
