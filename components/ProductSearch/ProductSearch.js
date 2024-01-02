@@ -54,24 +54,36 @@ function NavSearch({ setSearchFocus }) {
     }
   }
 
-  useEffect(() => { setSearchFocus(isFocused) }, [isFocused])
+  useEffect(() => {
+    setSearchFocus(isFocused);
+    if (isFocused) {      
+      searchInputRef.current.focus();
+    }
+    console.log(isFocused);
+  }, [isFocused])
 
   return (
-    <div className="flex items-center"
+    <div className="flex items-center justify-end sm:justify-start"
       onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}>
+      onBlur={() => setIsFocused(false)}
+    >
       <input
         type="text"
         ref={searchInputRef}
         value={searchTerm}
+        onFocus={() => setIsFocused(true)}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={(e) => handleKeyPress(e)}
-        className={`border border-gray-200 ${isFocused ? "w-full sm:w-2/3" : "hidden sm:block sm:w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
+        className={`border border-gray-200 ${isFocused ? "w-full" : "hidden sm:block sm:w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
         placeholder="Buscar"
         id="search"
         maxLength={32}
       />
-      <button className= {`${isFocused ? "justify-between my-auto border-l-0 border border-gray-200 p-2 rounded-xl rounded-tl-none rounded-bl-none shadow-lg shadow-indigo-500/50 outline-none" : ""}`}
+      <button className={`object-right ${isFocused ?
+        "justify-between my-auto border-l-0 border border-gray-200 p-2 rounded-xl rounded-tl-none rounded-bl-none shadow-lg shadow-indigo-500/50 outline-none"
+        :
+        "sm:my-auto sm:border-l-0 sm:border sm:border-gray-200 sm:p-2 sm:rounded-xl sm:rounded-tl-none sm:rounded-bl-none sm:shadow-lg sm:shadow-indigo-500/50 sm:outline-none"
+        }`}
         onClick={redirectToSearchResults}
       >
         <FontAwesomeIcon icon={faSearch} style={{ color: "#647187", }} className="w-6 m-auto" />
