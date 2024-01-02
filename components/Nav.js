@@ -109,7 +109,7 @@ function Nav() {
           </Link>
 
           {/* SEARCH */}
-          <div className="flex-1 ml-2">
+          <div className="flex-1 ml-2  ">
             <NavSearch setSearchFocus={(e) => handleSearchFocus(e)} />
           </div>
 
@@ -143,7 +143,7 @@ function Nav() {
           {/* OBJETOS DEL MENU */}
           <div
             id="menu"
-            className={`w-full block flex-grow ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
+            className={`w-full block ${isShow ? "" : "hidden"} divide-y divide-y-reverse justify-end divide-gray-200 lg:divide-none lg:flex lg:justify-self-center lg:w-auto`}
           >
 
             {/* ADMINISTRACION */}
