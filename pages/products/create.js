@@ -4,7 +4,7 @@ import withAuthorization from 'components/withAuthorization';
 const Create = () => {
     return(
         <div className="min-h-screen pt-4">
-            <NewProduct/>
+            <NewProduct admin={true}/>
         </div>
     )
 }
