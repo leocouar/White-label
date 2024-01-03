@@ -85,7 +85,7 @@ const Gallery = ({ productData }) => {
             >
                 {groupedProducts.map((products, index) => (
                     <div key={index}>
-                        <div class="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 mx-auto justify-items-center place-items-center">
+                        <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-9 2xl:gap-4 mx-auto justify-items-center place-items-center">
                             {products.map((product, innerIndex) => (
                                 <ProductCard key={innerIndex} product={product} />
                             ))}
