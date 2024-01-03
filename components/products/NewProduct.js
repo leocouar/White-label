@@ -1,33 +1,41 @@
 import { NotificationContainer } from "react-notifications";
 import useForm from "../../hooks/useForm";
-import { useState, useMemo,useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
+import * as storeService from "services/storeService";
 import { save } from "services/productService";
 
 
 
-const NewProduct = ({ store,onCancel}) => {
+const NewProduct = ({ store, onCancel, admin = false }) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
-    const[categories,setCategories]= useState()
-    const[brands,setBrands]= useState()
-    const[sizes,setSizes]= useState()
+    const [categories, setCategories] = useState()
+    const [brands, setBrands] = useState()
+    const [sizes, setSizes] = useState()
+    const [stores, setStores] = useState();
 
     useEffect(() => {
         const fetchData = async () => {
-            const categorieList= await categoriesService.findAll()
-            const brandList=await brandsService.findAll()
-            const sizeList= await sizeService.findAll()
+            const categorieList = await categoriesService.findAll()
+            const brandList = await brandsService.findAll()
+            const sizeList = await sizeService.findAll()
 
             setCategories(categorieList);
             setBrands(brandList);
             setSizes(sizeList);
+
+            if (admin) {
+                const storeList = await storeService.findAllStores();
+                setStores(storeList);
+            }
         };
-    
+
         fetchData();
-      }, []);
-      const initialForm = useMemo(() => ({
+    }, []);
+
+    const initialForm = useMemo(() => ({
         name: "",
         price: "",
         description: "",
@@ -71,6 +79,10 @@ const NewProduct = ({ store,onCancel}) => {
             errors.brand = "El campo 'Marcas' es requerido";
         }
 
+        if (form.store.id == "" && admin) {
+            errors.store = "El campo 'Comercio' es requerido";
+        }
+
         if (!form.sizes[0] || form.sizes[0].id === 0) {
             errors.sizes = "El campo 'Sizes' es requerido";
         }
@@ -83,9 +95,9 @@ const NewProduct = ({ store,onCancel}) => {
         //     errors.stock = "El campo 'Stock' es requerido";
         // }
 
-        if (!form.points.trim()) {
-            errors.points = "El campo 'Puntos' es requerido";
-        }
+        //if (!form.points.trim()) {
+        //    errors.points = "El campo 'Puntos' es requerido";
+        //}
         return errors;
     };
 
@@ -113,10 +125,19 @@ const NewProduct = ({ store,onCancel}) => {
         }
     }
 
+    const handleChangeStore = (e) => {
+        if (e.target) {
+            const finalStore = {
+                "id": e.target.value
+            }
+            form.store = finalStore;
+        }
+    }
+
     const handleCancel = () => {
-        
         onCancel();
     }
+
     return <>
         <NotificationContainer />
         <div className="inset-0 z-10 flex items-center justify-center ">
@@ -150,17 +171,47 @@ const NewProduct = ({ store,onCancel}) => {
                             <input
                                 autoComplete="off"
                                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="descripcion" 
-                                placeholder="Descripci&oacute;n del producto" 
+                                id="descripcion"
+                                placeholder="Descripci&oacute;n del producto"
                                 name="description"
                                 value={form.description}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                // required
+                            // required
                             />
                             {errors.description && <p className={`text-red-500 text-xs italic`}>{errors.description}</p>}
                         </div>
 
+                        <div className="w-full md:w-1/2 mb-3">
+                            <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                Precio*
+                            </label>
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div>
+                                    <span className="text-center flex p-3 absolute text-gray-500 sm:text-sm align-middle">
+                                        $
+                                    </span>
+                                    <input
+                                        type="number"
+                                        id="price"
+                                        autoComplete="off"
+                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 pl-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                        placeholder="0.00" name="price"
+                                        value={form.price}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        maxLength="7"
+                                        onKeyDown={(event) => {
+                                            if (!/[0-9]?[0-9]?(\.[0-9][0-9]?)?/.test(event.key)) {
+                                                event.preventDefault();
+                                            }
+                                        }}
+                                    />
+                                </div>
+                                {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
+                            </div>
+                        </div>
                         {/* <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="codigo">
@@ -199,7 +250,7 @@ const NewProduct = ({ store,onCancel}) => {
                         <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="brand">
-                                Marcas*
+                                Marca*
                             </label>
                             <select value={form.brand.id} onChange={handleChange} name="brand" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="brand">
                                 <option disabled={true} value="">Seleccionar</option>
@@ -212,38 +263,7 @@ const NewProduct = ({ store,onCancel}) => {
                             {errors.brand && <p className={`text-red-500 text-xs italic`}>{errors.brand}</p>}
                         </div>
                         <div className="flex flex-wrap -mx-3">
-
-                        <div className="w-full md:w-1/2 px-3">
-                            <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                Precio*
-                            </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div>
-                                    <span className="text-center flex p-3 absolute text-gray-500 sm:text-sm align-middle">
-                                        $
-                                    </span>
-                                    <input
-                                        type="number"
-                                        id="price"
-                                        autoComplete="off"
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 pl-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        placeholder="0.00" name="price"
-                                        value={form.price}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        required
-                                        maxLength="7"
-                                        onKeyPress={(event) => {
-                                            if (!/[0-9]?[0-9]?(\.[0-9][0-9]?)?/.test(event.key)) {
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    />
-                                </div>
-                                {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
-                            </div>
-                        </div>
-                        {/* <div className="w-full md:w-1/2 px-3">
+                            {/* <div className="w-full md:w-1/2 px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="Stock">
                                 Stocks
@@ -268,8 +288,21 @@ const NewProduct = ({ store,onCancel}) => {
 
                         </div> */}
                         </div>
-
-
+                        <div className={`${admin ? "w-full" : "hidden"}`}>
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                                htmlFor="store">
+                                Comercio*
+                            </label>
+                            <select value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
+                                <option disabled={true} value="">Seleccionar</option>
+                                {
+                                    stores && stores.map(store => (
+                                        <option value={store.id}>{store.name}</option>
+                                    ))
+                                }
+                            </select>
+                            {errors.store && <p className={`text-red-500 text-xs italic`}>{errors.store}</p>}
+                        </div>
                     </div>
                 </div>
 
@@ -284,7 +317,6 @@ const NewProduct = ({ store,onCancel}) => {
                         Guardar
                     </button>
                 </div>
-
             </form>
         </div>
     </>;
