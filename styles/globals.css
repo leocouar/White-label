@@ -29,6 +29,10 @@ html {
   border-left-color: #ffffff;
 }
 
+.smalltext {
+  font-size: 8px;
+}
+
 
 .carousel {
   display: inline-flex;
