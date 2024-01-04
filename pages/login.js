@@ -4,6 +4,7 @@ import login from "/images/login.png";
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faFacebook } from '@fortawesome/free-solid-svg-icons';
+import SEO from "@/components/SEO";
 
 const Login = ({ csrfToken }) => {
   const router = useRouter();
@@ -34,6 +35,8 @@ const Login = ({ csrfToken }) => {
   };
 
   return (
+    <>
+    <SEO title="Ingresa tu e-mail o usuario" />
     <div className="min-h-full flex  items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-1/2 flex  justify-center">
         <div className="w-auto mt-10 mb-10 space-y-4">
@@ -116,6 +119,7 @@ const Login = ({ csrfToken }) => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

@@ -2,8 +2,9 @@ import ProductCard from '@/components/products/ProductCard'
 import FilterModal from '@/components/filter/FilterModal'
 import { useEffect, useState, useRef } from "react";
 import { searchList } from "../../services/productService"
+import SEO from '../SEO';
 
-function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true, showMsg = true }) {
+function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true, showMsg = true}) {
     //Control de pagina
     const productListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);         //Indica si esta cargando nuevos productos
@@ -144,12 +145,14 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 columnList={columnList}
                 showFilters={showFilters}
             ></FilterModal>
-    
+  
+            
             <div className="mx-auto">
-                
+    
                 {productsToShow && productsToShow.length > 0 ? (
                     // Si hay productos cargados, mostrar el mensaje y la lista de productos
                     <>
+                    
                         { showMsg && <p className='text-center text-md text-palette-primary font-semibold mt-4 ' style={{color: "#5d5475",}}>
                             Resultados para: "{q.term}"
                         </p>}
@@ -191,6 +194,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                     </svg>
                 </button>
             </div>
+     
             {isLoading ? (
                 <div className='flex items-center justify-center py-6'>
                     <div className='w-16 h-16 border-b-2 border-palette-secondary rounded-full animate-spin'></div>
@@ -199,6 +203,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 <></>
             )}
         </div>
+        
     )
     
 }

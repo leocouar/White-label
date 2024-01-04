@@ -5,9 +5,12 @@ import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
 import Banner from '@/components/products/CommerceBanner.js';
 import { prepareDefaultParams } from '@/components/products/ProductListings';
+import SEO from '@/components/SEO';
 
 function IndexPage({ brands, categories, initialSearch, stores}) {
   return (
+    <>
+    <SEO title="Camara Bolivar" />
     <div className='bg-white'>
       <div >
         <Carrusel />
@@ -21,6 +24,7 @@ function IndexPage({ brands, categories, initialSearch, stores}) {
       <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} 
       showFilters={false} showMsg = {false}/>
     </div>
+    </>
   )
 }
 

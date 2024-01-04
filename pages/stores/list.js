@@ -8,7 +8,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-
+import SEO from "@/components/SEO";
 function StoreList() {
   const { data: session } = useSession()
   const [youStores, setYouStores] = useState()
@@ -25,6 +25,8 @@ function StoreList() {
   },[session])
 
   return (
+    <>
+    <SEO title="Tus Comercios" />
     <div className="h-full items-center">
       <StoreHeading title="Tus Comercios" />
       <div className='flex justify-center'>
@@ -38,6 +40,7 @@ function StoreList() {
         </Link>
       </div>
     </div>
+    </>
   )
 
 }
