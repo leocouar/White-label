@@ -4,9 +4,12 @@ import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
 import {PlusIcon} from "@heroicons/react/20/solid";
 import withAuthorization from 'components/withAuthorization';
+import SEO from "@/components/SEO";
 
 const StoreManager = ({stores}) => {
     return (
+        <>
+        <SEO title="Comercios" />
         <div className="items-center mx-auto bg-white max-w-6xl relative">
             <PageTitle text="Comercios" />
             <Link legacyBehavior href="/stores/create" passHref>
@@ -20,6 +23,7 @@ const StoreManager = ({stores}) => {
             </Link>
             <Stores stores={stores}/>
         </div>
+        </>
     )
 }
 

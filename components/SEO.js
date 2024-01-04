@@ -1,5 +1,5 @@
 import Head from 'next/head'
-
+import { useEffect } from 'react'
 function SEO({ title }) {
   // customize meta properties
   // you can pass them as an argument like title in case you want to change for each page
@@ -8,6 +8,11 @@ function SEO({ title }) {
   const siteURL = process.env.siteUrl
   const twitterHandle = process.env.twitterHandle
   const imagePreview = `${siteURL}/${process.env.siteImagePreviewUrl}`
+
+  useEffect(() => {
+    // Update the title when the component mounts and whenever the title prop changes
+    document.title = title || process.env.siteTitle;
+  }, [title]);
 
   return (
     <Head>

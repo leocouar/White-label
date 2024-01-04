@@ -1,7 +1,11 @@
 import React from "react";
+import SEO from "./SEO";
+
 
 function Example() {
   return (
+    <>
+    <SEO title="Error 404" />
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="lg:w-1/2 lg:h-96 text-center bg-gray-600 rounded-lg">
         <div className="mt-10 h-full">
@@ -19,6 +23,7 @@ function Example() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

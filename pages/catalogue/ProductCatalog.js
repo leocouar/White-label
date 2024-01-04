@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import ProductListings, { prepareDefaultParams } from '@/components/products/ProductListings';
 import { findAll as findBrands } from 'services/brandService';
 import { findAll as findCategs } from 'services/categoriesService';
+import SEO from '@/components/SEO';
+
 
 const ProductCatalog = ({ brands, categories }) => {
   const router = useRouter();
@@ -22,6 +24,8 @@ const ProductCatalog = ({ brands, categories }) => {
   }, [query]);
 
   return (
+    <>
+    <SEO title={`${query} | Camara Bolivar`}/>  
     <div className='h-full w-full flex flex-col'style={{ backgroundImage: `url('/images/bgcatalog.jpg')` }}>
       {query && initialSearch && (
         <div className='text-center'>
@@ -45,6 +49,7 @@ const ProductCatalog = ({ brands, categories }) => {
       {/* Muestra los productos si existen */}
  
     </div>
+    </>
   );
 };
 

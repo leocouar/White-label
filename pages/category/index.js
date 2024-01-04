@@ -3,13 +3,17 @@ import CategoriesList from "@/components/categories/CategoriesList";
 import PageTitle from "@/components/PageTitle";
 import withAuthorization from 'components/withAuthorization';
 import React from "react";
+import SEO from "@/components/SEO";
 
 const Category = ({categories}) => {
   return (
+    <>
+    <SEO title="Categorias" />
         <div className="mx-auto max-w-6xl">
             <PageTitle text="Categorias"/>
             <CategoriesList categories={categories}/>
         </div>
+    </>
   );
 };
 

@@ -4,11 +4,12 @@ import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
 import {PlusIcon} from "@heroicons/react/20/solid";
 import withAuthorization from 'components/withAuthorization';
-
+import SEO from "@/components/SEO";
 const ProductsManager = ({products}) => {
 
     return (
-
+        <>
+        <SEO title="Articulos" />
         <div className="items-center mx-auto bg-white max-w-6xl relative">
             <PageTitle text="Articulos" />
             <Link legacyBehavior href="/products/create" passHref>
@@ -22,6 +23,7 @@ const ProductsManager = ({products}) => {
             </Link>
             <Products products={products}/>
         </div>
+        </>
 
     )
 
