@@ -1,13 +1,17 @@
 import NewStore from "@/components/stores/NewStore";
 import StoreHeading from "@/components/StoreHeading";
 import withAuthorization from 'components/withAuthorization';
+import SEO from "@/components/SEO";
 
 const CreateStore = () => {
     return(
+        <>
+        <SEO title="Cargar nuevo comercio" />
         <div className="min-h-screen">
             <StoreHeading title="Nuevo Comercio"/>
             <NewStore/>
         </div>
+        </>
     )
 }
 
