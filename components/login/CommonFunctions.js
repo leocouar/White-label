@@ -12,7 +12,7 @@ export const commonLogin = async (credentials, csrfToken, router) => {
         username: credentials.username,
         password: credentials.password,
         csrfToken: csrfToken,
-        remember: true,
+        remember: true
       });
 
       console.log('SignIn Result:', result);
@@ -20,10 +20,9 @@ export const commonLogin = async (credentials, csrfToken, router) => {
       router.push('/stores/list');
     } catch (error) {
       console.error('Error during login:', error);
-      router.push('/login/error');
     }
   } else {
-    router.push('/login/error?error=invaliduser');
+    router.push('/login/error?error=invalidUser');
   }
 };
 

@@ -57,3 +57,13 @@ export async function getByUsername(username) {
         return []
     }
 }
+
+export async function solicitPassRestoreEmail(username){
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/restore/${username}`;
+    try {
+        let response = await axios.post(fetchUrl, username);
+        return response;
+    } catch (error) {
+        console.error("Could not solicit the dispatch of the restore password email !");
+    }
+}

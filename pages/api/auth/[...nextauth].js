@@ -21,11 +21,12 @@ const options = {
           if (res.status === 200) {
             return res.data;
           } else {
-            return Promise.reject(`${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/login/error`);
+            const errorMessage = res.data?.message || 'Invalid credentials';
+            throw new Error(errorMessage);
           }
         } catch (error) {
           console.error("Error during authentication:", error);
-          return Promise.reject(`${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/login/error`);
+          throw new Error(`passwrdError&user=` + username);
         }
       }
     }),
