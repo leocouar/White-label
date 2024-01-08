@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
-import { saveStore } from "/services/storeService";
+import { saveStore } from "services/storeService";
 import { uploadFile } from 'services/fileService';
 import imageResizer from '../uploadFile/ImageResizer';
 import { getByUsername } from 'services/userService';
 import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
+import 'react-notifications/lib/notifications.css';
+import { NotificationManager , NotificationContainer } from 'react-notifications';
 
 const NewStore = () => {
     const { data: session, status } = useSession();
@@ -100,13 +102,17 @@ const NewStore = () => {
             "schedule": schedule,
             "address": address
         };
-        const response = await saveStore(newStore, {
-            params: {
-                "ownerIds": ownerIds.join(',')
-            }
-        });
-        const folder = response.id;
-        uploadFile("commerce", file, folder)
+        try {
+            const response = await saveStore(newStore, {
+                params: {
+                    "ownerIds": ownerIds.join(',')
+                }
+            });
+            const folder = response.id;
+            await uploadFile("commerce", file, folder)
+        } catch (error) {
+            NotificationManager.warning('El comercio: ' + '\"' + newStore.name + '\"' + ' ya existe', 'Error', 2000 );      
+        }
     };
 
     //Selecciona una imagen a cargar  
@@ -188,7 +194,8 @@ const NewStore = () => {
         if (file) setErrImg(false);
     }, [file]);
 
-    return (
+    return <>
+        <NotificationContainer />
         <div className="flex justify-center">
             <form className="w-full max-w-lg flex flex-wrap -mx-3 mb-6"
                 onSubmit={handleFormSubmit}
@@ -250,14 +257,14 @@ const NewStore = () => {
                         htmlFor="telephone">Tel&eacute;fono:</label>
                     <p className="text-xs text-gray-400">Podrá ser utilizado como contacto de WhatsApp</p>
                     <div className="flex items-center mb-3">
-                    <span className="absolute text-gray-500 pl-3">+54 9</span>
-                    <input
-                        type="text"
-                        id="telephone"
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 pl-16 pr-3 leading-tight focus:outline-none focus:bg-white"
-                        placeholder="Ejemplo: 2314123456"
-                        value={telephone}
-                        onChange={(e) => setTelephone(e.target.value)}
+                        <span className="absolute text-gray-500 pl-3">+54 9</span>
+                        <input
+                            type="text"
+                            id="telephone"
+                            className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 pl-16 pr-3 leading-tight focus:outline-none focus:bg-white"
+                            placeholder="Ejemplo: 2314123456"
+                            value={telephone}
+                            onChange={(e) => setTelephone(e.target.value)}
                         />
                     </div>
                     {errTel && <p className={`text-red-500 text-xs italic`}>
@@ -376,7 +383,7 @@ const NewStore = () => {
                 </button>
             </form>
         </div>
-    );
+    </>;
 };
 
 export default NewStore;
