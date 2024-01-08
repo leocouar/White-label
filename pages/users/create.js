@@ -1,6 +1,7 @@
 import StoreHeading from "@/components/StoreHeading";
 import {useState} from "react";
 import {save} from "../../services/userService";
+import SEO from "@/components/SEO";
 
 const Create = () => {
 
@@ -95,6 +96,7 @@ const Create = () => {
 
     return (
         <>
+            <SEO title="Crear un nuevo usuario" />
             <StoreHeading title="Registrarse"/>
 
             <div className="min-h-full flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">

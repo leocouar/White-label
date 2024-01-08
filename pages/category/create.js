@@ -6,7 +6,7 @@ import withAuthorization from 'components/withAuthorization';
 const Create = () => {
     return (
         <>
-        <SEO title="Nueva Categoria" />
+        <SEO title="Agregar nueva categoria" />
         <div className="min-h-screen">
             <StoreHeading title="Categorias"/>
             <NewCategory/>
