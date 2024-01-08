@@ -5,10 +5,10 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { commonLogin, commonFacebookLogin, commonGoogleLogin } from './CommonFunctions';
 
 const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword, router, csrfToken }) => {
-    const handleSubmit = () => {
+    const handleSubmit = (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
         commonLogin(credentials, csrfToken, router);
     };
-
     const handleFacebookLogin = () => {
         commonFacebookLogin(router);
     };
@@ -20,6 +20,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
     return (
         <div className="w-1/2 flex  justify-center">
             <div className="w-auto mt-10 mb-10 space-y-4">
+            <form onSubmit={handleSubmit}>
                 <div>
                     <img className="mx-auto h-12 w-auto"
                         src={login.src} alt="Workflow" />
@@ -65,7 +66,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                         </div>
                     </div>
                     <div>
-                        <button type="button"
+                        <button type="submit"
                             onClick={handleSubmit}
                             className="rounded-md group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Iniciar sesion
@@ -99,6 +100,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                         </button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     );
