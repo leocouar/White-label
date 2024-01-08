@@ -59,7 +59,7 @@ export async function getByUsername(username) {
 }
 
 export async function solicitPassRestoreEmail(username){
-    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/restore/${username}`;
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/restore/`;
     try {
         let response = await axios.post(fetchUrl, username);
         return response;
