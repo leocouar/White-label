@@ -6,7 +6,7 @@ import withAuthorization from 'components/withAuthorization';
 const Create = () => {
     return (
         <>
-        <SEO title="Nueva Marca" />
+        <SEO title="Agregar nueva marca" />
         <div className="min-h-screen">
             <StoreHeading title="Marcas"/>
             <NewBrand/>
