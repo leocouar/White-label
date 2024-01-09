@@ -38,6 +38,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                                 onChange={({ target }) => setCredentials({ ...credentials, username: target.value })}
                                 required
                                 type="type"
+                                maxLength={32} // Cambia el número según tus necesidades
                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-palette-slight placeholder-palette-slight text-palette-sdark rounded-t-md focus:outline-none focus:ring-palette-secondary focus:border-palette-sdark focus:z-10 sm:text-sm"
                                 placeholder="Usuario"
                             />
@@ -52,6 +53,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                                     type={showPassword ? 'text' : 'password'}
                                     autoComplete="current-password"
                                     required
+                                    maxLength={100} // Cambia el número según tus necesidades
                                     className="mt-5 appearance-none rounded-none relative block w-full px-3 py-2 border border-palette-slight placeholder-palette-slight text-palette-sdark rounded-b-md focus:outline-none focus:ring-palette-secondary focus:border-palette-sdark focus:z-10 sm:text-sm pr-8"
                                     placeholder="Contraseña"
                                 />
@@ -69,7 +71,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                         <button type="submit"
                             onClick={handleSubmit}
                             className="rounded-md group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Iniciar sesion
+                            Iniciar Sesión
                         </button>
                     </div>
                     <div className="w-full border border-current border-blue-600 rounded-md">
@@ -86,7 +88,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                             onClick={handleGoogleLogin}
                             className="ml-auto group relative w-4/5 flex justify-center py-2 px-4 text-xs text-black hover:bg-green-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            Continuar con google
+                            Continuar con Google
                         </button>
                     </div>
                     <div className="w-full bg-blue-800 border border-current border-blue-600 rounded-md">
@@ -96,7 +98,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                         <button type="button"
                             onClick={handleFacebookLogin}
                             className="ml-auto group relative w-4/5 flex justify-center py-2 px-4 border border-transparent text-xs text-white bg-blue-800 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Continuar con facebook
+                            Continuar con Facebook
                         </button>
                     </div>
                 </div>
