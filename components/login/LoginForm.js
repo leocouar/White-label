@@ -88,7 +88,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                             onClick={handleGoogleLogin}
                             className="ml-auto group relative w-4/5 flex justify-center py-2 px-4 text-xs text-black hover:bg-green-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            Continuar con Google
+                            Continuar con google
                         </button>
                     </div>
                     <div className="w-full bg-blue-800 border border-current border-blue-600 rounded-md">
@@ -98,7 +98,7 @@ const LoginForm = ({ credentials, setCredentials, showPassword, setShowPassword,
                         <button type="button"
                             onClick={handleFacebookLogin}
                             className="ml-auto group relative w-4/5 flex justify-center py-2 px-4 border border-transparent text-xs text-white bg-blue-800 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Continuar con Facebook
+                            Continuar con facebook
                         </button>
                     </div>
                 </div>
