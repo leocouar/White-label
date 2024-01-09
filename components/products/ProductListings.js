@@ -2,6 +2,7 @@ import ProductCard from '@/components/products/ProductCard'
 import FilterModal from '@/components/filter/FilterModal'
 import { useEffect, useState, useRef } from "react";
 import { searchList } from "../../services/productService"
+import _debounce from 'lodash/debounce';
 import SEO from '../SEO';
 
 function ProductListings({ brands, categories, initialSearch, initialTerm = "", showFilters = true, showMsg = true}) {
@@ -87,11 +88,11 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
     //------------------------------------- SCROLLING -------------------------------------
 
     //1 - Inicia el scrolling
-    const handleScroll = async (e) => {
+    const handleScroll =  _debounce(async (e) => {
         if (window.innerHeight + e.target.documentElement.scrollTop + 1 > e.target.documentElement.scrollHeight && !isLoading) {
             await setScrolling(true);
         }
-    }
+    } , 300);
 
     //2 - Añade una pagina mas para scrollear (si se hizo scroll)
     useEffect(() => {
@@ -109,13 +110,17 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                     await searchList(page, q.term, q.params[0], q.params[1], q.orderBy, q.asc == "T" ? true : false)
                     :
                     await searchList(page, "", [], [], "sales", false);
-                const products = [...productsToShow, ...newResults.content];
+    
+                // Filter out duplicates based on a unique identifier (e.g., product ID)
+                const uniqueNewResults = newResults.content.filter(newProduct => !productsToShow.some(existingProduct => existingProduct.id === newProduct.id));
+    
+                const products = [...productsToShow, ...uniqueNewResults];
                 setProductsToShow(products);
             }
             setScrolling(false);
             setIsLoading(false);
         }
-    }
+    };
 
     //3A - Cuando detecte un cambio de pagina, ejecutara la carga de una nueva pagina (de ser posible)
     useEffect(() => {
