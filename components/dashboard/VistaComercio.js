@@ -161,6 +161,7 @@ const VistaComercio = ({ commerceData }) => {
                   className="w-full px-3 py-2 border rounded-md"
                   id="name"
                   name="name"
+                  maxLength={50} 
                 />
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
@@ -172,6 +173,7 @@ const VistaComercio = ({ commerceData }) => {
                   className="w-full px-3 py-2 border rounded-md"
                   id="description"
                   name="description"
+                  maxLength={50}
                 />
               </div>
 
@@ -218,6 +220,7 @@ const VistaComercio = ({ commerceData }) => {
                   className="w-full px-3 py-2 border rounded-md"
                   id="address"
                   name="address"
+                  maxLength={50}
                 />
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
@@ -229,6 +232,7 @@ const VistaComercio = ({ commerceData }) => {
                   className="w-full px-3 py-2 border rounded-md"
                   id="schedule"
                   name="schedule"
+                  maxLength={50}
                 />
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
