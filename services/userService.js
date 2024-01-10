@@ -58,12 +58,20 @@ export async function getByUsername(username) {
     }
 }
 
-export async function solicitPassRestoreEmail(username){
-    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/restore/`;
+export async function solicitPassRestoreEmail(username) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/restore`;
     try {
-        let response = await axios.post(fetchUrl, username);
+        let response = await axios.post(fetchUrl, username, {
+            headers: {
+                'Content-Type': 'text/plain', // Set the content type explicitly
+            },
+        });
         return response;
     } catch (error) {
-        console.error("Could not solicit the dispatch of the restore password email !");
+        console.error("Could not solicit the dispatch of the restore password email!");
+        return { status: 500 };
     }
 }
+
+
+

@@ -28,6 +28,7 @@ const LoginError = ({ csrfToken }) => {
   }, [router.query]);
 
   useEffect(() => {
+    console.log(usernameFromQuery)
     if (usernameFromQuery) {
       setCredentials(prevCredentials => ({
         ...prevCredentials,
@@ -36,10 +37,8 @@ const LoginError = ({ csrfToken }) => {
     }
   }, [usernameFromQuery]);
 
-  useEffect(() => { console.log(showResetMessage) }, [showResetMessage])
-
   const handleForgotPassword = async () => {
-    const request = solicitPassRestoreEmail(usernameFromQuery);
+    let request = await solicitPassRestoreEmail(usernameFromQuery);
     setNewPassRequestStatus(request.status)
     setShowResetMessage(true);
     setErrorType("");
@@ -47,7 +46,6 @@ const LoginError = ({ csrfToken }) => {
       newPassRequestStatus === 200 ? router.push("/") : router.push("/login")
     }, 5000);
   };
-
 
   return (
     <>
@@ -81,7 +79,6 @@ const LoginError = ({ csrfToken }) => {
             </div>
           }
           {showResetMessage &&
-
             <div className="mx-auto mt-2 text-sm  text-center" ref={messageRef}>
               {newPassRequestStatus === 200 ?
                 <div className="text-green-500">
