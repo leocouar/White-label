@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { updateStore } from 'services/storeService.js';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,8 @@ import { uploadFile } from 'services/fileService';
 import { findByID } from 'services/storeService.js';
 import { useRouter } from "next/router";
 import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
+import DeleteWarning from './DeleteWarning';
+import { deleteStore } from 'services/storeService.js';
 
 const VistaComercio = ({ commerceData }) => {
   const [view, setView] = useState('commerce');
@@ -18,9 +20,18 @@ const VistaComercio = ({ commerceData }) => {
   const [newLogoFile, setNewLogoFile] = useState();
   const [editLogoURL, setEditLogoURL] = useState(null);
   const router = useRouter();
-
   const [errEmail, setErrEmail] = useState(false);
   const [errTel, setErrTel] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openWarning = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeWarning = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     if (storeToShow && storeToShow.logo) {
@@ -30,6 +41,7 @@ const VistaComercio = ({ commerceData }) => {
     }
   }, [storeToShow]);
 
+  //Selecciona una imagen a cargar  
   const handleImageUpload = async (event) => {
     const resizedData = await imageResizer(event);
     setNewLogoFile(resizedData.fileData);
@@ -40,6 +52,11 @@ const VistaComercio = ({ commerceData }) => {
   const handleEditClick = () => {
     setView('edit');
   };
+
+  const handleDelClick = async() => {
+    await deleteStore(commerceData.store.store.id);
+    router.push("/stores/list");
+  }
 
   const handleCancelClick = () => {
     setView('commerce');
@@ -69,14 +86,10 @@ const VistaComercio = ({ commerceData }) => {
     setErrTel(checkTel);
 
     const checkEmail = !emailRegex.test(storeToUpdate.email.trim());
-    setErrEmail(checkEmail);
+    await setErrEmail(checkEmail)
 
     return { checkTel, checkEmail};
   };
-
-  useEffect(() => {
-    console.log("ESTADO REAL:", errEmail, errTel);
-  }, [errEmail, errTel]);
 
   const handleSave = async () => {
     const errors = await verifyData();
@@ -138,7 +151,13 @@ const VistaComercio = ({ commerceData }) => {
             </div>
           </div>
           {/* Edit button */}
-          <div className="md:col-span-2 text-right">
+          <div className="md:col-span-2 text-right mt-2">
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md mr-2"
+              onClick={openWarning}
+            >
+              Eliminar
+            </button>
             <button
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
               onClick={handleEditClick}
@@ -146,6 +165,31 @@ const VistaComercio = ({ commerceData }) => {
               Editar
             </button>
           </div>
+
+          {/*MODAL TESTING*/}
+          <div className="min-h-screen flex items-center justify-center">
+            <DeleteWarning isOpen={isModalOpen} onClose={closeWarning}>
+              <h1 className="text-4xl font-bold mb-4 text-center">¡ATENCIÓN!</h1>
+              <h3 className="text-lg mb-4 text-center">
+                Esto eliminará todos los productos relacionados al comercio{' '}
+                {commerceData.store.store.name}, los mismos{' '}
+                <u>
+                  <b>no se podrán recuperar en absoluto.</b>
+                </u>
+              </h3>
+              <p className="mb-4 text-center">¿Está seguro de que desea continuar?</p>
+              <div className="flex justify-center">
+                <button onClick={handleDelClick} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
+                  Confirmar
+                </button>
+                <button onClick={closeWarning} className="bg-gray-500 text-white px-4 py-2 rounded">
+                  Cancelar
+                </button>
+              </div>
+            </DeleteWarning>
+          </div>
+          {/*MODAL TESTING*/}
+
         </div>)}
 
       {view === 'edit' && (
@@ -162,7 +206,7 @@ const VistaComercio = ({ commerceData }) => {
                   className="w-full px-3 py-2 border rounded-md"
                   id="name"
                   name="name"
-                  maxLength={50} 
+                  maxLength={50}
                 />
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
@@ -194,18 +238,18 @@ const VistaComercio = ({ commerceData }) => {
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
                 <label className="block text-sm font-medium mb-1">Teléfono:</label>
-                  <div className="flex items-center">
-                    <span className="absolute text-gray-500 pl-3">+54 9</span>
-                    <input
-                    
+                <div className="flex items-center">
+                  <span className="absolute text-gray-500 pl-3">+54 9</span>
+                  <input
+
                     type="text"
                     value={storeToUpdate?.telephone}
                     onChange={handleChange}
                     className="w-full pl-16 pr-3 py-2 border rounded-md"
                     id="telephone"
                     name="telephone"
-                    />
-                  </div>
+                  />
+                </div>
                 {errTel && <p className={`text-red-500 text-xs italic`}>
                   "Ingrese su número sin el 0 y sin el 15, y sin guiones en el medio"
                 </p>}
