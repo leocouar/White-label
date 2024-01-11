@@ -1,13 +1,11 @@
 import { NotificationContainer } from "react-notifications";
 import useForm from "../../hooks/useForm";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import * as brandsService from 'services/brandService';
 import * as categoriesService from "services/categoriesService";
 import * as sizeService from "services/sizeService";
 import * as storeService from "services/storeService";
 import { save } from "services/productService";
-
-
 
 const NewProduct = ({ store, onCancel, admin = false }) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
@@ -15,6 +13,9 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
     const [brands, setBrands] = useState()
     const [sizes, setSizes] = useState()
     const [stores, setStores] = useState();
+    const [reloadStoreSel, setReloadStoreSel] = useState(false);
+    const selectStore = useRef();
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -102,7 +103,8 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
     };
 
     const {
-        form,
+        form,        
+        setForm,
         errors,
         handleChange,
         handleBlur,
@@ -129,10 +131,17 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
         if (e.target) {
             const finalStore = {
                 "id": e.target.value
-            }
-            form.store = finalStore;
+            };
+            setForm((prevForm) => ({
+                ...prevForm,
+                store: finalStore,
+            }));
         }
-    }
+        setReloadStoreSel((prev) => !prev);
+    };
+    
+    
+      
 
     const handleCancel = () => {
         onCancel();
@@ -293,7 +302,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                 htmlFor="store">
                                 Comercio*
                             </label>
-                            <select value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
+                            <select ref={selectStore} value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
                                 <option disabled={true} value="">Seleccionar</option>
                                 {
                                     stores && stores.map(store => (

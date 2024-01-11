@@ -50,6 +50,7 @@ const useForm = (initialState, validateForm, submitForm) => {
 
   return {
     form,
+    setForm,
     errors,
     loading,
     response,
