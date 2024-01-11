@@ -74,7 +74,7 @@ function NavSearch({ setSearchFocus }) {
         onFocus={() => setIsFocused(true)}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={(e) => handleKeyPress(e)}
-        className={`border border-gray-200 ${isFocused ? "w-full" : "hidden sm:block sm:w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
+        className={`border border-gray-200 ${isFocused ? "w-1/2" : "hidden sm:block sm:w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
         placeholder="Buscar"
         id="search"
         maxLength={32}
