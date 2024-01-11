@@ -90,7 +90,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
     //1 - Inicia el scrolling
     const handleScroll =  _debounce(async (e) => {
         if (window.innerHeight + e.target.documentElement.scrollTop + 1 > e.target.documentElement.scrollHeight && !isLoading) {
-            await setScrolling(true);
+            setScrolling(true);
         }
     } , 300);
 
