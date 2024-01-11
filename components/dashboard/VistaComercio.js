@@ -20,8 +20,14 @@ const VistaComercio = ({ commerceData }) => {
   const [newLogoFile, setNewLogoFile] = useState();
   const [editLogoURL, setEditLogoURL] = useState(null);
   const router = useRouter();
+
+  ////*** Errores */
   const [errEmail, setErrEmail] = useState(false);
   const [errTel, setErrTel] = useState(false);
+  const [errName, setErrName] = useState(false);
+  const [errAdress, setErrAdress] = useState(false);
+  const [erraddress, setErraddress] = useState(false);
+  const [errSchedule, setErrSchedule] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -53,7 +59,7 @@ const VistaComercio = ({ commerceData }) => {
     setView('edit');
   };
 
-  const handleDelClick = async() => {
+  const handleDelClick = async () => {
     await deleteStore(commerceData.store.store.id);
     router.push("/stores/list");
   }
@@ -88,11 +94,48 @@ const VistaComercio = ({ commerceData }) => {
     const checkEmail = !emailRegex.test(storeToUpdate.email.trim());
     await setErrEmail(checkEmail)
 
-    return { checkTel, checkEmail};
+    return { checkTel, checkEmail };
   };
 
   const handleSave = async () => {
     const errors = await verifyData();
+
+    const missingFields = [];
+    if (!storeToUpdate.name || !storeToUpdate.name.trim()) {
+      setErrName(true);
+      missingFields.push("Nombre");
+    } else {
+      setErrName(false);
+    }
+
+    if (!storeToUpdate.address || !storeToUpdate.address.trim()) {
+      setErraddress(true);
+      missingFields.push("Dirección");
+    } else {
+      setErraddress(false);
+    }
+
+    if (!storeToUpdate.Adress || !storeToUpdate.Adress.trim()) {
+      setErrAdress(true);
+      missingFields.push("Descripción");
+    } else {
+      setErrAdress(false);
+    }
+
+    if (!storeToUpdate.schedule || !storeToUpdate.schedule.trim()) {
+      setErrSchedule(true);
+      missingFields.push("Horarios");
+    } else {
+      setErrSchedule(false);
+    }
+
+
+
+    if (missingFields.length > 0) {
+      // Mostrar mensaje de error
+
+      return;
+    }
 
     if (!errors.checkEmail && !errors.checkTel) {
       await updateStore(storeToUpdate);
@@ -208,6 +251,7 @@ const VistaComercio = ({ commerceData }) => {
                   name="name"
                   maxLength={50}
                 />
+                {errName && <p className="text-red-500 text-xs italic">Falta completar este campo</p>}
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
                 <label className="block text-sm font-medium mb-1">Descripci&oacute;n:</label>
@@ -220,6 +264,7 @@ const VistaComercio = ({ commerceData }) => {
                   name="Adress"
                   maxLength={50}
                 />
+                {errAdress && <p className="text-red-500 text-xs italic">Falta completar este campo</p>}
               </div>
 
               <div className="w-full md:w-1/2 px-3 mb-4">
@@ -267,6 +312,7 @@ const VistaComercio = ({ commerceData }) => {
                   name="address"
                   maxLength={50}
                 />
+                {erraddress && <p className="text-red-500 text-xs italic">Falta completar este campo</p>}
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
                 <label className="block text-sm font-medium mb-1">Horarios:</label>
@@ -279,6 +325,7 @@ const VistaComercio = ({ commerceData }) => {
                   name="schedule"
                   maxLength={50}
                 />
+                {errSchedule && <p className="text-red-500 text-xs italic">Falta completar este campo</p>}
               </div>
               <div className="w-full md:w-1/2 px-3 mb-4">
                 <label className="block text-sm font-medium mb-1">Logo:</label>
