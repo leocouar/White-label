@@ -13,9 +13,8 @@ import { deleteStore } from 'services/storeService.js';
 
 const VistaComercio = ({ commerceData }) => {
   const [view, setView] = useState('commerce');
-  //(No preguntar porque dice store.store: funciona y ya.)
   const [storeToUpdate, setStoreToUpdate] = useState(commerceData.store.store);
-  const [storeToShow, setStoreToShow] = useState(commerceData.store.store)
+  const [storeToShow, setStoreToShow] = useState(commerceData.store.store);
   const [currentLogoURL, setCurrentLogoURL] = useState("https://i.pinimg.com/564x/56/02/c2/5602c21e0b1cc147c5c7f7ad36e688da.jpg");
   const [logoWasUpdated, setLogoWasUpdated] = useState(false);
   const [newLogoFile, setNewLogoFile] = useState();
@@ -38,11 +37,9 @@ const VistaComercio = ({ commerceData }) => {
     if (storeToShow && storeToShow.logo) {
       const logoURL = storeToShow?.logo?.link;
       setCurrentLogoURL(logoURL);
-      setEditLogoURL(logoURL)
+      setEditLogoURL(logoURL);
     }
-  }, [storeToShow])
-
-
+  }, [storeToShow]);
 
   //Selecciona una imagen a cargar  
   const handleImageUpload = async (event) => {
@@ -66,11 +63,11 @@ const VistaComercio = ({ commerceData }) => {
   };
 
   const handleChange = (e) => {
-    setStoreToUpdate({
-      ...storeToUpdate,
+    setStoreToUpdate((prevStore) => ({
+      ...prevStore,
       [e.target.name]: e.target.value,
-    });
-  }
+    }));
+  };
 
   function extractFilename(url) {
     const parts = url.split('/');
@@ -80,29 +77,30 @@ const VistaComercio = ({ commerceData }) => {
 
   const updateStoreData = async () => {
     const updatedStore = await findByID(storeToUpdate.id);
-    await setStoreToShow(updatedStore)
-    await setCurrentLogoURL(updatedStore?.logo?.link);
-  }
+    setStoreToShow(updatedStore);
+    setCurrentLogoURL(updatedStore?.logo?.link);
+  };
 
   const verifyData = async () => {
     const checkTel = !phoneRegex.test(storeToUpdate.telephone.trim());
-    await setErrTel(checkTel);
+    setErrTel(checkTel);
 
     const checkEmail = !emailRegex.test(storeToUpdate.email.trim());
-    await setErrEmail(checkEmail);
-    return { checkTel, checkEmail };
-  }
+    await setErrEmail(checkEmail)
 
-  useEffect(() => { console.log("ESTADO REAL:", errEmail, errTel) }, [errEmail, errTel]);
+    return { checkTel, checkEmail};
+  };
 
   const handleSave = async () => {
     const errors = await verifyData();
 
     if (!errors.checkEmail && !errors.checkTel) {
       await updateStore(storeToUpdate);
+
       if (logoWasUpdated) {
-        if (storeToShow?.logo?.link)
+        if (storeToShow?.logo?.link) {
           await deleteStoreLogo(storeToUpdate.id, extractFilename(currentLogoURL));
+        }
         await uploadFile("store", newLogoFile, storeToUpdate.id, false);
       }
 
@@ -111,7 +109,7 @@ const VistaComercio = ({ commerceData }) => {
       await updateStoreData();
       setLogoWasUpdated(false);
     }
-  }
+  };
 
   return (
     <div className="bg-white p-4 rounded-md">
@@ -120,7 +118,7 @@ const VistaComercio = ({ commerceData }) => {
           <div className="flex items-center mb-4">
             <div className="mr-16">
               <h1 className="text-4xl font-semibold mb-4">"{storeToShow.name}"</h1>
-              <h2 className="text-2xl italic mb-4">{storeToShow.description}</h2>
+              <h2 className="text-2xl italic mb-4">{storeToShow.Adress}</h2>
             </div>
             <img src={currentLogoURL}
               alt={storeToShow.name}
@@ -215,11 +213,11 @@ const VistaComercio = ({ commerceData }) => {
                 <label className="block text-sm font-medium mb-1">Descripci&oacute;n:</label>
                 <input
                   type="text"
-                  value={storeToUpdate?.description}
+                  value={storeToUpdate?.Adress}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border rounded-md"
-                  id="description"
-                  name="description"
+                  id="Adress"
+                  name="Adress"
                   maxLength={50}
                 />
               </div>

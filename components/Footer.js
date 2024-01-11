@@ -6,6 +6,7 @@
  
  function Footer() {
    return (
+    <div className="relative">
      <footer id="Footer" className="flex h-64 justify-center font-primary items-center w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" ,
      backgroundImage: `url('/images/bgcatalog.png')`, bottom: 0, }}>
        <div className="w-full max-w-screen-xl">
@@ -72,6 +73,7 @@
          <hr className="hidden sm:block border-t h-1 shadow border-gray-700 w-full mb-4 mt-7"/>
        </div>
      </footer>
+     </div>
    );
  }
  
