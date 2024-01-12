@@ -15,7 +15,6 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
     const [stores, setStores] = useState();
     const [reloadStoreSel, setReloadStoreSel] = useState(false);
     const selectStore = useRef();
-    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,6 +59,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
 
     const validationsForm = (form) => {
         let errors = {};
+        
         if (!form.name.trim()) {
             errors.name = "El campo 'Nombre' es requerido";
         }
@@ -68,48 +68,50 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
             errors.price = "El campo 'Precio' es requerido";
         }
 
-        // if (!form.description.trim()) {
-        //     errors.description = "El campo 'Descripcion' es requerido";
-        // }
+        /*
+        if (!form.description.trim()) {
+             errors.description = "El campo 'Descripcion' es requerido";
+        }
+        */        
 
-        if (form.category.id == "") {
+        if (form.category.id === "") {
             errors.category = "El campo 'Categoria' es requerido";
         }
 
-        if (form.brand.id == "") {
+        if (form.brand.id === "") {
+            console.log(form.brand.id)
+            console.log("ERROR")
             errors.brand = "El campo 'Marcas' es requerido";
         }
 
-        if (form.store.id == "" && admin) {
+        if (form.store.id === "" && admin) {
             errors.store = "El campo 'Comercio' es requerido";
         }
 
+        /*
         if (!form.sizes[0] || form.sizes[0].id === 0) {
             errors.sizes = "El campo 'Sizes' es requerido";
         }
 
-        // if (!form.code.trim()) {
-        //     errors.code = "El campo 'Codigo' es requerido";
-        // }
+        if (!form.code.trim()) {
+            errors.code = "El campo 'Codigo' es requerido";
+        }
 
-        // if (!form.stock.trim()) {
-        //     errors.stock = "El campo 'Stock' es requerido";
-        // }
+        if (!form.stock.trim()) {
+            errors.stock = "El campo 'Stock' es requerido";
+        }
 
-        //if (!form.points.trim()) {
-        //    errors.points = "El campo 'Puntos' es requerido";
-        //}
+        if (!form.points.trim()) {
+            errors.points = "El campo 'Puntos' es requerido";
+        }
+        */
         return errors;
     };
 
-    const {
-        form,        
-        setForm,
-        errors,
-        handleChange,
-        handleBlur,
-        handleSubmit } = useForm(initialForm, validationsForm, save);
+    const { form, setForm, errors, handleChange, handleBlur, handleSubmit } =
+        useForm(initialForm, validationsForm, save);
 
+    /*
     const handleChangeSize = (e) => {
         if (e.target.checked) {
             const final = [
@@ -126,6 +128,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
             form.sizes = sizes;
         }
     }
+    */
 
     const handleChangeStore = (e) => {
         if (e.target) {
@@ -139,13 +142,6 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
         }
         setReloadStoreSel((prev) => !prev);
     };
-    
-    
-      
-
-    const handleCancel = () => {
-        onCancel();
-    }
 
     return <>
         <NotificationContainer />
@@ -168,7 +164,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                 value={form.name}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                required
+                                //required
                             />
                             {errors.name && <p className={`text-red-500 text-xs italic`}>{errors.name}</p>}
                         </div>
@@ -186,9 +182,8 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                 value={form.description}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                            // required
                             />
-                            {errors.description && <p className={`text-red-500 text-xs italic`}>{errors.description}</p>}
+                            {/*errors.description && <p className={`text-red-500 text-xs italic`}>{errors.description}</p>*/}
                         </div>
 
                         <div className="w-full md:w-1/2 mb-3">
@@ -201,6 +196,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                         $
                                     </span>
                                     <input
+                                        //required
                                         type="number"
                                         id="price"
                                         autoComplete="off"
@@ -208,8 +204,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                         placeholder="0.00" name="price"
                                         value={form.price}
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        required
+                                        onBlur={handleBlur}                                        
                                         maxLength="7"
                                         onKeyDown={(event) => {
                                             if (!/[0-9]?[0-9]?(\.[0-9][0-9]?)?/.test(event.key)) {
@@ -316,8 +311,8 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                 </div>
 
                 <div className="flex space-x-2 mt-8 justify-end">
-                    <button className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"
-                        onClick={handleCancel}
+                    <button type="button" className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"
+                        onClick={onCancel}
                     >
                         Cancelar
                     </button>
