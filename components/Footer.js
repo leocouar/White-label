@@ -6,10 +6,10 @@
  
  function Footer() {
    return (
-    <div className="relative">
-     <footer id="Footer" className="flex h-64 justify-center font-primary items-center w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" ,
-     backgroundImage: `url('/images/bgcatalog.png')`, bottom: 0, }}>
-       <div className="w-full max-w-screen-xl">
+
+     <footer id="Footer" className="fixed flex h-64 justify-center font-primary items-center w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" ,
+     backgroundImage: `url('/images/bgcatalog.png')`, position: "absolute", bottom: 0}}>
+        <div className="w-full">
          <div className="flex  items-center">
  
            {/* Logo */}
@@ -40,7 +40,7 @@
            {/* Redes Sociales */}
            <div className="hidden sm:block w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mx-8 mb-16">
              <h2 className="text-lg font-bold mb-4">REDES SOCIALES</h2>
-                   <div className="flex mr-12 justify-around">
+                   <div className="flex mr-12 justify-around sm:justify-start sm:ml-4">
                          <a
                            href="https://www.instagram.com/camarabolivar/"
                            target="_blank"
@@ -70,10 +70,9 @@
            </div>
             
          </div>
-         <hr className="hidden sm:block border-t h-1 shadow border-gray-700 w-full mb-4 mt-7"/>
        </div>
      </footer>
-     </div>
+ 
    );
  }
  
