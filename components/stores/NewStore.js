@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSession } from "next-auth/react";
 import { saveStore } from "services/storeService";
 import { uploadFile } from 'services/fileService';
@@ -6,11 +6,14 @@ import imageResizer from '../uploadFile/ImageResizer';
 import { getByUsername } from 'services/userService';
 import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
 import 'react-notifications/lib/notifications.css';
-import { NotificationManager , NotificationContainer } from 'react-notifications';
+import { NotificationManager, NotificationContainer } from 'react-notifications';
+import { data } from 'autoprefixer';
 
-const NewStore = () => {
+const NewStore = ({ users }) => {
     const { data: session, status } = useSession();
     const [firstLoad, setFirstLoad] = useState(true);
+    const adminUserSel = useRef();
+
     //Datos de texto
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -21,7 +24,16 @@ const NewStore = () => {
 
     //Datos para propietarios
     const [newOwner, setNewOwner] = useState('');
-    const [ownerIds, setOwnerIds] = useState([]);
+    const [ownerIds, setOwnerIds] = useState([]);                   //Lista final de ids a entregar al backend
+    const [userAdmin, setUserAdmin] = useState(null);
+
+    useEffect(() => {
+        if (session) {
+            const userIsAdmin = session?.user?.role.includes("ADMIN");
+            setUserAdmin(userIsAdmin);
+        }
+    }, [session])
+
 
     //Datos para endpoints
     const [file, setFile] = useState();
@@ -111,7 +123,7 @@ const NewStore = () => {
             const folder = response.id;
             await uploadFile("commerce", file, folder)
         } catch (error) {
-            NotificationManager.warning('El comercio: ' + '\"' + newStore.name + '\"' + ' ya existe', 'Error', 2000 );      
+            NotificationManager.warning('El comercio: ' + '\"' + newStore.name + '\"' + ' ya existe', 'Error', 2000);
         }
     };
 
@@ -126,11 +138,9 @@ const NewStore = () => {
         const owner = await getByUsername(newOwner.trim());
         const ownerId = owner?.username;
         if (ownerId) {
-
             if (!ownerIds.some(existingId => existingId === ownerId)) {
                 const updatedIds = [...ownerIds, ownerId];
                 setOwnerIds(updatedIds);
-                setErrOwn(false);
                 setNewOwner("");
             } else {
                 setNewOwner("");
@@ -138,11 +148,34 @@ const NewStore = () => {
             }
         }
         else {
-            console.log("I went here...")
             setNewOwner("");
             setErrNewOwn(true);
         }
     }
+
+
+    const handleChangeOwners = (e) => {
+        const value = e.target.value;
+
+        if (value != "Seleccionar") {
+            const selectedUserId = users.find(owner => owner.username === value).username;
+            if (selectedUserId && !ownerIds.some(ownerId => ownerId === selectedUserId)) {
+                const updatedIds = [...ownerIds, selectedUserId];
+                setOwnerIds(updatedIds);
+            }
+            setErrOwn(false);
+        }
+    };
+
+    const deleteOwner = (e) => {
+        const value = e.target.value;
+        const updatedDataOwnerIds =  ownerIds.filter(owner => owner !== value) ;
+        setOwnerIds(updatedDataOwnerIds);
+        const selectElement = adminUserSel.current;
+        selectElement.value = selectElement.options[0].value;
+    }
+
+
 
     const editNewOwner = (value) => {
         setErrNewOwn(false);
@@ -153,7 +186,10 @@ const NewStore = () => {
     const cleanOwners = () => {
         setErrNewOwn(false);
         setErrRepOwn(false);
-        setOwnerIds([]);
+        if (ownerIds.length > 1) {
+            const firstOwner = ownerIds[0];
+            setOwnerIds([firstOwner]);
+        }
     }
 
     useEffect(() => {
@@ -307,41 +343,80 @@ const NewStore = () => {
                 </div>
 
                 {/*PROPIETARIOS*/}
+
                 <div className="w-full mb-3">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
-                        htmlFor="ownerIds">Propietarios:</label>
-                    <input
-                        type="text"
-                        id="newOwner"
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white"
-                        placeholder="Ingrese el nombre de usuario de un propietario"
-                        value={newOwner}
-                        onChange={(e) => editNewOwner(e.target.value)}
-                    />
-                    <div>
-                        <div className="flex items-center">
+                        htmlFor="ownerIds">Propietarios:
+                    </label>
+                    {userAdmin ?
+                        <>
+                            <select
+                                onChange={handleChangeOwners}
+                                ref={adminUserSel}
+                                name={users.username}
+                                value={users.username}
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="owners"
+                            >
+                                <option value={null}>Seleccionar</option>
+                                {users
+                                    ? users.map(user => (
+                                        <option key={user.username} value={user.username}>
+                                            {user.name} ({user.username})
+                                        </option>
+                                    ))
+                                    : <option>Propietarios</option>
+                                }
+                            </select>
+                            <div className="flex grid grid-cols-4 gap-8 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight">
+                                {
+                                    ownerIds?.map((owner) => {
+                                        return (
+                                            <div className="flex w-32 justify-between mx-2 rounded shadow-xl bg-blue-500 text-white" key={owner}>
+                                                <div className="flex w-3/4 m-auto text-xs p-2">{owner}</div>
+                                                <button className="w-1/4 rounded-r bg-red-500 uppercase text-white h-full" onClick={e => { deleteOwner(e) }} value={owner}>x</button>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </>
+                        :
+                        <>
                             <input
-                                className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm"
-                                value="Añadir propietario"
-                                type="button"
-                                id="addOwner"
-                                onClick={handleAddUser}
+                                type="text"
+                                id="newOwner"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white"
+                                placeholder="Ingrese el nombre de usuario de un propietario"
+                                value={newOwner}
+                                onChange={(e) => editNewOwner(e.target.value)}
                             />
-                            <input
-                                className={`${ownerIds.length === 0 ? "hidden" : ""
-                                    } ml-2 inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm`}
-                                value="Limpiar lista"
-                                type="button"
-                                id="clean"
-                                onClick={cleanOwners}
-                            />
-                        </div>
-                        {ownerIds && ownerIds.map((owner, index) => (
-                            <p className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-1 py-1 bg-gray-400 text-base font-medium text-black hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 sm:w-auto sm:text-sm mr-1 my-2"
-                                key={index}>{owner}</p>
-                        ))}
-                    </div>
+                            <div>
+                                <div className="flex items-center">
+                                    <input
+                                        className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm"
+                                        value="Añadir propietario"
+                                        type="button"
+                                        id="addOwner"
+                                        onClick={handleAddUser}
+                                    />
+                                    <input
+                                        className={`${ownerIds.length === 0 ? "hidden" : ""
+                                            } ml-2 inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm`}
+                                        value="Limpiar lista"
+                                        type="button"
+                                        id="clean"
+                                        onClick={cleanOwners}
+                                    />
+                                </div>
+                                {ownerIds && ownerIds.map((owner, index) => (
+                                    <p className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-1 py-1 bg-gray-400 text-base font-medium text-black hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 sm:w-auto sm:text-sm mr-1 my-2"
+                                        key={index}>{owner}</p>
+                                ))}
+                            </div>
 
+                        </>
+                    }
                     {errNewOwn && <p className={`text-red-500 text-xs italic`}>
                         "Error: el usuario ingresado no existe"
                     </p>}
@@ -352,6 +427,8 @@ const NewStore = () => {
                         "Debe escoger al menos un propietario para su comercio"
                     </p>}
                 </div>
+
+
 
                 {/*LOGO*/}
                 <div className="w-full block">
