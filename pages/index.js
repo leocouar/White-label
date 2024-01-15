@@ -11,18 +11,19 @@ function IndexPage({ brands, categories, initialSearch, stores}) {
   return (
     <>
     <SEO title="Camara Bolivar" />
-    <div className='bg-white'>
-      <div >
+    <div className=''>
+      <div>
         <Carrusel />
-        {/*<img src="images/inicio.jpg" className="w-full h-screen"></img>*/}
       </div>
       <div className="w-full h-full">
         <div className='flex justify-center'>
           <Banner stores={stores} />
         </div>
       </div>
+      <div className='mx-auto max-w-7xl'>
       <ProductListings brands={brands} categories={categories} initialSearch={initialSearch} 
       showFilters={false} showMsg = {false}/>
+      </div>
     </div>
     </>
   )

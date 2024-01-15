@@ -6,6 +6,7 @@ function Layout({ children }) {
   
   return (
     <CartProvider>
+      <div className='relative'>
       <div className='sticky top-0 z-40 shadow'>
         <Nav/>
       </div>
@@ -13,8 +14,10 @@ function Layout({ children }) {
         <main className='bg-palette-bg'>
           {children}
         </main>
-
-        <Footer />
+        <div className='min-h-screen'>
+        <Footer/>
+        </div>
+        </div>
     </CartProvider>
   )
 }
