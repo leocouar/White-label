@@ -14,9 +14,9 @@ function Layout({ children }) {
         <main className='bg-palette-bg'>
           {children}
         </main>
-        <div className='min-h-screen'>
+        
         <Footer/>
-        </div>
+        
         </div>
     </CartProvider>
   )
