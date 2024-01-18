@@ -109,7 +109,7 @@ function Nav() {
           </Link>
 
           {/* SEARCH */}
-          <div className="flex-1 ml-2  ">
+          <div className="flex-1">
             <NavSearch setSearchFocus={(e) => handleSearchFocus(e)} />
           </div>
 
@@ -117,7 +117,7 @@ function Nav() {
           <div className={`${searchFocused ? "hidden sm:block" : ""} lg:order-3`}>
             <div
               title={session ? "Sign Out" : "Sign On"}
-              className="flex md:-mt-1 flex-wrap ml-2 md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary"
+              className="flex md:-mt-1 flex-wrap  md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary"
               onClick={handleSession}>
               <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
             </div>
@@ -126,7 +126,7 @@ function Nav() {
           {/* CARRITO */}
           <div className={`${searchFocused ? "hidden sm:block" : ""} lg:order-3`}>
             <Link href="/cart" passHref>
-              <div className="flex md:-mt-1 flex-wrap ml-2 md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
+              <div className="flex md:-mt-1 flex-wrap  md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
                 <FontAwesomeIcon
                   className="text-palette-primary hover:text-palette-secondary h-6"
                   icon={faShoppingCart}
