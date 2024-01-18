@@ -1,149 +1,104 @@
-import Link from "next/link";
-import { useState } from "react";
-import { updateTwinsCard } from "services/productService";
+import FilterComponent from  "@/components/filter/FilterComponent";
+import DataTable  from "react-data-table-component";
+import Link from 'next/link'
+import { deleteProduct } from "services/productService";
+import {useState, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faEye, faEdit, faTrash, faTag, faInfo} from '@fortawesome/free-solid-svg-icons'
+import {faBars} from '@fortawesome/free-solid-svg-icons'
+
+const UserList = ({users}) => {
+    const [filterText, setFilterText]= useState ('')
+    const filteredItems = users.filter(item=> filterText.toLowerCase() == '' || filterText.includes(item.id));
+    const [data,setData]= useState(filteredItems)
+
+    const handleDelete = (rowId) => {
+        const updatedData = data.filter(row => row.id !== rowId);
+        setData(updatedData);
+        deleteProduct(rowId)
+      };
 
 
-const UserList = ({ users }) => {
-    const [twins, setTwins] = useState(false)
-
-    const handleTwins = async (e) => {
-        console.log(e.target.value, e.target.id);
-
-
-        setTwins(e)
-
-        const user = {
-            "cardId": e.target.id,
-            "twins": e.target.value,
-        }
-
-        let result = await updateTwinsCard(user);
-        e.target.value = user.twins
-    }
-
-    
-
-
-
-
-    return (
-        <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-red-50">
-                                <tr>
-                                    <th></th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nombre
-                                    </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Apellido
-                                    </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        DNI
-                                    </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        CUIT
-                                    </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Contacto
-                                    </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Mellizos
-                                    </th>
-                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Facturacion
-                                    </th>
-                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Datos
-                                    </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                       Puntos
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-
-                                {
-                                    users.map((user, index) =>
-                                        <tr key={index}>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">
-                                                    #{index + 1}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center uppercase">
-                                                    <div className="margin auto">
-                                                        {user.name}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900 uppercase">
-                                                    {user.lastName}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span
-                                                    className="px-2 inline-flex text-xs leading-5 items-center text-black-500">
-                                                    {user.cardId}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {user.cuit}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {user.phone}
-                                            </td>
-                                            <td className="flex flex-col relative px-6 py-4 justify-center items-center">
-                                                <select className="felx flex-col bg-red-100 text-black-900 justify-center items-center"
-                                                    id={`${user.username}`}
-                                                    onChange={handleTwins} 
-                                                    value={user.twins}
-                                                    >
-                                                    <option value={false}>No</option>
-                                                    <option value={true}>Si</option>
-                                                </select>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <Link legacyBehavior href={`/bills/user/${user.username}`} passHref>
-                                                    <a href="#" className="text-black-600 hover:text-indigo-900">Facturaci&oacute;n</a>
-                                                </Link>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <Link href={`/users/${user.username}`} passHref legacyBehavior>
-                                                <button className="bg-red-300 ml-0 hover:bg-red-200 text-white w-10 h-auto p-2 rounded-full font-primary font-semibold text-xs flex
-                                                justify-center items-baselinetransform transition duration-500 group cursor-pointer">
-                                                <FontAwesomeIcon icon={faEdit} className="w-5 m-auto"/>
-                                                </button>
-                                                </Link>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-rigth text-sm font-medium">
-                                                <Link legacyBehavior href={`/users/wallet/${user.username}`} passHref>
-                                                    <a href="#" className="text-black-600 hover:text.-indigo-900">Mi Billetera</a>
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    )
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+    const columns = [            
+        {
+            name: 'Nombre',
+            selector: row => row.name ? row.name : "Nombre",
+            sortable: true
+        },
+        {
+            name:'Apellido',
+            selector: row => row.lastName ? row.lastName : "Apellido",
+            sortable: true
+        },
+        {
+            name: 'E-mail',
+            selector: row => row.email ? row.email : "E-mail",
+            sortable: true
+        },
+        {
+            name:'CUIT',
+            selector: row => row.cuit ? row.cuit : "CUIT",
+            sortable: true
+        },
+        {
+            name: 'Teléfono',
+            selector:row=>row.phone ? row.phone : "Teléfono",
+            sortable: true
+        },
+        {
+            name: 'Ciudad',
+            selector:row=>row.city ? row.city : "Ciudad",
+            sortable: true
+        },
+        {
+            name: 'Dirección',
+            selector:row=>row.direction ? row.direction : "Dirección",
+            sortable: true
+        },
+        {
+            name: 'Codigo postal',
+            selector:row=>row.postal ? row.postal : "CP",
+            sortable: true
+        },
+        {
+            name: 'Acciones',
+            cell: (row) => ( 
+                <div className="flex justify-center absolute ml-1">
+                    <Link href={`/users/${row.username}`} passHref legacyBehavior>
+                    <button onClick={() => console.log('Button clicked!')} className="ml-0 w-10 h-auto p-2font-primary font-semibold text-xs flex
+                         items-baselinetransform transition duration-500 group cursor-pointer">
+                    <FontAwesomeIcon icon={faBars} className="w-5 m-auto"/>
+                    </button>
+                    </Link>
                 </div>
+            ),
+        },
+    ]
+
+    const subHeaderComponentMemo = useMemo(() => {
+        const handleClear = () => {
+            if (filterText) {
+                setFilterText('');
+            }
+        };
+        return (
+            <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText}/>
+        );
+    }, [filterText]);
+
+ 
+    return (
+        <div className="min-h-80 max-w-12 my-4 sm:my-8 mx-auto w-full">
+             <div className="overflow-hidden">
+                <DataTable
+                    columns={columns}
+                    data={data}
+                    pagination
+                    subHeader
+                    subHeaderComponent={subHeaderComponentMemo}
+                    />
             </div>
-            <Link legacyBehavior href="/users/create" passHref>
-                <button className=" bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mt-10 ml-10 rounded w-40 sm: ml-28">
-                    Nuevo Usuario
-                </button>
-            </Link>
         </div>
-    );
+    )
 }
 
-
-export default UserList
+export default UserList;

@@ -1,4 +1,4 @@
-import { getByUsername ,save } from "services/userService";
+import { getByUsername , update } from "services/userService";
 import { useState} from "react";
 
 const UserSegurity = ({user}) => {
@@ -25,9 +25,9 @@ const UserSegurity = ({user}) => {
     
     const submit = (e) => {
         e.preventDefault();
-        save(userUpdate).then((result) => {
+        update(userUpdate).then((result) => {
             if (result.status === 202) {
-                window.location.href = '/login'
+                window.location.href = '/users/' + userUpdate.username
             }
         }); 
     }
