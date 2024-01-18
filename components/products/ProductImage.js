@@ -16,11 +16,11 @@ function ProductImage({ images, id }) {
   
   const [image,setImage]=useState(images && images.length != 0 ? images[0].link : defaultImage.link)
   const [mainImg, setMainImg] = useState(image);
-  useEffect(() => {
-    setImage(images && images.length !== 0 ? images[0].link : defaultImage.link);
-    // Utiliza el valor actualizado de "image" aquí
-    setMainImg((prevImage) => prevImage === image ? images[0].link : prevImage);
-  }, [image, images]);
+   useEffect(() => {
+    setImage(images && images.length != 0 ? images[0].link : defaultImage.link)
+    setMainImg(image)
+    
+  },)
 
 
   // const image = images && images.length != 0 ? images[0].link : defaultImage.link
