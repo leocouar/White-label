@@ -3,17 +3,17 @@ import { useDropzone } from "react-dropzone";
 import { uploadFile } from "services/fileService";
 
 const UploadFile = ({ isOpen, setIsOpen, folder }) => {
-    const [file, setFile] = useState();
-    console.log(file);
+    const [files, setFiles] = useState([]);
+    
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-        maxFiles: 1,
+        maxFiles: 10,
         accept: 'image/jpeg, image/png, image/jpg',
-        onDrop: acceptedFiles => {
-            setFile(acceptedFiles[0]);
+        onDrop: newFiles => {
+            setFiles([...files, ...newFiles]);
         }
     });
 
-    const files = acceptedFiles.map(file => (
+    const uploadedFiles = files.map(file => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
         </li>
@@ -24,7 +24,11 @@ const UploadFile = ({ isOpen, setIsOpen, folder }) => {
     }
 
     const upload = () => {
-        const type = "products"; uploadFile(type, file, folder) };
+        const type = "products";
+        files.forEach(file => {
+            uploadFile(type, file, folder);
+        });
+    };
 
     return (
         isOpen === false
@@ -58,21 +62,18 @@ const UploadFile = ({ isOpen, setIsOpen, folder }) => {
                                     <div className="mt-2">
                                         <p className="text-sm text-gray-500">
 
-                                            <section className="container">
-                                                <div {...getRootProps({ className: 'dropzone' })}>
-                                                    <input {...getInputProps()} />
-                                                    <p className="h-20 rounded text-center items-center bg-blue-100 border-2 border-dashed border-red-400">Arrastre y suelte algunos archivos aquí, o haga clic para seleccionar archivos</p>
+                                        <div className="container">
+                                            <div {...getRootProps({ className: 'dropzone' })}>
+                                                <input {...getInputProps()} />
+                                                <p className="h-20 rounded text-center items-center bg-blue-100 border-2 border-dashed border-red-400">Arrastre y suelte algunos archivos aquí, o haga clic para seleccionar archivos</p>
+                                            </div>
+                                            <aside>
+                                                <h4>Archivos: </h4>
+                                                <div className="border-2 border-dashed border-slate mx-1">
+                                                    <ul>{uploadedFiles}</ul>
                                                 </div>
-
-                                                <aside>
-                                                    <h4>Archivo: </h4>
-                                                    <div class="border-2 border-dashed border-slate mx-1">
-                                                        <ul>{files}</ul>
-                                                    </div>
-                                                </aside>
-
-
-                                            </section>
+                                            </aside>
+                                        </div>
 
                                         </p>
                                     </div>
