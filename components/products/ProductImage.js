@@ -5,51 +5,45 @@ import { faArrowLeft, faArrowRight, faTimes } from '@fortawesome/free-solid-svg-
 import logo from '../../images/default.jpeg'
 import { useSession } from "next-auth/react";
 import * as productService from 'services/productService'
+import ownerAuthorization from '../ownerAuthorization'
 
 function ProductImage({ images, id }) {
-  const defaultImage =
-  {
+  const defaultImage = {
     "url": "Image 2021-08-10 at 11.20.24 (1).jpeg",
     "link": logo,
     "main": false
   };
   
-  const [image,setImage]=useState(images && images.length != 0 ? images[0].link : defaultImage.link)
-  const [mainImg, setMainImg] = useState(image);
-   useEffect(() => {
-    setImage(images && images.length != 0 ? images[0].link : defaultImage.link)
-    setMainImg(image)
-    
-  },)
-
-
-  // const image = images && images.length != 0 ? images[0].link : defaultImage.link
-  
+  const [mainImg, setMainImg] = useState(images && images.length !== 0 ? images[0].link : defaultImage.link);
   const [delImg, setDelImg] = useState();
   const { data: session } = useSession();
   const ref = useRef();
   const [deletedModal, setDeletedModal] = useState(false);
 
   function scroll(scrollOffset) {
-    ref.current.scrollLeft += scrollOffset
+    ref.current.scrollLeft += scrollOffset;
   }
 
   function deleteProduct(img) {
-    if (deletedModal == false) {
-      setDeletedModal(!deletedModal)
+    if (!deletedModal) {
+      setDeletedModal(true);
     }
-    setDelImg(img)
+    setDelImg(img);
   }
 
   async function delImage() {
-    await productService.deletedImagen(id, delImg.url)
-    window.location.reload()
+    await productService.deletedImagen(id, delImg.url);
+    window.location.reload();
   }
 
-  return (
+  useEffect(() => {
+    // Update mainImg when images or image change
+    setMainImg(images && images.length !== 0 ? images[0].link : defaultImage.link);
+  }, [images]);
 
+  return (
     <div className="w-96 p-2 max-w-md rounded-lg border border-palette-lighter">
-      <div className="container relative  h-96">
+      <div className="container relative h-96">
         <Image
           src={mainImg}
           layout="fill"
@@ -57,45 +51,37 @@ function ProductImage({ images, id }) {
         />
       </div>
       <div className="relative flex border-t border-palette-lighter">
-
-        {
-          images.length != 0
-            ?
-            <button
-              aria-label="left-scroll"
-              className="h-32 bg-palette-lighter hover:bg-pink-200 relative left-0 z-10 opacity-75"
-              onClick={() => scroll(-300)}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className="w-3 mx-1 text-palette-primary" />
-            </button>
-            : <></>
-        }
+        {images.length !== 0 && (
+          <button
+            aria-label="left-scroll"
+            className="h-32 bg-palette-lighter hover:bg-pink-200 relative left-0 z-10 opacity-75"
+            onClick={() => scroll(-300)}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} className="w-3 mx-1 text-palette-primary" />
+          </button>
+        )}
 
         <div
           ref={ref}
           style={{ scrollBehavior: "smooth" }}
           className="flex space-x-1 w-full overflow-auto border-t border-palette-lighter"
         >
-          {
-            images.map((imgItem) => (
-              <div key={imgItem.url} className="relative w-40 h-32 flex-shrink-0 rounded-sm ">
-                <Image
-                  src={imgItem.link}
-                  layout="fill"
-                  className=""
-                  onClick={() => setMainImg(imgItem.link)}
-                  alt='Imagen de producto'
-                />
-                {
-                  session?.user?.role?.includes('ADMIN')
-                    ?
-                    <button className='absolute left-0' onClick={() => deleteProduct(imgItem)}><FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-white bg-red-500 rounded-full p-1" /></button>
-                    :
-                    <></>
-                }
-              </div>
-            ))
-          }
+          {images.map((imgItem) => (
+            <div key={imgItem.url} className="relative w-40 h-32 flex-shrink-0 rounded-sm ">
+              <Image
+                src={imgItem.link}
+                layout="fill"
+                className=""
+                onClick={() => setMainImg(imgItem.link)}
+                alt='Imagen de producto'
+              />
+              {session?.user?.role?.includes('OWNER') && (
+                <button className='absolute left-0' onClick={() => deleteProduct(imgItem)}>
+                  <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-white bg-red-500 rounded-full p-1" />
+                </button>
+              )}
+            </div>
+          ))}
         </div>
 
         {
@@ -166,4 +152,4 @@ function ProductImage({ images, id }) {
   )
 }
 
-export default ProductImage
+export default ownerAuthorization(ProductImage);
