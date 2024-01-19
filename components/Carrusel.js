@@ -42,8 +42,7 @@ function Carousel() {
       const container = containerRef.current;
       const newImgs = container.getElementsByTagName('img');
       setImgs(newImgs);
-  
-      imgs[1] && imgs[1].scrollIntoView({ block: 'nearest', inline: 'start' });
+      // imgs[1] && imgs[1].scrollIntoView({ block: 'nearest', inline: 'start' });
   
       // Añadir lógica para ajustar el height de las imágenes en pantallas pequeñas
       const imgHeight = window.innerWidth < 768 ? 'auto' : `${initialHeight}px`;
@@ -54,7 +53,6 @@ function Carousel() {
     };
   
     // Llama a la función de actualización inicial
-    updateWindowDimensions();
   
     updateWindowDimensions();
 
@@ -72,12 +70,12 @@ function Carousel() {
       imgs[imgs.length - 1].parentNode.replaceChild(temp, imgs[imgs.length - 1]);
       containerRef.current.scrollTo({ left: 0 });
 
-      imgs[1].scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'start',
-        height: '200',
-      });
+      // imgs[1].scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'nearest',
+      //   inline: 'start',
+      //   height: '200',
+      // });
     }, 5000);
 
     window.addEventListener('resize', updateWindowDimensions);
@@ -137,13 +135,25 @@ function Carousel() {
   const arrowStyle = 'absolute text-white text-2xl z-10 bg-white h-10 w-10 rounded-full opacity-75 flex items-center justify-center';
 
   const sliderControl = isLeft => (
-  <></>
-  );
+    <button
+      type="button"
+      onClick={isLeft ? () => spin(true) : () => spin()}
+      className={`${arrowStyle} ${isLeft ? 'left-2' : 'right-2'}`}
+      style={{ top: '40%' }}
+    >
+      <span role="img" aria-label={`Arrow ${isLeft ? 'left' : 'right'}`} className={'bg-slate-900'}>
+        {isLeft ? (
+          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+        ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+        )}
+      </span>
+    </button>  );
 
   const positions = [1, 2, 3];
   return (
 
-    <div style={{heightAdjust}}className="relative">
+    <div style={heightAdjust}className="relative">
       <div id="container" ref={containerRef} className="w-full overflow-hidden">
         {sliderControl(true)}
         <div className="flex" style={{ width: `${windowDimensions[1]}px` }}>
