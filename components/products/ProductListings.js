@@ -174,23 +174,21 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                         No se encontraron resultados para :  "{q.term}"
                     </p>
                 )}
-                    
-                    <button
+    
+                <button
                     style={{ zIndex: 9999 }} // Set a high z-index value
                     type="button"
                     data-mdb-ripple="true"
                     onClick={backToTopButton}
                     data-mdb-ripple-color="light"
-                    className={`
-                        z-0 shadow-lg ml-2 md:visible ease-out duration-300 sticky p-2 bg-palette-secondary animate-bounce text-white font-medium text-xs leading-tight uppercase rounded-full hover:bg-palette-sdark hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg bottom-5 right-2
-                    `}
+                    className={backToTopVisible?"z-0 shadow-lg invisible ml-2 md:visible ease-out duration-300 sticky p-2 bg-palette-secondary animate-bounce text-white font-medium text-xs leading-tight uppercase rounded-full hover:bg-palette-sdark hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg bottom-5 right-2":""}
                     id="btn-back-to-top"
                 >
                     <svg
                         aria-hidden="true"
                         focusable="false"
                         data-prefix="fas"
-                        className="w-5 h-5"
+                        className={backToTopVisible?"w-5 h-5":""}
                         role="img"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 448 512"
@@ -201,7 +199,6 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                         ></path>
                     </svg>
                 </button>
-
             </div>
      
             {isLoading ? (
