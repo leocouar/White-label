@@ -12,9 +12,9 @@ function IndexPage({ brands, categories, initialSearch, stores}) {
     <>
     <SEO title="Camara Bolivar" />
     <div className=''>
-      <div>
+      {/* <div>
         <Carrusel />
-      </div>
+      </div> */}
       <div className="w-full h-full">
         <div className='flex justify-center'>
           <Banner stores={stores} />
