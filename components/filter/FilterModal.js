@@ -107,8 +107,8 @@ function FilterModal({ filterParams, searchFunction, searchTerm, columnList, sho
 
         <div
             ref={filterElementRef}
-            className={`ml-10 flex w-64 absolute left-0 transform transition-transform ease-in-out duration-300 ${modalVisible ? "" : "-translate-x-full"}`}
-            style={{minHeight: "200vh"}}>
+            className={`flex w-64 bg-gray-100 static left-0 transform transition-transform ease-in-out duration-300 ${modalVisible ? "block" : "hidden"}`}
+            >
             <div className="text-left ">
                 <div
                     id="categoriesAndBrands"

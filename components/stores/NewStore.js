@@ -7,7 +7,7 @@ import { getByUsername } from 'services/userService';
 import { emailRegex, phoneRegex } from '../stores/FieldRegexs';
 import 'react-notifications/lib/notifications.css';
 import { NotificationManager, NotificationContainer } from 'react-notifications';
-import { data } from 'autoprefixer';
+import PhoneInputFields from '../users/PhoneInput';
 
 const NewStore = ({ users }) => {
     const { data: session, status } = useSession();
@@ -58,10 +58,10 @@ const NewStore = ({ users }) => {
         let errorDetected = false;
 
         //Si hay algun error, se muestra en pantalla
-        if (!name.trim()) {
+        if (setErrName(!name.trim())) {
             errorDetected = true;
-            setErrName(true);
         }
+        
         if (!description.trim()) {
             errorDetected = true;
             setErrDesc(true);
@@ -176,7 +176,6 @@ const NewStore = ({ users }) => {
     }
 
 
-
     const editNewOwner = (value) => {
         setErrNewOwn(false);
         setErrRepOwn(false);
@@ -289,20 +288,10 @@ const NewStore = ({ users }) => {
 
                 {/*TELEFONO*/}
                 <div className="w-full">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold"
-                        htmlFor="telephone">Tel&eacute;fono:</label>
-                    <p className="text-xs text-gray-400">Podrá ser utilizado como contacto de WhatsApp</p>
-                    <div className="flex items-center mb-3">
-                        <span className="absolute text-gray-500 pl-3">+54 9</span>
-                        <input
-                            type="text"
-                            id="telephone"
-                            className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 pl-16 pr-3 leading-tight focus:outline-none focus:bg-white"
-                            placeholder="Ejemplo: 2314123456"
-                            value={telephone}
-                            onChange={(e) => setTelephone(e.target.value)}
-                        />
-                    </div>
+                    <PhoneInputFields
+                        telephone={telephone}
+                        setTelephone={setTelephone}
+                    ></PhoneInputFields>
                     {errTel && <p className={`text-red-500 text-xs italic`}>
                         "Ingrese su número sin el 0 y sin el 15, y sin guiones en el medio"
                     </p>}

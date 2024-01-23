@@ -32,13 +32,14 @@ const ProductCatalog = ({ brands, categories }) => {
         </div>
       )}
            {initialSearch && (
-        <div className='w-4/5 ml-auto h-full' style={{minHeight: "200vh"}}>
+        <div className='flex relative w-full h-full'>
         <ProductListings
           brands={brands}
           categories={categories}
           initialSearch={initialSearch}
           initialTerm={query}
           showFilters={true}
+          className="static right-0"
         />
         </div>
       )}

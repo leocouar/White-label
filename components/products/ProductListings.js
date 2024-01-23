@@ -141,7 +141,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
       }, [])
 
       return (        
-        <div className="">
+        <div className="flex">
             <div ref={productListRef}></div>
             <FilterModal
                 filterParams={filterParams}
@@ -149,6 +149,7 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 searchTerm={initialTerm}
                 columnList={columnList}
                 showFilters={showFilters}
+                className="static left-0"
             ></FilterModal>
   
             
@@ -175,7 +176,6 @@ function ProductListings({ brands, categories, initialSearch, initialTerm = "", 
                 )}
     
                 <button
-                    style={{ zIndex: 9999 }} // Set a high z-index value
                     type="button"
                     data-mdb-ripple="true"
                     onClick={backToTopButton}
