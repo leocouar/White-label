@@ -12,11 +12,11 @@ const WhatsAppButton = ({ phoneNumber, message, actionPostRedirect }) => {
     return (
         <div>
             <button
-                className='flex items-center text-white border-white border rounded-xl p-2 text-lg w-full'
+                className='h-11 flex items-center text-white border-black border rounded-lg p-2 text-md w-full'
                 onClick={handleWhatsAppClick}
                 style={{ backgroundColor: "rgb(81,203,95)" }}
             >
-                <img src={logo.src} style={{ width: "3rem" }} alt="WhatsApp Logo" className="mr-2" />
+                <img src={logo.src} style={{ width: "2rem" }} alt="WhatsApp Logo" className="mr-2" />
                 <b>Consultar por WhatsApp</b>
             </button>
         </div>
