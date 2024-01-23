@@ -6,7 +6,7 @@ import 'react-notifications/lib/notifications.css';
 import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
 import * as sizesService from 'services/sizeService'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ownerAuthorization from "@/components/ownerAuthorization";
 import SEO from "@/components/SEO";
 

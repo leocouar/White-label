@@ -37,7 +37,7 @@ function ProductImage({ images, id }) {
   }
 
   useEffect(() => {
-    // Update mainImg when images or image change
+  
     setMainImg(images && images.length !== 0 ? images[0].link : defaultImage.link);
   }, [images]);
 

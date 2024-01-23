@@ -6,7 +6,7 @@ function AuthorizationWrapper({ children }) {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
-    // Render loading state if session is still loading
+  
     return <p>Loading...</p>;
   }
 
