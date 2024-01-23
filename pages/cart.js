@@ -6,10 +6,14 @@ import { useCartContext, useCleanCartContext } from '@/context/Store'
 import { buyWithPoints, createCheckout, getPreference } from "../services/productService";
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/utils/Loading";
-import { getSession } from "next-auth/react";
+import { getSession } from 'next-auth/react'
 import { getPoints } from "../services/walletService";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useSession } from 'next-auth/react'
+import MercadoPago from '@/components/mercadoPago/MercadoPago'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArchive, faMoneyBill, faNewspaper } from "@fortawesome/free-solid-svg-icons";
 
 
 function CartPage({ myPoints, user }) {
@@ -24,33 +28,26 @@ function CartPage({ myPoints, user }) {
     const [totalAmount, setTotalAmount] = useState(0)
     const [items, setItems] = useState(cart.length);
 
-    useEffect(() => {
-        let total = cart.reduce((a, v) => a + v.price, 0);
-        setTotalAmount(total);
-    }, [cart]);
+
 
     useEffect(() => {
+        let total = cart.reduce((a, v) => a + v.price * v.quantity, 0);
+        total = total.toFixed(2);
+        setTotalAmount(total);
         setItems(cart.length);
     }, [cart]);
 
 
+
     const preparePreference = () => {
         setLoading(true);
-        getPreference(cart).then((res) => {
+        getPreference(cart, session.user.username).then((res) => {
             setPreference(res.data);
             setLoading(false);
         });
     }
 
-    const handleCheckout = () => {
-        setLoading(true);
-        createCheckout(cart).then((res) => {
-            setCheckout(res.data);
-            setLoading(false);
-        });
-    }
-
-    const handleCreditPoints = () => {
+    /*const handleCreditPoints = () => {
         setLoading(true);
         let walletDiscount = {
             "username": user.username,
@@ -62,23 +59,45 @@ function CartPage({ myPoints, user }) {
             router.push('/users/wallet')
             cleanCart();
         });
-    }
+    }*/
+    const [zoomFactor, setZoomFactor] = useState(1);
+
+    useEffect(() => {
+      const handleResize = () => {
+        const screenWidth = window.innerWidth;
+        if (screenWidth < 320) {
+            setZoomFactor(0.55);
+        } else if (screenWidth < 380) {
+          setZoomFactor(0.65);
+        } else if (screenWidth < 576) {
+          setZoomFactor(0.75);
+        } else {
+          setZoomFactor(1);
+        }
+      };
+  
+      handleResize();
+  
+      window.addEventListener('resize', handleResize);
+  
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
 
     return (
-
-        <div className='bg-blue-100 lg:px-6'>
-            <div className='flex bg-white  sm:content-start '>
-                <div className="bg-white mx-auto mb-5">
-                    <SEO title="Tu Compra"/>
+        <div className='bg-white lg:px-6 flex justify-center items-center'>
+            <div className='flex sm:content-start ' style={{ transform: `scale(${zoomFactor})` }}>
+                <div className="sm:px-10 bg-white mx-auto">
+                    <SEO title={pageTitle} />
                     <PageTitle text="Tu Compra" />
-
                     {
                         totalAmount == 0 && cart.length >= 1
                             ?
                             <div
-                                className="flex items-center justify-center m-auto w-3/6 bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-center text-red-700"
+                                className="flex items-center justify-center m-auto w-3/6 bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-center text-red-700 mb-3"
                                 role="alert">
-                                Encontramos el item en el carro con importes igual a CERO !!
+                                ¡Encontramos el item en el carro con importes igual a cero!
                             </div>
                             :
                             <></>
@@ -99,16 +118,30 @@ function CartPage({ myPoints, user }) {
                                 <CartTable
                                     cart={cart}
                                 />
+                                <h1 className="leading-relaxed font-primary text-2xl text-center text-palette-primary py-2 sm:py-4">
+                                    Precio total: ${totalAmount}
+                                </h1>
                                 <div className="max-w-sm mx-auto space-y-4 px-2">
                                     <BackToProductButton />
                                     {
+                                        preference != null
+                                            ?
+                                            <MercadoPago preference={preference} />
+                                            :
+                                            <>
+                                                <a onClick={preparePreference}
+                                                    aria-label="checkout-products"
+                                                    className="bg-blue-500 text-white text-lg font-primary font-semibold pt-2 pb-1 leading-relaxed flex cursor-pointer justify-center items-center focus:ring-1 focus:ring-palette-light focus:outline-none w-full hover:bg-blue-600 rounded-sm"
+                                                >Pagar con Mercado Pago</a>
+                                            </>
+                                    }
+                                    `                               {
                                         loading
                                             ?
                                             <Loading message={"Espere un momento por favor"} />
                                             :
                                             <></>
                                     }
-
                                 </div>
                             </>
                     }
@@ -141,4 +174,3 @@ export async function getServerSideProps(context) {
         },
     }
 }
-

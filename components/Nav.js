@@ -4,6 +4,7 @@ import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDoorOpen, faSignOutAlt, faBars, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import logo from "/images/camara_bolivar_logo.png";
+import mobile_logo from "/images/camara_bolivar_logo_mobile.png";
 import { useSession, signOut } from "next-auth/react";
 import Loading from "./utils/Loading";
 import NavSearch from "./ProductSearch/ProductSearch";
@@ -41,6 +42,10 @@ function Nav() {
       router.push("/login");
     };
   };
+
+  useEffect(()=>{
+    console.log(session)
+  },[session])
 
   useEffect(() => {
     const changeColor = () => {
@@ -103,7 +108,13 @@ function Nav() {
             <div className="flex sm:block cursor-pointer flex-row items-center">
               <img
                 src={logo.src}
-                className={`${searchFocused ? "hidden sm:block" : ""} w-32 mx-16 ml-8 md:mx-70 lg:mx-4 lg:w-32`}
+                className={"hidden sm:block w-32 mx-6 sm:mx-16 sm:ml-8 md:mx-70 lg:mx-4 lg:w-32"}
+              />
+              <img
+                src={mobile_logo.src}
+                className={`${searchFocused ? "hidden sm:block" : ""}
+                sm:hidden block 
+                w-24 mx-2 sm:mx-16 sm:ml-8 md:mx-70 lg:mx-4 lg:w-32`}
               />
             </div>
           </Link>
@@ -119,20 +130,20 @@ function Nav() {
               title={session ? "Sign Out" : "Sign On"}
               className="flex md:-mt-1 flex-wrap  md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary"
               onClick={handleSession}>
-              <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto" />
+              <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto cursor-pointer" />
             </div>
           </div>
 
           {/* CARRITO */}
           <div className={`${searchFocused ? "hidden sm:block" : ""} lg:order-3`}>
             <Link href="/cart" passHref>
-              <div className="flex md:-mt-1 flex-wrap  md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
+              <div className="flex md:-mt-1 flex-wrap md:ml-1 object-right sm:p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary" aria-label="cart">
                 <FontAwesomeIcon
                   className="text-palette-primary hover:text-palette-secondary h-6"
                   icon={faShoppingCart}
                 />
                 {cartItems === 0 ? null : (
-                  <div className=" text-xs bg-palette-secondary rounded-full text-white font-semibold py-1 px-2 ">
+                  <div className=" text-xs bg-palette-secondary rounded-full text-white font-semibold py-1 px-1 sm:px-2 ">
                     {cartItems}
                   </div>
                 )}
