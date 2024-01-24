@@ -43,10 +43,6 @@ function Nav() {
     };
   };
 
-  useEffect(()=>{
-    console.log(session)
-  },[session])
-
   useEffect(() => {
     const changeColor = () => {
       if (window.scrollY >= 90) {
@@ -89,8 +85,6 @@ function Nav() {
     setIsShow(false)
     isSearchFocused(e);
   }
-
-  useEffect(() => { console.log(searchFocused) }, [searchFocused])
 
   return (
     <header className="w-full sticky  lg:static top-0 z-50 bg-white">
@@ -160,7 +154,7 @@ function Nav() {
             {/* ADMINISTRACION */}
             <Link legacyBehavior href="/admin">
               <div
-                className={session?.user?.role.includes("ADMIN") ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
+                className={session?.user?.role.includes("ADMIN") ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 lg:ml-0 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
               >
                 ADMINISTRACIÓN
               </div>
@@ -169,7 +163,7 @@ function Nav() {
             {/* TUS COMERCIOS */}
             <Link legacyBehavior href="/stores/list">
               <div
-                className={session ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
+                className={session ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 lg:ml-0 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
               >
                 TUS COMERCIOS
               </div>
@@ -178,7 +172,7 @@ function Nav() {
             {/* NOSOTROS */}
             <Link legacyBehavior href="/about">
               <div
-                className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
+                className="text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 lg:ml-0 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer"
               >
                 NOSOTROS
               </div>
