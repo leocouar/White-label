@@ -20,7 +20,8 @@ const Create = () => {
         city: "",
         direction: "",
         email: ""
-    })
+    });
+    const [role, setRole] = useState("");
 
     const [passwrdControl, setPasswrdControl] = useState({
         new: "",
@@ -35,6 +36,8 @@ const Create = () => {
         }));
     }, [telephone]);
 
+    useEffect(()=>{console.log(role)},[role])
+
     const handleChange = async (e) => {
         await setUser(prevUser => ({
             ...prevUser,
@@ -42,12 +45,17 @@ const Create = () => {
         }));
     }
 
+    const handleChangeRole = async (e) => {
+        const role = e.target.value;
+        await setRole(role);
+    }
+
     useEffect(() => {
         if (failedSave) {
             validate();
         }
     }, [user, passwrdControl, failedSave]);
-    
+
 
     const handleChangePass = async (e) => {
         await setPasswrdControl(prevPasswrdControl => ({
@@ -74,6 +82,7 @@ const Create = () => {
     const [errFormatPass, setErrFormatPass] = useState(false);
     const [errRepPass, setErrRepPass] = useState(false);
     const [errMismatch, setErrMismatch] = useState(false);
+    const [errRole, setErrRole] = useState(false);
 
     const validate = () => {
         let errorDetected = false;
@@ -90,9 +99,10 @@ const Create = () => {
             { check: () => !user.city.trim(), setErr: setErrCity },
             { check: () => !user.direction.trim(), setErr: setErrAdd },
             { check: () => !passwrdControl.new.trim(), setErr: setErrPass },
-            { check: () => passwrdControl.new && !passwrdRegex.test(passwrdControl.new), setErr: setErrFormatPass},
+            { check: () => passwrdControl.new && !passwrdRegex.test(passwrdControl.new), setErr: setErrFormatPass },
             { check: () => !passwrdControl.repeat.trim(), setErr: setErrRepPass },
-            { check: () => passwrdControl.new !== passwrdControl.repeat, setErr: setErrMismatch }
+            { check: () => passwrdControl.new !== passwrdControl.repeat, setErr: setErrMismatch },
+            { check: () => !role.trim(), setErr: setErrRole}
         ];
 
         validations.forEach(validation => {
@@ -112,11 +122,16 @@ const Create = () => {
         router.push("/users")
     }
 
+    //A partir de ahora se sube un usuario con rol en lugar de un usuario solitario.
     const submit = (e) => {
         e.preventDefault();
         const errorDetected = validate();
         if (!errorDetected) {
-            save(user).then((result) => {
+            const userUpload = {
+                role: role,
+                user: user
+            }
+            save(userUpload).then((result) => {
                 if (result.status === 202) {
                     window.location.href = '/users'
                 }
@@ -278,7 +293,7 @@ const Create = () => {
                                 Complete su dirección.
                             </p>}
                         </div>
-                    </div>
+                    </div>                    
                     <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -295,6 +310,30 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su código postal."
                             />
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mb-6">
+                        <div className="w-full px-3">
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="grid-password">
+                                Rol
+                            </label>
+                            <select
+                                onChange={handleChangeRole}
+                                name={"role"}
+                                onBlur={handleBlur}
+                                value={role}
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="role"
+                            >
+                                <option value={""}>Seleccionar</option>
+                                <option value={"ADMIN"}>Administrador</option>
+                                <option value={"OWNER"}>Propietario</option>
+                                <option value={"CUSTOMER"}>Cliente</option>
+                            </select>
+                            {errRole && <p className="text-red-500 text-xs italic">
+                                Escoja un rol por favor.
+                            </p>}
                         </div>
                     </div>
                     <div className="flex  flex-wrap -mx-3 mb-6">
@@ -346,6 +385,8 @@ const Create = () => {
                             8 a 16 caracteres al menos 1 mayúscula y 1 dígito
                         </p>
                     </div>
+
+
 
                     <div className="flex space-x-2 mt-8 justify-end">
                         <button type="button" className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"
