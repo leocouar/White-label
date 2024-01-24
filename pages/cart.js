@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react'
 import MercadoPago from '@/components/mercadoPago/MercadoPago'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArchive, faMoneyBill, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+import PriceFormatter from '@/components/products/PriceFormat'
 
 
 function CartPage({ myPoints, user }) {
@@ -27,8 +28,6 @@ function CartPage({ myPoints, user }) {
     const { data: session, status } = useSession()
     const [totalAmount, setTotalAmount] = useState(0)
     const [items, setItems] = useState(cart.length);
-
-
 
     useEffect(() => {
         let total = cart.reduce((a, v) => a + v.price * v.quantity, 0);
@@ -119,7 +118,7 @@ function CartPage({ myPoints, user }) {
                                     cart={cart}
                                 />
                                 <h1 className="leading-relaxed font-primary text-2xl text-center text-palette-primary py-2 sm:py-4">
-                                    Precio total: ${totalAmount}
+                                    Precio total: ${PriceFormatter(totalAmount)}
                                 </h1>
                                 <div className="max-w-sm mx-auto space-y-4 px-2">
                                     <BackToProductButton />
