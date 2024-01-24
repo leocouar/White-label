@@ -12,7 +12,7 @@ const Login = ({ csrfToken }) => {
   return (
     <>
       <SEO title="Ingresa tu e-mail o usuario" />
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-full flex items-center justify-center sm:px-6 lg:px-8">
         <LoginForm
           credentials={credentials}
           setCredentials={setCredentials}

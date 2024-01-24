@@ -25,7 +25,7 @@ const VistaComercio = ({ commerceData }) => {
   const [errEmail, setErrEmail] = useState(false);
   const [errTel, setErrTel] = useState(false);
   const [errName, setErrName] = useState(false);
-  const [errAdress, setErrAdress] = useState(false);
+  const [errDescr, setErrDescr] = useState(false);
   const [erraddress, setErraddress] = useState(false);
   const [errSchedule, setErrSchedule] = useState(false);
 
@@ -115,11 +115,11 @@ const VistaComercio = ({ commerceData }) => {
       setErraddress(false);
     }
 
-    if (!storeToUpdate.Adress || !storeToUpdate.Adress.trim()) {
-      setErrAdress(true);
+    if (!storeToUpdate.description || !storeToUpdate.description.trim()) {
+      setErrDescr(true);
       missingFields.push("Descripción");
     } else {
-      setErrAdress(false);
+      setErrDescr(false);
     }
 
     if (!storeToUpdate.schedule || !storeToUpdate.schedule.trim()) {
@@ -161,7 +161,7 @@ const VistaComercio = ({ commerceData }) => {
           <div className="flex items-center mb-4">
             <div className="mr-16">
               <h1 className="text-4xl font-semibold mb-4">"{storeToShow.name}"</h1>
-              <h2 className="text-2xl italic mb-4">{storeToShow.Adress}</h2>
+              <h2 className="text-2xl italic mb-4">{storeToShow.description}</h2>
             </div>
             <img src={currentLogoURL}
               alt={storeToShow.name}
@@ -210,7 +210,6 @@ const VistaComercio = ({ commerceData }) => {
           </div>
 
           {/*MODAL TESTING*/}
-          <div className="min-h-screen flex items-center justify-center">
             <DeleteWarning isOpen={isModalOpen} onClose={closeWarning}>
               <h1 className="text-4xl font-bold mb-4 text-center">¡ATENCIÓN!</h1>
               <h3 className="text-lg mb-4 text-center">
@@ -222,15 +221,14 @@ const VistaComercio = ({ commerceData }) => {
               </h3>
               <p className="mb-4 text-center">¿Está seguro de que desea continuar?</p>
               <div className="flex justify-center">
-                <button onClick={handleDelClick} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
+                <button onClick={handleDelClick} className="bg-red-500 hover:bg-red-400 text-white px-4 py-2 rounded mr-2">
                   Confirmar
                 </button>
-                <button onClick={closeWarning} className="bg-gray-500 text-white px-4 py-2 rounded">
+                <button onClick={closeWarning} className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded">
                   Cancelar
                 </button>
               </div>
             </DeleteWarning>
-          </div>
           {/*MODAL TESTING*/}
 
         </div>)}
@@ -257,14 +255,14 @@ const VistaComercio = ({ commerceData }) => {
                 <label className="block text-sm font-medium mb-1">Descripci&oacute;n:</label>
                 <input
                   type="text"
-                  value={storeToUpdate?.Adress}
+                  value={storeToUpdate?.description}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border rounded-md"
-                  id="Adress"
-                  name="Adress"
+                  id="description"
+                  name="description"
                   maxLength={50}
                 />
-                {errAdress && <p className="text-red-500 text-xs italic">Falta completar este campo</p>}
+                {errDescr && <p className="text-red-500 text-xs italic">Falta completar este campo</p>}
               </div>
 
               <div className="w-full md:w-1/2 px-3 mb-4">
