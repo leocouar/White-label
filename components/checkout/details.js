@@ -16,18 +16,10 @@ const Details = ({ checkout }) => {
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Cantidad
                         </th>
-                        {/*<th scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Talle
-                        </th>*/}
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Precio Unitario
                         </th>
-                        {/*<th scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Estado
-                        </th>*/}
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Total
@@ -59,15 +51,9 @@ const Details = ({ checkout }) => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {p.quantity}
                                     </td>
-                                    {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {p.size?.name}
-                                    </td>*/}
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         $ {p.product.price}
                                     </td>
-                                    {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {p.status}
-                                    </td>*/}
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         $ {parseFloat(p.price*p.quantity).toFixed(2)}
                                     </td>

@@ -30,10 +30,6 @@ const List = () => {
         setLoading(false)
     };
 
-    useEffect(()=>{
-        console.log(content)
-    },[content])
-
     const fetchData = async () => {
         try {
             setLoading(true);

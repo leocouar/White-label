@@ -40,7 +40,7 @@ function CartPage({ myPoints, user }) {
 
     const preparePreference = () => {
         setLoading(true);
-        getPreference(cart, session.user.username).then((res) => {
+        getPreference(cart, session?.user?.username).then((res) => {
             setPreference(res.data);
             setLoading(false);
         });
@@ -163,8 +163,8 @@ export async function getServerSideProps(context) {
             props: {},
         };
     }
-    const myPoints = await getPoints(session.user.username);
-    const user = session.user;
+    const myPoints = await getPoints(session?.user?.username);
+    const user = session?.user;
     return {
         props: {
             myPoints,

@@ -8,7 +8,6 @@ import { getCartSubTotal } from '@/utils/helpers'
 import logo from "../../images/default.jpeg";
 import Image from 'next/image'
 import React from 'react'
-import WhatsAppButton from '../whatsapp/WhatsAppButton'
 
 function CartTable({ cart }) {
   const updateCartQuantity = useUpdateCartQuantityContext()
@@ -21,18 +20,6 @@ function CartTable({ cart }) {
     "main": false
   };
 
-  //Genera el mensaje de WhatsApp a enviar...
-  /*const getMessage = (products) => {
-    let message = "¡Hola!, me comunico para comprar los siguientes productos: \n";
-
-    products.forEach((product) => {
-      message = message.concat("- ", product.quantity, " ", product.productTitle, '\n');
-    });
-    return message;
-  };*/
-
-
-  //Items separados por tienda, asi despues se podra hacer el pedido de multiples items a la vez
   const gropeItems = cart.reduce((groups, item) => {
     const storeName = item.store?.name;
 
@@ -42,14 +29,11 @@ function CartTable({ cart }) {
         name: storeName,
         items: [],
         logoLink: item.store?.logo ? item.store.logo.link : null
-        //telephone: item.store?.telephone || null,
-        //message: ""
       });
     }
 
     const store = groups.find(store => store.name === storeName);
     store.items.push(item);
-    //store.message = getMessage(store.items)
 
     return groups;
   }, []);
@@ -67,7 +51,6 @@ function CartTable({ cart }) {
 
   const eraseStoreGroup = (i) => {
     const updatedGroupedItems = [...groupedItems];
-    console.log(updatedGroupedItems[i])
     const storeRemoved = updatedGroupedItems.splice(i, 1)[0];
     storeRemoved.items.map((removed) => {
       updateCartQuantity(removed.id, 0);
@@ -75,8 +58,6 @@ function CartTable({ cart }) {
 
     setGroupedItems(updatedGroupedItems);
   };
-
-
 
   return (
     <>
@@ -172,20 +153,6 @@ function CartTable({ cart }) {
                   </tr>
                 )
               ))}
-              {
-                /*<tr>
-                  <td colSpan="5" className="text-center font-primary font-semibold px-6 py-2">
-                    <div className="flex items-center justify-center">
-                      <WhatsAppButton
-                        key={index}
-                        phoneNumber={groupedItems[index].telephone}
-                        message={groupedItems[index].message}
-                        actionPostRedirect={() => eraseStoreGroup(index)}
-                      />
-                    </div>
-                  </td>
-                </tr>*/
-              }
             </tbody>
           </table>
         </React.Fragment>

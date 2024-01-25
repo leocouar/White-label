@@ -81,7 +81,7 @@ export function CartProvider({ children }) {
     setisLoading(false)
   }
 
-  const emptyCart = async () => {
+  const emptyCart = () => {
     setCart([])
   }
 

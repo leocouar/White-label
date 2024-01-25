@@ -40,13 +40,12 @@ function NavSearch({ setSearchFocus }) {
     };
   }, []);
 
-  // Función para redirigir a los resultados de búsqueda
   function redirectToSearchResults() {
     if (searchTerm.trim() !== '') {
       router.push(`/catalogue/ProductCatalog?query=${searchTerm}`);
     }
   }
-  // Handle 'Enter' key press for form submission
+
   const handleKeyPress = async (e) => {
     if (e.key === 'Enter' && isFocused) {
       await setSearchTerm(e.target.value);
@@ -59,7 +58,6 @@ function NavSearch({ setSearchFocus }) {
     if (isFocused) {      
       searchInputRef.current.focus();
     }
-    console.log(isFocused);
   }, [isFocused])
 
   return (
