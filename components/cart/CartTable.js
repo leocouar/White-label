@@ -8,6 +8,7 @@ import { getCartSubTotal } from '@/utils/helpers'
 import logo from "../../images/default.jpeg";
 import Image from 'next/image'
 import React from 'react'
+import checkInputNumber from '../NumberInput'
 
 function CartTable({ cart }) {
   const updateCartQuantity = useUpdateCartQuantityContext()
@@ -43,7 +44,6 @@ function CartTable({ cart }) {
     setGroupedItems(gropeItems)
     setSubtotal(getCartSubTotal(cart))
   }, [cart])
-
 
   const updateItem = (id, quantity) => {
     updateCartQuantity(id, quantity)
@@ -119,11 +119,7 @@ function CartTable({ cart }) {
                         maxLength={2}
                         onChange={(e) => updateItem(item.id, e.target.value)}
                         className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
-                        onKeyDown={(event) => {
-                          if (!/[0-9]/.test(event.key)) {
-                            event.preventDefault();
-                          }
-                        }}
+                        onKeyDown={(event) => checkInputNumber(event, item.quantity, 2)}
                       />
                     </td>
                     <td className="font-primary text-base font-light px-2 sm:px-6 py-2">

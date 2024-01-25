@@ -46,19 +46,6 @@ function CartPage({ myPoints, user }) {
         });
     }
 
-    /*const handleCreditPoints = () => {
-        setLoading(true);
-        let walletDiscount = {
-            "username": user.username,
-            "checkoutId": checkout.id,
-        };
-        buyWithPoints(walletDiscount).then((res) => {
-            setCheckout(res.data);
-            setLoading(false);
-            router.push('/users/wallet')
-            cleanCart();
-        });
-    }*/
     const [zoomFactor, setZoomFactor] = useState(1);
 
     useEffect(() => {
@@ -132,6 +119,10 @@ function CartPage({ myPoints, user }) {
                                                     aria-label="checkout-products"
                                                     className="bg-blue-500 text-white text-lg font-primary font-semibold pt-2 pb-1 leading-relaxed flex cursor-pointer justify-center items-center focus:ring-1 focus:ring-palette-light focus:outline-none w-full hover:bg-blue-600 rounded-sm"
                                                 >Pagar con Mercado Pago</a>
+                                                <a onClick={cleanCart}
+                                                    aria-label="checkout-products"
+                                                    className="bg-gray-500 text-white text-lg font-primary font-semibold pt-2 pb-1 leading-relaxed flex cursor-pointer justify-center items-center focus:ring-1 focus:ring-palette-light focus:outline-none w-full hover:bg-gray-600 rounded-sm"
+                                                >Vaciar carrito</a>
                                             </>
                                     }                               {
                                         loading
