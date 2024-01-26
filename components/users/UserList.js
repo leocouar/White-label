@@ -35,11 +35,6 @@ const UserList = ({users}) => {
             sortable: true
         },
         {
-            name:'CUIT',
-            selector: row => row.cuit ? row.cuit : "CUIT",
-            sortable: true
-        },
-        {
             name: 'Teléfono',
             selector:row=>row.phone ? row.phone : "Teléfono",
             sortable: true
@@ -54,11 +49,16 @@ const UserList = ({users}) => {
             selector:row=>row.direction ? row.direction : "Dirección",
             sortable: true
         },
-        {
-            name: 'Codigo postal',
-            selector:row=>row.postal ? row.postal : "CP",
-            sortable: true
-        },
+                {
+                name: 'Puntos',
+                cell: (row) => (
+                    <Link href={`/users/wallet/${row.username}`} passHref legacyBehavior>
+                        <a className="text-blue-500 underline">Puntos</a>
+                    </Link>
+                ),
+            },
+        
+          
         {
             name: 'Acciones',
             cell: (row) => ( 

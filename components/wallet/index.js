@@ -26,10 +26,21 @@ const WalletOfUser = ({ walletOfUser, user }) => {
     const [filterText, setFilterText] = useState('');
     const filteredItems = walletOfUser && walletOfUser.filter(item => filterText == '' || filterText.toLowerCase().includes(item.id));
     
-    useEffect(async () => {
-        walletOfUser.length == 0 ? setIsWallet(false) : setIsWallet(true);
-        setPoints(await getPoints(user.username))
-    }, [walletOfUser]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (walletOfUser.length === 0) {
+                setIsWallet(false);
+            } else {
+                setIsWallet(true);
+            }
+    
+            const points = await getPoints(user.username);
+            setPoints(points);
+        };
+    
+        fetchData();
+    }, [walletOfUser, user.username]);
+    
 
 
     const columns = [
@@ -80,7 +91,7 @@ const WalletOfUser = ({ walletOfUser, user }) => {
             }
         };
         return (
-            <FilterComponent  onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+            <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
         );
     }, [filterText]);
 
@@ -115,10 +126,10 @@ const WalletOfUser = ({ walletOfUser, user }) => {
             {user.twins
                 ?
                 <div id="myDiv">
-                    <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden cursor-pointer transition-all duration-500 bg-gradient-to-r from-blue-500 to-green-400 p-4 py-3 px-5'>
+                    <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden cursor-pointer transition-all duration-500 bg-gradient-to-r from-green-500 to-blue-500 p-4 py-3 px-5'>
                         <div className="relative flex justify-between">
                             <div>
-                                <h2 className='relative text-left font-bold text-xl decoration-pink-500'>Tarjeta Mellizos</h2>
+                                <h2 className='relative text-left font-bold text-xl decoration-pink-500'>Tarjeta de puntos</h2>
                                 <h2 className="relative italic">20% de descuento</h2>
 
                             </div>
@@ -159,7 +170,7 @@ const WalletOfUser = ({ walletOfUser, user }) => {
            {
            session?.user?.role?.includes('ADMIN')
           ? 
-            <div className="flex justify-between m-auto w-80 h-10">
+            <div className="flex justify-between m-auto w-80 h-10  rounded">
                 <a
                     onClick={() => setRemovePoints(true)}
                     aria-label="back-to-products"
