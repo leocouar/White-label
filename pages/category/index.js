@@ -8,9 +8,9 @@ import SEO from "@/components/SEO";
 const Category = ({categories}) => {
   return (
     <>
-    <SEO title="Categorias" />
+    <SEO title="Artículos" />
         <div className="mx-auto max-w-6xl">
-            <PageTitle text="Categorias"/>
+            <PageTitle text="Artículos"/>
             <CategoriesList categories={categories}/>
         </div>
     </>

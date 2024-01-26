@@ -5,7 +5,7 @@ import SEO from "@/components/SEO";
 const Admin = () => {
     return (
         <>
-        <SEO title="Administracion"/>
+        <SEO title="Administración"/>
         <div className="antialiased bg-blue-200 w-full font-ssans flex flex-wrap">
             <div className="flex flex-wrap m-2 w-full justify-self-center grid grid-cold-1 md:grid-cols-2 container mx-auto">
                 {/*

@@ -10,7 +10,7 @@ import SEO from '@/components/SEO';
 function IndexPage({ brands, categories, initialSearch, stores}) {
   return (
     <>
-    <SEO title="Camara Bolivar" />
+    <SEO title="Cámara Bolívar" />
     <div className=''>
       <div>
         <Carrusel />

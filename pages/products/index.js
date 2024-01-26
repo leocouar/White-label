@@ -9,9 +9,9 @@ const ProductsManager = ({products}) => {
 
     return (
         <>
-        <SEO title="Articulos" />
+        <SEO title="Artículos" />
         <div className="items-center mx-auto bg-white max-w-6xl relative">
-            <PageTitle text="Articulos" />
+            <PageTitle text="Artículos" />
             <Link legacyBehavior href="/products/create" passHref>
                 <div className="absolute top-0 right-0 mt-4 mr-4">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
