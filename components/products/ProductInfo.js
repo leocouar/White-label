@@ -3,7 +3,7 @@ import Price from '@/components/products/Price'
 function ProductInfo({ title, description, price }) {
   return (
     <div className=" font-primary">
-      <h1 className="leading-relaxed font-extrabold text-3xl text-palette-primary py-2 sm:py-4">
+      <h1 className="leading-relaxed font-extrabold text-3xl text-palette-primary py-2 sm:py-4 text-ellipsis">
         {title}
       </h1>
       <p className="font-medium text-lg">
