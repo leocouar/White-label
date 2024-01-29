@@ -2,12 +2,21 @@ import ProductSection from '@/components/products/ProductSection'
 import Gallery from "@/components/products/Gallery";
 import {getProduct,getProductsRelated} from "../../../services/productService";
 import SEO from '@/components/SEO';
+import useAuthorization from "../../../hooks/useAuthorization";
 
 function Index({ productData ,related}) {
+    const storeid= productData.store.id
+    const {Auth} = useAuthorization(storeid)
+    console.log(Auth);
 
     return (
         <>
-        <SEO title={productData.name} />
+        {Auth
+        ?
+        <div className="w-5 h-5 bg-green-500"></div>
+        :
+        <div className="w-5 h-5 bg-red-500"></div>
+        }
         <section>
             <div className="justify-center">
                 <ProductSection productData={productData} />
