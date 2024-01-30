@@ -87,7 +87,9 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
         if (form.store.id === "" && admin) {
             errors.store = "El campo 'Comercio' es requerido";
         }
-
+        if (!form.points.trim()) {
+            errors.points = "El campo 'Puntos' es requerido";
+        }
         /*
         if (!form.sizes[0] || form.sizes[0].id === 0) {
             errors.sizes = "El campo 'Sizes' es requerido";
@@ -101,9 +103,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
             errors.stock = "El campo 'Stock' es requerido";
         }
 
-        if (!form.points.trim()) {
-            errors.points = "El campo 'Puntos' es requerido";
-        }
+      
         */
         return errors;
     };
@@ -215,6 +215,24 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                 </div>
                                 {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
                             </div>
+                        </div>
+                        <div className="w-full">
+                            <label className="block uppercase block tracking-wide text-gray-700 text-xs font-bold mb-3"
+                                htmlFor="puntos">
+                                Puntos de producto
+                            </label>
+                            <input
+                                autoComplete="off"
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="puntos" type="number"
+                                placeholder="Puntos del producto"
+                                name="points"
+                                value={form.points}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                required
+                            />
+                            {errors.points && <p className={`text-red-500 text-xs italic`}>{errors.points}</p>}
                         </div>
                         {/* <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
