@@ -157,6 +157,7 @@ const Update = ({product, brands, categories, sizes}) => {
                             value={data.name}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            maxLength={120}
                             required
                         /> 
                         {errors.name &&  <p className={`text-red-500 text-xs italic`}>{errors.name}</p>}
@@ -262,7 +263,7 @@ const Update = ({product, brands, categories, sizes}) => {
                 <div className="flex flex-wrap -mx-3 mb-2">
                     <div className="w-full md:w-64 px-3 mb-6 md:mb-0">
                         <div>
-                            <label htmlFor="price" className="block text-sm font-medium text-palette-primary">
+                            <label htmlFor="price" className="block text-xs font-bold text-palette-primary mb-2">
                                 PRECIO*
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
@@ -295,7 +296,7 @@ const Update = ({product, brands, categories, sizes}) => {
 
                     </div>
                     {/* <div className="w-full md:ml-12 md:w-64 px-3 mb-6 md:mb-0">
-                        <label className="block text-sm font-medium text-palette-primary"
+                        <label className="block text-xs font-bold text-palette-primary mb-3"
                                htmlFor="stock">
                             STOCK
                         </label>

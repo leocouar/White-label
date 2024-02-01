@@ -167,6 +167,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                 value={form.name}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                maxLength={120}
                                 //required
                             />
                             {errors.name && <p className={`text-red-500 text-xs italic`}>{errors.name}</p>}
@@ -268,8 +269,23 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                             </select>
                             {errors.brand && <p className={`text-red-500 text-xs italic`}>{errors.brand}</p>}
                         </div>
+                        <div className={`${admin ? "w-full" : "hidden"}`}>
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                                htmlFor="store">
+                                Comercio*
+                            </label>
+                            <select ref={selectStore} value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
+                                <option disabled={true} value="">Seleccionar</option>
+                                {
+                                    stores && stores.map(store => (
+                                        <option value={store.id}>{store.name}</option>
+                                    ))
+                                }
+                            </select>
+                            {errors.store && <p className={`text-red-500 text-xs italic`}>{errors.store}</p>}
+                        </div>
                         <div className="w-full md:w-1/2 mb-3">
-                            <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                            <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3">
                                 Precio*
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
@@ -324,21 +340,6 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
 
                         </div>
                         </div> */}
-                        <div className={`${admin ? "w-full" : "hidden"}`}>
-                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
-                                htmlFor="store">
-                                Comercio*
-                            </label>
-                            <select ref={selectStore} value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
-                                <option disabled={true} value="">Seleccionar</option>
-                                {
-                                    stores && stores.map(store => (
-                                        <option value={store.id}>{store.name}</option>
-                                    ))
-                                }
-                            </select>
-                            {errors.store && <p className={`text-red-500 text-xs italic`}>{errors.store}</p>}
-                        </div>
                     </div>
                 </div>
 
