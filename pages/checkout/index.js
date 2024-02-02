@@ -9,9 +9,9 @@ const Index = () => {
 
     return (
         <>
-        <SEO title="Tus Compras" />
+        <SEO title="Transacciones realizadas" />
         <div className="mx-auto max-w-6xl">
-            <PageTitle text={`Tus Compras`} />
+            <PageTitle text={`Transacciones realizadas`} />
             <List/>
         </div>
         </>

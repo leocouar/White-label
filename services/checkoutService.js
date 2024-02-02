@@ -1,3 +1,4 @@
+import axios from "axios";
 
 export function findAll(page) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/checkout/search?page=${page}&size=10`;
@@ -62,3 +63,13 @@ export async function search(value) {
     }
 }
 
+
+export async function getByUser(username, page = 0, asc = true, ) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/checkout/user/${username}?asc=${asc}&page=${page}`;
+    try {
+        let response = await axios.get(fetchUrl);
+        return response.data;
+    } catch (error) {
+        throw new Error("Could not get the checkouts from the user!");
+    }
+}
