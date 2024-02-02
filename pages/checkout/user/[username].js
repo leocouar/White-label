@@ -4,6 +4,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import SEO from "@/components/SEO";
 import List from "@/components/checkout/List";
+import userAuthorization from "@/components/userAuthorization";
 
 const UserCheckouts = ({checkoutList }) => {
     const { data: session, status } = useSession();
@@ -20,4 +21,4 @@ const UserCheckouts = ({checkoutList }) => {
 
 }
 
-export default UserCheckouts;
+export default userAuthorization(UserCheckouts);
