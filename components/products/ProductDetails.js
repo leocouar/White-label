@@ -16,7 +16,7 @@ function ProductDetails({ productData}) {
 
   return (
 
-    <div className="flex py-1 flex-col justify-between w-full max-w-xs mx-auto space-y-4 min-h-128">  
+    <div className="flex py-1 flex-col justify-between max-w-xs space-y-4 min-h-128 w-60">  
       <div>
         <ProductInfo 
           title={productData.name}
