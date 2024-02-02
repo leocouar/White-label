@@ -7,7 +7,6 @@ import useAuthorization from "../../../hooks/useAuthorization";
 function Index({ productData ,related}) {
     const storeid= productData.store.id
     const {Auth} = useAuthorization(storeid)
-    console.log("El resultadoe de Hook es: ",Auth);
 
     return (
         <section>
