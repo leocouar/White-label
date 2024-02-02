@@ -49,12 +49,11 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
             id: store?.id || ""
         },
         sizes: [{
-            id: "1814" // queda '1814' hardcodeado para evitar errores de campo not null en el back, ID=1814 pertenece a sin talle tanto en produccion como en local
+            id: "1814" 
         }],
         code: "",
         stock: "",
-        points: "0", //queda '0' hardcodeado para evitar que el formulario valide error en este campo
-        promo: false,
+        points: "0", 
     }), [store?.id]);
 
     const validationsForm = (form) => {

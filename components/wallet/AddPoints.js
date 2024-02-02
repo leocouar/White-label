@@ -57,7 +57,6 @@ function addPoints({visible, onClose, user}){
     return (
         <>
             <NotificationContainer/>
-        
                 <div id="container" onClick={handleOnClose} className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center ">
                 <div className="w-auto bg-white text-sm text-palette-primary font-bold px-10 py-6 rounded mb-5">
                     <div className="m-2 text-3xl flex justify-center">Añadir Puntos</div>
