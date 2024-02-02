@@ -40,13 +40,12 @@ function NavSearch({ setSearchFocus }) {
     };
   }, []);
 
-  // Función para redirigir a los resultados de búsqueda
   function redirectToSearchResults() {
     if (searchTerm.trim() !== '') {
       router.push(`/catalogue/ProductCatalog?query=${searchTerm}`);
     }
   }
-  // Handle 'Enter' key press for form submission
+
   const handleKeyPress = async (e) => {
     if (e.key === 'Enter' && isFocused) {
       await setSearchTerm(e.target.value);
@@ -59,7 +58,6 @@ function NavSearch({ setSearchFocus }) {
     if (isFocused) {      
       searchInputRef.current.focus();
     }
-    console.log(isFocused);
   }, [isFocused])
 
   return (
@@ -74,7 +72,7 @@ function NavSearch({ setSearchFocus }) {
         onFocus={() => setIsFocused(true)}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={(e) => handleKeyPress(e)}
-        className={`border border-gray-200 ${isFocused ? "w-1/2" : "hidden sm:block sm:w-1/3"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
+        className={`border border-gray-200 ${isFocused ? " w-full sm:w-1/2 md:w-3/5 lg:w-64" : "hidden sm:block sm:w-1/3 md:w-1/4 lg:w-32"} border-r-0 ring-inset focus:ring-1 placeholder-palette-slighter font-semibold text-l p-2 my-auto rounded-xl shadow-lg outline-none transition-all ease-in duration-300 rounded-tr-none rounded-br-none`}
         placeholder="Buscar"
         id="search"
         maxLength={32}

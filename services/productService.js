@@ -134,18 +134,23 @@ export async function updateAsAPromotion(product) {
     }
 }
 
-export async function getPreference(cart) {
+export async function getPreference(cart, username) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/payment/checkout`;
-    let details = []
+    let details = [];
     cart.forEach(function(value, index, array) {
         let detail = {
             "id": value.id,
-            "quantity" : value.quantity
+            "quantity" : value.quantity,
+            "size" : value.size
         }
         details.push(detail);
     });
+    const data = {
+        username : username,
+        details : details
+    }
     try {
-        let response = await axios.post(fetchUrl, details);
+        let response = await axios.post(fetchUrl, data);
         return response;
     } catch (error) {
         throw new Error("Could not create preference!");
@@ -153,7 +158,7 @@ export async function getPreference(cart) {
 }
 
 export async function callbackPayment(result) {
-    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/payment/MP/callback` ;
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/payment/callback` ;
     try {
         let response = await axios.post(fetchUrl, result);
         return response.data;
@@ -183,7 +188,7 @@ export async function createCheckout(cart){
         let detail = {
             "id": value.id,
             "quantity" : value.quantity,
-            "size": value.size
+            "size": value.size ? value.size : null
         }
         details.push(detail);
     });
@@ -203,7 +208,7 @@ export async function createBudget(cart){
         let detail = {
             "id": value.id,
             "quantity" : value.quantity,
-            "size": value.size
+            "size": value.size ? value.size : null
         }
         details.push(detail);
     });
