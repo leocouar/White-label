@@ -22,13 +22,11 @@ function ProductImage({ images, id }) {
   function handleThumbnailClick(imgItem) {
     setMainImg(imgItem.link);
 
-    // Obtener la posición de la miniatura seleccionada en relación con el contenedor de miniaturas
     const thumbnailIndex = images.findIndex((item) => item.url === imgItem.url);
     const thumbnailContainer = ref.current;
     const thumbnailWidth = thumbnailContainer.children[thumbnailIndex].offsetWidth;
     const newPosition = thumbnailIndex * thumbnailWidth;
 
-    // Actualizar la posición del scroll para que la miniatura seleccionada esté en el centro
     thumbnailContainer.scrollTo({
       left: newPosition - thumbnailContainer.clientWidth / 2 + thumbnailWidth / 2,
       behavior: "smooth",
