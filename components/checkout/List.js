@@ -1,6 +1,6 @@
 import DataTable from 'react-data-table-component'
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,  useState } from "react";
 import { paginationComponentOptions } from "../../DataTableUtils";
 import Loading from "@/components/utils/Loading";
 import { findAll, getByUser, search } from "../../services/checkoutService";
@@ -28,10 +28,6 @@ const List = ({ user = null }) => {
         setContent(data.content);
         setLoading(false)
     };
-
-    useEffect(() => {
-        console.log(content)
-    }, [content])
 
     const fetchData = async () => {
         if (user == null) {
