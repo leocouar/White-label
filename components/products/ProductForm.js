@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { activateProduct, deleteProduct, updateAsAPromotion } from 'services/productService';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getStoresByUser } from 'services/storeService';
-import WhatsAppButton from '../whatsapp/WhatsAppButton';
+
 
 function ProductForm({ productData, image }) {
   const [quantity, setQuantity] = useState(1);
@@ -19,7 +19,7 @@ function ProductForm({ productData, image }) {
   const router = useRouter();
   const [promo, setPromo] = useState(productData?.promo);
   const [status, setStatus] = useState(productData?.deleted)
-  const wspMsj = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
+  
 
   const { data: session } = useSession()
   const [userCanEdit, setUserCanEdit] = useState(false);
@@ -183,11 +183,6 @@ function ProductForm({ productData, image }) {
                   </button>
                 </div>
             }
-
-            <WhatsAppButton
-              phoneNumber={"549" + productData?.store?.telephone}
-              message={wspMsj}
-            />
           </div>
         </div>
 

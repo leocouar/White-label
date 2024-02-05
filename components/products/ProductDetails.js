@@ -2,9 +2,10 @@ import ProductInfo from '@/components/products/ProductInfo'
 import ProductForm from '@/components/products/ProductForm'
 import logo from "../../images/default.jpeg";
 import BackToProductButton from './BackToProductButton';
-
+import WhatsAppButton from '../whatsapp/WhatsAppButton';
 
 function ProductDetails({ productData}) {
+  const wspMsj = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
     const defaultImage =
         {
             "url": "default.jpeg",
@@ -32,6 +33,10 @@ function ProductDetails({ productData}) {
       <div className=''>
         <BackToProductButton />
       </div>
+      <WhatsAppButton
+              phoneNumber={"549" + productData?.store?.telephone}
+              message={wspMsj}
+            />
     </div>
     
   )
