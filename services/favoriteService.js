@@ -34,7 +34,7 @@ export async function deleteFav(id) {
     }
 }
 
-export async function findByUser(page = 0, name = "", asc=true, username){
+export async function findByUser(page = 0, size = 10, asc=true, username){
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/favorite/user/${username}?asc=${asc}&page=${page}&size=${size}`;
     try {
         const response = await axios.get(fetchUrl);
