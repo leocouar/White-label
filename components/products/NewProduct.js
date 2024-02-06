@@ -11,7 +11,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
     const [sizeToCheck, setsizeToCheck] = useState([]);
     const [categories, setCategories] = useState()
     const [brands, setBrands] = useState()
-    const [sizes, setSizes] = useState()
+    const [sizes, setSizes] = useState([])
     const [stores, setStores] = useState();
     const [reloadStoreSel, setReloadStoreSel] = useState(false);
     const selectStore = useRef();
@@ -49,11 +49,11 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
             id: store?.id || ""
         },
         sizes: [{
-            id: "1814" // queda '1814' hardcodeado para evitar errores de campo not null en el back, ID=1814 pertenece a sin talle tanto en produccion como en local
+            id: "" //ID=1814 pertenece a sin talle en produccion
         }],
         code: "",
         stock: "",
-        points: "0", //queda '0' hardcodeado para evitar que el formulario valide error en este campo
+        points: "",
         promo: false,
     }), [store?.id]);
 
@@ -79,8 +79,6 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
         }
 
         if (form.brand.id === "") {
-            console.log(form.brand.id)
-            console.log("ERROR")
             errors.brand = "El campo 'Marcas' es requerido";
         }
 
@@ -88,11 +86,10 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
             errors.store = "El campo 'Comercio' es requerido";
         }
 
-        /*
         if (!form.sizes[0] || form.sizes[0].id === 0) {
-            errors.sizes = "El campo 'Sizes' es requerido";
+            errors.sizes = "El campo 'Talles' es requerido";
         }
-
+        /*
         if (!form.code.trim()) {
             errors.code = "El campo 'Codigo' es requerido";
         }
@@ -111,25 +108,31 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
     const { form, setForm, errors, handleChange, handleBlur, handleSubmit } =
         useForm(initialForm, validationsForm, save);
 
-    /*
+    
     const handleChangeSize = (e) => {
-        if (e.target.checked) {
-            const final = [
+        const final = Number(e.target.value)
+        if ((final !== null && e.target.value !== 'Seleccionar' && !(sizeToCheck.map(size => size.id)).includes(final))) {
+            setsizeToCheck([
                 ...sizeToCheck,
-                {
-                    "id": e.target.value
-                }
-            ];
-            setsizeToCheck(final);
-            form.sizes = final;
-        } else {
-            const sizes = sizeToCheck.filter((size) => size.id !== e.target.value);
-            setsizeToCheck(sizes);
-            form.sizes = sizes;
+                { id: final, name: sizes.find(size => size.id == final).name }
+            ]);
         }
     }
-    */
-
+    
+    const deleteSize = (e) => {
+        const value = Number(e.target.value)
+        setsizeToCheck(
+            sizeToCheck.filter(size => size.id !== value)
+            )
+        }
+        
+    useEffect(() => {
+        setForm((prevForm) => ({
+            ...prevForm,
+            sizes: sizeToCheck,
+        }));
+    }, [sizeToCheck]);
+        
     const handleChangeStore = (e) => {
         if (e.target) {
             const finalStore = {
@@ -164,6 +167,7 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                                 value={form.name}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                maxLength={120}
                                 //required
                             />
                             {errors.name && <p className={`text-red-500 text-xs italic`}>{errors.name}</p>}
@@ -186,36 +190,35 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                             {/*errors.description && <p className={`text-red-500 text-xs italic`}>{errors.description}</p>*/}
                         </div>
 
-                        <div className="w-full md:w-1/2 mb-3">
-                            <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                Precio*
-                            </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div>
-                                    <span className="text-center flex p-3 absolute text-gray-500 sm:text-sm align-middle">
-                                        $
-                                    </span>
-                                    <input
-                                        //required
-                                        type="number"
-                                        id="price"
-                                        autoComplete="off"
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 pl-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        placeholder="0.00" name="price"
-                                        value={form.price}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}                                        
-                                        maxLength="7"
-                                        onKeyDown={(event) => {
-                                            if (!/[0-9]?[0-9]?(\.[0-9][0-9]?)?/.test(event.key)) {
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    />
-                                </div>
-                                {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
-                            </div>
+                        <div className="w-full">
+                        <label className="block uppercase block tracking-wide text-palette-primary text-xs font-bold mb-3"
+                            htmlFor="size">
+                            Talles*
+                        </label>
+                        <select onChange={handleChangeSize} onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="size">
+                            <option value={null}>Seleccionar</option>
+                            {
+                                sizes ? sizes.map(size => (
+                                    <option value={size.id}>{size.name}</option>
+                                )) : 
+                                <option>Talles</option>
+                            }
+                        </select>
+                        <div className="flex flex-wrap gap-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight">
+                            { sizeToCheck.length!==0 ?
+                                sizeToCheck.map( (size)  => {
+                                    return(
+                                    <div className="flex justify-between rounded shadow-xl bg-gray-500 text-white" key={size.id} onBlur={handleBlur}>
+                                        <div className="flex m-auto text-xs p-2"> {size.name} </div>
+                                        <button className="w-6 rounded-r bg-red-400 hover:bg-red-300 uppercase text-white h-full" onClick={e => {deleteSize(e)}} value={size.id}>x</button>
+                                    </div>
+                                    )
+                                })
+                            : <p className="italic text-gray-400">Debe seleccionar al menos una opción</p>
+                            }
+                            {errors.sizes &&  <p className={`text-red-500 text-xs italic`}>{errors.sizes}</p>}
                         </div>
+                    </div> 
                         {/* <div className="w-full">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                                 htmlFor="codigo">
@@ -266,8 +269,53 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                             </select>
                             {errors.brand && <p className={`text-red-500 text-xs italic`}>{errors.brand}</p>}
                         </div>
-                        <div className="flex flex-wrap -mx-3">
-                            {/* <div className="w-full md:w-1/2 px-3">
+                        <div className={`${admin ? "w-full" : "hidden"}`}>
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
+                                htmlFor="store">
+                                Comercio*
+                            </label>
+                            <select ref={selectStore} value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
+                                <option disabled={true} value="">Seleccionar</option>
+                                {
+                                    stores && stores.map(store => (
+                                        <option value={store.id}>{store.name}</option>
+                                    ))
+                                }
+                            </select>
+                            {errors.store && <p className={`text-red-500 text-xs italic`}>{errors.store}</p>}
+                        </div>
+                        <div className="w-full md:w-1/2 mb-3">
+                            <label htmlFor="price" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3">
+                                Precio*
+                            </label>
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div>
+                                    <span className="text-center flex p-3 absolute text-gray-500 sm:text-sm align-middle">
+                                        $
+                                    </span>
+                                    <input
+                                        //required
+                                        type="number"
+                                        id="price"
+                                        autoComplete="off"
+                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 pl-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                        placeholder="0.00" name="price"
+                                        value={form.price}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}                                        
+                                        maxLength="7"
+                                        onKeyDown={(event) => {
+                                            if (!/[0-9]?[0-9]?(\.[0-9][0-9]?)?/.test(event.key)) {
+                                                event.preventDefault();
+                                            }
+                                        }}
+                                    />
+                                </div>
+                                {errors.price && <p className={`text-red-500 text-xs italic`}>{errors.price}</p>}
+                            </div>
+                        </div>
+                        {/* <div className="flex flex-wrap -mx-3">
+                            <div className="w-full md:w-1/2 px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="Stock">
                                 Stocks
@@ -290,23 +338,8 @@ const NewProduct = ({ store, onCancel, admin = false }) => {
                             />
                             {errors.stock && <p className={`text-red-500 text-xs italic`}>{errors.stock}</p>}
 
+                        </div>
                         </div> */}
-                        </div>
-                        <div className={`${admin ? "w-full" : "hidden"}`}>
-                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
-                                htmlFor="store">
-                                Comercio*
-                            </label>
-                            <select ref={selectStore} value={form.store.id} onChange={handleChangeStore} name="store" onBlur={handleBlur} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="store">
-                                <option disabled={true} value="">Seleccionar</option>
-                                {
-                                    stores && stores.map(store => (
-                                        <option value={store.id}>{store.name}</option>
-                                    ))
-                                }
-                            </select>
-                            {errors.store && <p className={`text-red-500 text-xs italic`}>{errors.store}</p>}
-                        </div>
                     </div>
                 </div>
 
