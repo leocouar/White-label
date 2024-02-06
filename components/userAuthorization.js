@@ -1,38 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { useSession } from "next-auth/react";
-import ForbiddenPage from './ForbiddenPage';
+import { useSession } from "next-auth/react"; // Asegúrate de importar la librería correcta
 
 function AuthorizationWrapper({ children }) {
-  const { data: session ,status} = useSession()
+  const { data: session, status } = useSession();
   const [grantAccess, setGrantAccess] = useState(false);
-  const sessionUser = session?.user?.username
-  let userAdmin, validUser, allowedUser;
+  const sessionUser = session?.user?.username;
 
-  //Once that the page has finished loading and the user is known, deduces if the user should be allowed 
-  //and if the user is an admin
   useEffect(() => {
-    if (status=="authenticated") {
-      validUser = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-      if (session?.user?.role?.includes('ADMIN')){
-        userAdmin= true
-      }else{
-        userAdmin= false
-      }
+    if (status === "authenticated") {
+      const validUser = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+      const userAdmin = session?.user?.role?.includes('ADMIN') || false;
+      const allowedUser = sessionUser === validUser || sessionUser === validUser + "#";
 
-      allowedUser = sessionUser === validUser || sessionUser === validUser + "#";
-    }
-  }, [status, sessionUser]);
-
-  //Once that allowedUser has got a value, it checks whether the user should be granted access or not.
-  useEffect(() => {
-    if (status=="authenticated") {
       if (userAdmin || allowedUser) {
         setGrantAccess(true);
       }
     }
-  }, [status, userAdmin, allowedUser]);
+  }, [status, sessionUser]);
 
-  if (!grantAccess) return <ForbiddenPage />;
+  if (status !== "authenticated") {
+    // Puedes añadir un componente de carga o redireccionar a la página de inicio de sesión aquí
+    return null;
+  }
+
+  if (!grantAccess) {
+    return <ForbiddenPage />;
+  }
+
   return <>{children}</>;
 }
 
