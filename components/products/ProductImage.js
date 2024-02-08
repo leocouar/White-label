@@ -5,7 +5,7 @@ import { faArrowLeft, faArrowRight, faTimes } from '@fortawesome/free-solid-svg-
 import logo from '../../images/default.jpeg'
 import { useSession } from "next-auth/react";
 import * as productService from 'services/productService'
-import ownerAuthorization from '../ownerAuthorization'
+
 
 function ProductImage({ images, id }) {
   const defaultImage = {
@@ -88,7 +88,7 @@ function ProductImage({ images, id }) {
 
                 alt='Imagen de producto'
               />
-              {session?.user?.role?.includes('OWNER') && (
+              {session?.user?.role?.includes('ADMIN') && (
                 <button className='absolute left-0' onClick={() => deleteProduct(imgItem)}>
                   <FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-white bg-red-500 rounded-full p-1" />
                 </button>
@@ -165,4 +165,4 @@ function ProductImage({ images, id }) {
   )
 }
 
-export default ownerAuthorization(ProductImage);
+export default (ProductImage);
