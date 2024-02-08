@@ -11,6 +11,7 @@ import { activateProduct, deleteProduct, updateAsAPromotion } from 'services/pro
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getStoresByUser } from 'services/storeService';
 import WhatsAppButton from '../whatsapp/WhatsAppButton';
+import FavoriteButton from '../favorites/FavoriteButton';
 
 function ProductForm({ productData, image }) {
   const [quantity, setQuantity] = useState(1);
@@ -188,6 +189,7 @@ function ProductForm({ productData, image }) {
               phoneNumber={"549" + productData?.store?.telephone}
               message={wspMsj}
             />
+            <FavoriteButton/>
           </div>
         </div>
 
