@@ -42,9 +42,9 @@ const Update = ({product, brands, categories, sizes}) => {
             errors.price = "El campo 'Precio' es requerido";
         }
 
-        if (!form.description.trim()){
-            errors.description = "El campo 'Descripcion' es requerido";
-        }
+        // if (!form.description.trim()){
+        //     errors.description = "El campo 'Descripcion' es requerido";
+        // }
 
         if (form.category.id == 0 || form.category.id == ""){
             errors.category = "El campo 'Categoria' es requerido";
@@ -58,18 +58,18 @@ const Update = ({product, brands, categories, sizes}) => {
             errors.sizes = "El campo 'Talles' es requerido";
         }
 
-        if (!form.code.trim()){
-            errors.code = "El campo 'Codigo' es requerido";
-        }
+        // if (!form.code.trim()){
+        //     errors.code = "El campo 'Codigo' es requerido";
+        // }
 
-        if (form.stock <= 0){
-            errors.stock = "El campo 'Stock' es requerido";
-        }
+        // if (form.stock <= 0){
+        //     errors.stock = "El campo 'Stock' es requerido";
+        // }
 
-        if (form.points <0 &&  form.points.length() == 0){
-            console.log("Entro a points error")
-            errors.points = "El campo 'Puntos' es requerido";
-        }
+        // if (form.points <0 &&  form.points.length() == 0){
+        //     console.log("Entro a points error")
+        //     errors.points = "El campo 'Puntos' es requerido";
+        // }
         
         return errors
     };
@@ -146,7 +146,7 @@ const Update = ({product, brands, categories, sizes}) => {
                         </label>
                         <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2"
                                htmlFor="name">
-                            Nombre
+                            Nombre*
                         </label>
                         <input
                             autoComplete="off"
@@ -157,6 +157,7 @@ const Update = ({product, brands, categories, sizes}) => {
                             value={data.name}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            maxLength={120}
                             required
                         /> 
                         {errors.name &&  <p className={`text-red-500 text-xs italic`}>{errors.name}</p>}
@@ -177,7 +178,7 @@ const Update = ({product, brands, categories, sizes}) => {
                         {errors.description &&  <p className={`text-red-500 text-xs italic`}>{errors.description}</p>}
                     </div>
 
-                    <div className="w-full">
+                    {/* <div className="w-full">
                         <label className="block tracking-wide text-palette-primary text-xs font-bold mt-2 mb-2"
                                htmlFor="codigo">
                             C&Oacute;DIGO
@@ -193,12 +194,12 @@ const Update = ({product, brands, categories, sizes}) => {
                             required
                         />
                          {errors.code &&  <p className={`text-red-500 text-xs italic`}>{errors.code}</p>}
-                    </div>
+                    </div> */}
 
                     <div className="w-full">
                         <label className="block tracking-wide text-palette-primary text-xs font-bold mt-2 mb-2"
                                htmlFor="category">
-                            CATEGORIA
+                            CATEGORIA*
                         </label>
                         <select onChange={handleChange} onBlur={handleBlur} name="category" value={data.category.id} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3    px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="category">
                             <option disabled={true} value="">Seleccionar</option>
@@ -215,7 +216,7 @@ const Update = ({product, brands, categories, sizes}) => {
                 <div className="w-full">
                     <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2 mt-2"
                             htmlFor="brand">
-                        Marcas
+                        Marcas*
                     </label>
                     <select onChange={handleChange} name="brand" onBlur={handleBlur} value={data.brand.id}  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="brand">
                     <option disabled={true} value="">Seleccionar</option>
@@ -232,7 +233,7 @@ const Update = ({product, brands, categories, sizes}) => {
                 <div className="w-full">
                         <label className="block uppercase block tracking-wide text-palette-primary text-xs font-bold mb-3"
                             htmlFor="size">
-                            Talles
+                            Talles*
                         </label>
                         <select onChange={handleChangeSize} name={sizes.name} onBlur={handleBlur} value={sizes.id}  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="size">
                             <option value={null}>Seleccionar</option>
@@ -243,16 +244,17 @@ const Update = ({product, brands, categories, sizes}) => {
                                 <option>Talles</option>
                             }
                         </select>
-                        <div className="flex grid grid-cols-4 gap-8 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight">
-                            {
-                                data.sizes?.map( (size)  => {
+                        <div className="flex flex-wrap gap-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight">
+                            {   data.sizes.length!==0 ?
+                                data.sizes.map( (size)  => {
                                     return(
-                                    <div className="flex w-32 justify-between mx-2 rounded shadow-xl bg-blue-500 text-white" key={size.id} onBlur={handleBlur}>
-                                        <div className="flex w-3/4 m-auto text-xs p-2">{size.name}</div>
-                                        <button className="w-1/4 rounded-r bg-red-500 uppercase text-white h-full" onClick={e => {deleteSize(e)}} value={size.id}>x</button>
+                                    <div className="flex justify-between rounded shadow-xl bg-gray-500 text-white" key={size.id} onBlur={handleBlur}>
+                                        <div className="flex m-auto text-xs p-2">{size.name}</div>
+                                        <button className="w-6 rounded-r bg-red-400 hover:bg-red-300 uppercase text-white h-full" onClick={e => {deleteSize(e)}} value={size.id}>x</button>
                                     </div>
                                     )
                                 })
+                                : <p className="italic text-gray-400">Debe seleccionar al menos una opción</p>
                             }
                             {errors.sizes &&  <p className={`text-red-500 text-xs italic`}>{errors.sizes}</p>}
                         </div>
@@ -261,8 +263,8 @@ const Update = ({product, brands, categories, sizes}) => {
                 <div className="flex flex-wrap -mx-3 mb-2">
                     <div className="w-full md:w-64 px-3 mb-6 md:mb-0">
                         <div>
-                            <label htmlFor="price" className="block text-sm font-medium text-palette-primary">
-                                PRECIO
+                            <label htmlFor="price" className="block text-xs font-bold text-palette-primary mb-2">
+                                PRECIO*
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div
@@ -293,8 +295,8 @@ const Update = ({product, brands, categories, sizes}) => {
                         </div>
 
                     </div>
-                    <div className="w-full md:ml-12 md:w-64 px-3 mb-6 md:mb-0">
-                        <label className="block text-sm font-medium text-palette-primary"
+                    {/* <div className="w-full md:ml-12 md:w-64 px-3 mb-6 md:mb-0">
+                        <label className="block text-xs font-bold text-palette-primary mb-3"
                                htmlFor="stock">
                             STOCK
                         </label>
@@ -318,9 +320,9 @@ const Update = ({product, brands, categories, sizes}) => {
                             />
                             </div>
                         {errors.stock &&  <p className={`text-red-500 text-xs italic`}>{errors.stock}</p>}
-                    </div>
+                    </div> */}
                 </div>
-                <div className="w-full">
+                {/* <div className="w-full">
                 <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2"
                                htmlFor="puntos">
                             Puntos de producto
@@ -337,7 +339,7 @@ const Update = ({product, brands, categories, sizes}) => {
                             required
                             />
                         {errors.points &&  <p className={`text-red-500 text-xs italic`}>{errors.points}</p>}
-                </div>
+                </div> */}
             </div>
 
                 <div className="mt-8 md:ml-20">

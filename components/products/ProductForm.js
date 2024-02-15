@@ -104,6 +104,11 @@ function ProductForm({ productData, image }) {
     window.location.href = '/products/update/' + productData?.id
   }
 
+  useEffect(() => {
+    // Restablecer la cantidad a 1 cuando cambia el ID del producto
+    setQuantity(1);
+  }, [productData?.id]);
+  
   function updateQuantity(e) {
     if (e === '') {
       setQuantity('')

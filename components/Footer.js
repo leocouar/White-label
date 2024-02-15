@@ -7,7 +7,7 @@
  function Footer() {
    return (
 
-     <footer id="Footer" className="hidden sm:block static bottom-0 h-48 font-primary w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" ,
+     <footer id="Footer" className="hidden sm:block absolute -bottom-48 h-48 font-primary w-full" style={{ boxShadow: "0px -5px 5px -5px rgba(0,0,0,0.5)" ,
      backgroundImage: `url('/images/bgcatalog.png')`}}>
          <div className="flex h-full">
  

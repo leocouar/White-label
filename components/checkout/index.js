@@ -1,11 +1,6 @@
-import {useEffect} from "react";
 import withAuthorization from 'components/withAuthorization';
 
 const CheckoutDetail = ({checkout, setShow}) => {
-    useEffect(() => {
-        console.log(checkout, setShow)
-    })
-
     return (
         <>
             <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
