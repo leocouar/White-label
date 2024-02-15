@@ -3,7 +3,7 @@ export async function save(favorite) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/favorite`;
     try {
         let response = await axios.post(fetchUrl, favorite);
-        return response;
+        return response.data;
     } catch (error) {
         console.error(error)
         throw new Error("Could not create favorite!");
@@ -23,7 +23,7 @@ export async function getStatus(prodId,username) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/favorite/user?prodId=${prodId}&username=${username}`;
     try {
         let response = await axios.get(fetchUrl);
-        return response;
+        return response.data;
     } catch (error) {
         console.error(error)
         throw new Error("Could not evaluate if the product is a favorite!");
