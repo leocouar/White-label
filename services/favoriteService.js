@@ -48,3 +48,13 @@ export async function findByUser(page = 0, size = 10, asc=true, username){
         return []
     }
 }
+
+export async function findAllByUser(username){
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/favorite/user/all/${username}`;
+    try {
+        const response = await axios.get(fetchUrl);
+        return response;
+    } catch (error) {
+        return []
+    }
+}

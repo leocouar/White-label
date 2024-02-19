@@ -19,7 +19,7 @@ function Nav() {
   const [isShow, setIsShow] = useState(false)
   const [load, setLoad] = useState(false)
   const [searchFocused, isSearchFocused] = useState(false);
-
+  const username = session?.user?.username;
   const [categoriesVisible, setCategoriesVisible] = useState(false);
   const [categories, setCategories] = useState([])
 
@@ -166,6 +166,12 @@ function Nav() {
                 className={session ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 lg:ml-0 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}
               >
                 TUS COMERCIOS
+              </div>
+            </Link>
+
+            <Link href={username ? `/favorites/${username}` : '/favorites'} legacyBehavior>
+              <div className={session ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 lg:ml-0 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}>
+                FAVORITOS
               </div>
             </Link>
 

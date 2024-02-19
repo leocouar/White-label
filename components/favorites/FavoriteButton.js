@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import { getStatus, save, deleteFav } from 'services/favoriteService';
 
 const FavoriteButton = ({ productData }) => {
-    const [favoriteId, setFavoriteId] = useState();
+    const [favoriteId, setFavoriteId] = useState(false);
     const { data: session, status } = useSession()
     const sessionUser = session?.user?.username
 
