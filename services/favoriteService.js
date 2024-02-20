@@ -53,7 +53,7 @@ export async function findAllByUser(username){
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/favorite/user/all/${username}`;
     try {
         const response = await axios.get(fetchUrl);
-        return response;
+        return response.data;
     } catch (error) {
         return []
     }

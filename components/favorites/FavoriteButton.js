@@ -34,18 +34,12 @@ const FavoriteButton = ({ productData }) => {
                  "username": sessionUser
                 }
             );
-
-            console.log(newFavorite)
             setFavoriteId(newFavorite.id);
         } else {
             deleteFav(favoriteId);
             setFavoriteId("")
         }
     };
-
-    useEffect(() => {
-        console.log(favoriteId)
-    }, [favoriteId]);
 
     return (
         <div>

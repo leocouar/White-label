@@ -169,6 +169,7 @@ function Nav() {
               </div>
             </Link>
 
+             {/* TUS FAVORITOS */} 
             <Link href={username ? `/favorites/${username}` : '/favorites'} legacyBehavior>
               <div className={session ? "text-smw block mt-4 lg:inline-block lg:mt-0 text-m font-primary text-palette-primary tracking-tight ml-7 lg:ml-0 md:p-2 rounded-md hover:text-palette-secondary cursor-pointer" : "hidden"}>
                 FAVORITOS
