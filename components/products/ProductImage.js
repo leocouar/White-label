@@ -11,44 +11,50 @@ function ProductImage({ images, id, storeId }) {
   const { Auth } = useAuthorization(storeId); // Obtén el estado de autorización usando el hook useAuthorization
 
 
-  const defaultImage =
-  {
+  const defaultImage = {
     "url": "Image 2021-08-10 at 11.20.24 (1).jpeg",
     "link": logo,
     "main": false
   };
   
-  const [image,setImage]=useState(images && images.length != 0 ? images[0].link : defaultImage.link)
-  const [mainImg, setMainImg] = useState(image);
-   useEffect(() => {
-    setImage(images && images.length != 0 ? images[0].link : defaultImage.link)
-    setMainImg(image)
-    
-  },)
-
-
-  // const image = images && images.length != 0 ? images[0].link : defaultImage.link
-  
+  const [mainImg, setMainImg] = useState(images && images.length !== 0 ? images[0].link : defaultImage.link);
   const [delImg, setDelImg] = useState();
   const { data: session } = useSession();
   const ref = useRef();
   const [deletedModal, setDeletedModal] = useState(false);
+  function handleThumbnailClick(imgItem) {
+    setMainImg(imgItem.link);
 
+    const thumbnailIndex = images.findIndex((item) => item.url === imgItem.url);
+    const thumbnailContainer = ref.current;
+    const thumbnailWidth = thumbnailContainer.children[thumbnailIndex].offsetWidth;
+    const newPosition = thumbnailIndex * thumbnailWidth;
+
+    thumbnailContainer.scrollTo({
+      left: newPosition - thumbnailContainer.clientWidth / 2 + thumbnailWidth / 2,
+      behavior: "smooth",
+    });
+  }
   function scroll(scrollOffset) {
-    ref.current.scrollLeft += scrollOffset
+    ref.current.scrollLeft += scrollOffset;
   }
 
   function deleteProduct(img) {
-    if (deletedModal == false) {
-      setDeletedModal(!deletedModal)
+    if (!deletedModal) {
+      setDeletedModal(true);
     }
-    setDelImg(img)
+    setDelImg(img);
   }
 
   async function delImage() {
-    await productService.deletedImagen(id, delImg.url)
-    window.location.reload()
+    await productService.deletedImagen(id, delImg.url);
+    window.location.reload();
   }
+
+  useEffect(() => {
+  
+    setMainImg(images && images.length !== 0 ? images[0].link : defaultImage.link);
+  }, [images]);
 
   return (
 
@@ -87,7 +93,7 @@ function ProductImage({ images, id, storeId }) {
                   src={imgItem.link}
                   layout="fill"
                   className=""
-                  onClick={() => setMainImg(imgItem.link)}
+                  onClick={() => handleThumbnailClick(imgItem)}
                   alt='Imagen de producto'
                 />
                 {
