@@ -11,8 +11,12 @@ import { activateProduct, deleteProduct, updateAsAPromotion } from 'services/pro
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getStoresByUser } from 'services/storeService';
 import WhatsAppButton from '../whatsapp/WhatsAppButton';
+import useAuthorization from "hooks/useAuthorization";
 
 function ProductForm({ productData, image }) {
+  const storeid= productData.store.id
+  const {Auth} = useAuthorization(storeid)
+
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
   const [openUploadFile, setOpenUploadFile] = useState(false);
@@ -22,26 +26,6 @@ function ProductForm({ productData, image }) {
   const wspMsj = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
 
   const { data: session } = useSession()
-  const [userCanEdit, setUserCanEdit] = useState(false);
-
-  const evaluateUser = async () => {
-    const currentUser = session?.user;
-    const storeId = productData?.store?.id;
-    const storesData = await getStoresByUser(currentUser?.username);
-
-    currentUser && currentUser?.role?.includes("ADMIN") ?
-      setUserCanEdit(true)
-      :
-      storesData && storesData.map((store) => {
-        if (store.id === storeId) {
-          setUserCanEdit(true);
-        }
-      });
-  }
-
-  useEffect(() => {
-    evaluateUser();
-  }, [session])
 
   const handlePromo = async () => {
     let producToUpdate = {
@@ -192,7 +176,7 @@ function ProductForm({ productData, image }) {
         </div>
 
         {
-          userCanEdit
+          Auth
             ?
             <div className='display flex w-full justify-between h-12'>
 
