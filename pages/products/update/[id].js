@@ -7,12 +7,15 @@ import * as brandsService from 'services/brandService';
 import * as categoriesService from 'services/categoriesService'
 import * as sizesService from 'services/sizeService'
 import { useState } from "react"; 
-import withAuthorization from 'components/withAuthorization';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShapes } from "@fortawesome/free-solid-svg-icons";
+import useAuthorization from "hooks/useAuthorization";
+
 
 
 const Update = ({product, brands, categories, sizes}) => {
+
+    const storeId = product.storeId; // Asumo que tienes un ID de tienda en tu objeto de producto
+    const { Auth } = useAuthorization(storeId); // Obtén el estado de autorización usando el hook useAuthorization
+
     const [data, setData] = useState({
         name: product.name ? product.name : "Producto",
         price: product.price ? product.price : 0,
@@ -66,10 +69,10 @@ const Update = ({product, brands, categories, sizes}) => {
         //     errors.stock = "El campo 'Stock' es requerido";
         // }
 
-        // if (form.points <0 &&  form.points.length() == 0){
-        //     console.log("Entro a points error")
-        //     errors.points = "El campo 'Puntos' es requerido";
-        // }
+        if (form.points <0 &&  form.points.length() == 0){
+         console.log("Entro a points error")
+         errors.points = "El campo 'Puntos' es requerido";
+        }
         
         return errors
     };
@@ -322,7 +325,7 @@ const Update = ({product, brands, categories, sizes}) => {
                         {errors.stock &&  <p className={`text-red-500 text-xs italic`}>{errors.stock}</p>}
                     </div> */}
                 </div>
-                {/* <div className="w-full">
+                <div className="w-full">
                 <label className="block uppercase tracking-wide text-palette-primary text-xs font-bold mb-2"
                                htmlFor="puntos">
                             Puntos de producto
@@ -339,7 +342,7 @@ const Update = ({product, brands, categories, sizes}) => {
                             required
                             />
                         {errors.points &&  <p className={`text-red-500 text-xs italic`}>{errors.points}</p>}
-                </div> */}
+                </div>
             </div>
 
                 <div className="mt-8 md:ml-20">
@@ -396,5 +399,5 @@ export async function getServerSideProps({ params }) {
     }
 }
 
-export default withAuthorization(Update);
+export default (Update);
 
