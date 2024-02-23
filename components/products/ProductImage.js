@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import * as productService from 'services/productService'
 
 function ProductImage({ images, id, storeId }) {
-  const { Auth } = useAuthorization(storeId); // Obtén el estado de autorización usando el hook useAuthorization
+  const { Auth } = useAuthorization(storeId); // obtén el estado de autorización usando el hook useAuthorization
 
 
   const defaultImage = {
