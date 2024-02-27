@@ -1,14 +1,13 @@
 import DataTable from 'react-data-table-component'
 import Link from 'next/link'
-import FilterComponent from "@/components/filter/FilterComponent";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,  useState } from "react";
 import { paginationComponentOptions } from "../../DataTableUtils";
 import Loading from "@/components/utils/Loading";
-import { findAll, getById, search } from "../../services/checkoutService";
+import { findAll, getByUser, search } from "../../services/checkoutService";
 
 
 /*https://react-data-table-component.netlify.app/?path=/story/getting-started-intro--page*/
-const List = () => {
+const List = ({ user = null }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [content, setContent] = useState([])
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -31,13 +30,24 @@ const List = () => {
     };
 
     const fetchData = async () => {
-        try {
-            setLoading(true);
-            const data = await findAll();
-            setContent(data.content);
-            setTotal(data.totalElements);
-        } finally {
-            setLoading(false);
+        if (user == null) {
+            try {
+                setLoading(true);
+                const data = await findAll();
+                setContent(data.content);
+                setTotal(data.totalElements);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            try {
+                setLoading(true);
+                const data = await getByUser(user);
+                setContent(data.content);
+                setTotal(data.totalElements);
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -52,7 +62,7 @@ const List = () => {
             sortable: true,
             cell: row => <Link legacyBehavior passHref href={`/checkout/${row.id}`}><a className={`text-indigo-600`}>#{row.id}</a></Link>
         },
-        {
+        user == null && { 
             name: 'Usuario',
             selector: row => row.username,
         },
@@ -65,6 +75,14 @@ const List = () => {
             selector: row => row.products.length
         },
         {
+            name: 'Fecha',
+            selector: row => row.date,
+        },
+        {
+            name: 'Hora',
+            selector: row => row.time
+        },
+        {
             name: 'Total',
             selector: row => (<label>$ {Number(row.totalAmount).toFixed(2)}</label>)
         }
@@ -72,14 +90,14 @@ const List = () => {
 
     return (
         <>
-            <input
+            {user == null && <input
                 className="w-full p-2 bg-gray-100 border border-purple-500 border-gray-200 rounded-lg"
                 id="search"
                 type="text"
                 placeholder="Buscar por id"
                 aria-label="Search Input"
                 onChange={filteredItems}
-            />
+            />}
 
             {loading ? (
                 <Loading />

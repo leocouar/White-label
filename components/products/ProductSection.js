@@ -1,9 +1,5 @@
 import ProductImage from '@/components/products/ProductImage'
 import ProductDetails from '@/components/products/ProductDetails'
-import Gallery from "@/components/products/Gallery";
-import { useEffect, useState } from "react";
-import * as productService from "../../services/productService";
-
 
 function ProductSection({ productData }) {
     return (
