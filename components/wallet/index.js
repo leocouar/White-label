@@ -118,9 +118,7 @@ const WalletOfUser = ({ walletOfUser, user }) => {
                     <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden cursor-pointer transition-all duration-500 bg-gradient-to-r from-blue-500 to-green-400 p-4 py-3 px-5'>
                         <div className="relative flex justify-between">
                             <div>
-                                <h2 className='relative text-left font-bold text-xl decoration-pink-500'>Tarjeta Mellizos</h2>
-                                <h2 className="relative italic">20% de descuento</h2>
-
+                                <h2 className='relative text-left font-bold text-xl decoration-pink-500'>Tarjeta de Puntos</h2>
                             </div>
                         </div>
                         <div className='relative flex justify-between mt-8 w-48 '>

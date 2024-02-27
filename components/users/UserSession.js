@@ -32,10 +32,10 @@ const UserSession = ({ session }) => {
     if (session) {
         return (
                 <div ref={componentRef} className="relative inline-block text-left">
-                        <div className="text-smw block lg:relative lg:-mt-2 hidden sm:table-cell">
+                        <div className="text-smw block lg:relative lg:-mt-2">
                             <button type="button"
                                     onClick={toggleOptionsSession}
-                                    className="inline-flex justify-center md:mt-2 md:ml-2 w-full rounded-md px-3 py-2 text-m font-primary text-palette-primary hover:text-palette-secondary capitalize  focus:ring-2 focus:ring-palette-lighter focus:ring-opacity-75"
+                                    className="inline-flex justify-center md:ml-2 w-full mt-2 rounded-md px-3 py-2 text-m font-primary text-palette-primary hover:text-palette-secondary capitalize  focus:ring-2 focus:ring-palette-lighter focus:ring-opacity-75 sm: ml-3"
                                     id="menu-button" aria-expanded="true" aria-haspopup="true">
                                 {(session.user.name).toUpperCase()}
                                 <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
@@ -49,11 +49,12 @@ const UserSession = ({ session }) => {
                         <div className="text-smw block lg:relative lg:-mt-2 md:invisible lg:hidden">
                             <button type="button"
                                     onClick={toggleOptionsSession}
-                                    className="inline-flex justify-center md:mt-2 md:ml-2 w-full rounded-md px-3 py-2 text-m font-primary text-palette-primary hover:text-palette-secondary capitalize  focus:ring-2 focus:ring-palette-lighter focus:ring-opacity-75"
+                                    className="inline-flex justify-center md:mt-2 md:ml-2 w-full rounded-md px-3 py-2 text-m font-primary text-palette-primary hover:text-palette-secondary capitalize  focus:ring-2 focus:ring-palette-lighter focus:ring-opacity-75 sm: hidden"
                                     id="menu-button" aria-expanded="true" aria-haspopup="true">
                                         <FontAwesomeIcon 
                                         className="text-palette-primary hover:text-palette-primary h-6"
-                                        icon={faUserCircle} />
+                                        icon={faUserCircle}
+                                         />
                             </button>
                         </div>
                         <div
@@ -62,24 +63,24 @@ const UserSession = ({ session }) => {
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
                             <div className="py-1 " role="none">
                                 <Link legacyBehavior href="/shoping/mine">
-                                <a href="#" className="text-palette-primary block text-center hover:bg-gray-50 px-4 py-2 text-sm" role="menuitem"
-                                   tabIndex="-1" id="menu-item-0">Mis Compras</a>
+                                <a href="#" className="text-palette-primary block text-center hover:bg-gray-50 px-4 py-2 text-xs" role="menuitem"
+                                   tabIndex="-1" id="menu-item-0">MIS COMPRAS</a>
                                 </Link>
                                 <Link legacyBehavior href={`/users/wallet/${session.user.username}`}>
-                                <a href="#" className="text-palette-primary block px-4 py-2 text-center text-sm hover:bg-gray-50" role="menuitem"
-                                   tabIndex="-1" id="menu-item-1">Mi Billetera</a> 
+                                <a href="#" className="text-palette-primary block px-4 py-2 text-center text-xs hover:bg-gray-50" role="menuitem"
+                                   tabIndex="-1" id="menu-item-1">MI BILLETERA</a> 
                                 </Link>
                                 <Link legacyBehavior href={`/users/${session.user.username}`}>
-                                    <a className="text-palette-primary block px-4 py-2 text-center text-sm hover:bg-gray-50" role="menuitem"
-                                       tabIndex="-1" id="menu-item-2">Mis Datos</a>
+                                    <a className="text-palette-primary block px-4 py-2 text-center text-xs hover:bg-gray-50" role="menuitem"
+                                       tabIndex="-1" id="menu-item-2">MIS DATOS</a>
                                 </Link>
                                 <form method="POST" action="#" role="none">
 
-                                    <button onClick={() => signOut({ callbackUrl: "/" })}
+                                    <button onClick={() => signOut({ callbackUrl: "/login" })}
 
-                                            className="text-palette-primary block w-full text-center px-4 py-2 text-sm hover:bg-gray-50"
+                                            className="text-palette-primary block w-full text-center px-4 py-2 text-xs hover:bg-gray-50"
                                             role="menuitem" tabIndex="-1" id="menu-item-3">
-                                        Salir
+                                        SALIR
                                     </button>
                                 </form>
                             </div>
