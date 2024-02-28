@@ -1,8 +1,11 @@
 import { useState, useRef } from "react";
 import { getByUsername, update } from "services/userService";
+import availableRoles from "@/components/users/ListOfRoles";
+import { useSession } from "next-auth/react";
 
 
 const UserData = ({ user }) => {
+    const { data: session, status } = useSession();
     const [userToUpdate, setUserToUpdate] = useState(user);
     const [editingOff, setEditingOff] = useState(true);
     const [enable, setEnabled] = useState(true);
@@ -15,7 +18,7 @@ const UserData = ({ user }) => {
     }
 
 
-    const handleChange = (e) => {
+    const handleChange = (e) => {    
         setUserToUpdate({
             ...userToUpdate,
             [e.target.name]: e.target.value,
@@ -24,37 +27,39 @@ const UserData = ({ user }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        if(!editingOff){
+        if (!editingOff) {
             setEditingOff(true);
             update(userToUpdate).then((result) => {
                 if (result.status === 202) {
                     window.location.href = '/users/' + user.username
                 }
             });
-        }else{
+        } else {
             setEditingOff(false);
             nameRef.current.focus();
         }
-        
+
     }
 
     return (
 
         <>
             <form class="flex-initial shrink w-full max-w-lg p-6">
-
+                <div className="text-center text-xl -mt-3 mb-4"><i>{userToUpdate?.username}</i></div>
                 <div class="flex flex-wrap mx-3 mb-6"
                     onDoubleClick={enableFields}>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                         <label
-                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                             Nombre
                         </label>
                         <input
                             onChange={handleChange}
                             ref={nameRef}
                             disabled={editingOff}
-                            class={`appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
+                            className={`appearance-none block w-full 
+                                        ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                        text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
                             value={userToUpdate?.name}
                             type="text"
                             id="name"
@@ -62,18 +67,20 @@ const UserData = ({ user }) => {
                         />
                     </div>
 
-                    <div class="w-full md:w-1/2 px-3"
+                    <div className="w-full md:w-1/2 px-3"
                         onDoubleClick={enableFields}>
                         <label
                             htmlFor="lastName"
-                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="grid-last-name">
                             Apellido
                         </label>
                         <input
                             onChange={handleChange}
                             disabled={editingOff}
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            className={`appearance-none block w-full 
+                                        ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                        text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
                             value={userToUpdate?.lastName}
                             type="text"
                             id="lastName"
@@ -84,38 +91,19 @@ const UserData = ({ user }) => {
 
                 <div class="flex flex-wrap mx-3 mb-6"
                     onDoubleClick={enableFields}>
-                    <div class="w-full px-3">
-                        <label
-                            htmlFor="email"
-                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
-                            Email
-                        </label>
-                        <input
-                            onChange={handleChange}
-                            disabled={true}
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            value={userToUpdate?.email}
-                            type="text"
-                            id="email"
-                            name="email"
-                        />
-                    </div>
-                </div>
-
-
-                <div class="flex flex-wrap mx-3 mb-6"
-                    onDoubleClick={enableFields}>
-                    <div class="w-full px-3">
+                    <div className="w-full px-3">
                         <label
                             htmlFor="phone"
-                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="grid-password">
                             Telefono
                         </label>
                         <input
                             onChange={handleChange}
                             disabled={editingOff}
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            className={`appearance-none block w-full 
+                                        ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                        text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
                             value={userToUpdate?.phone}
                             type="text"
                             id="phone"
@@ -127,17 +115,19 @@ const UserData = ({ user }) => {
 
                 <div class="flex flex-wrap mx-3 mb-6"
                     onDoubleClick={enableFields}>
-                    <div class="w-full px-3">
+                    <div className="w-full px-3">
                         <label
                             htmlFor="direction"
-                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="grid-password">
                             Direccion
                         </label>
                         <input
                             onChange={handleChange}
                             disabled={editingOff}
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            className={`appearance-none block w-full 
+                                        ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                        text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
                             value={userToUpdate?.direction}
                             type="text"
                             id="direction"
@@ -146,12 +136,35 @@ const UserData = ({ user }) => {
                     </div>
                 </div>
 
+                <div class="flex flex-wrap mx-3 mb-6"
+                    onDoubleClick={enableFields}>
+                    <div className="w-full px-3">
+                        <label
+                            htmlFor="cuit"
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            for="grid-password">
+                            CUIT/CUIL
+                        </label>
+                        <input
+                            onChange={handleChange}
+                            disabled={editingOff}
+                            className={`appearance-none block w-full 
+                                        ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                        text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
+                            value={userToUpdate?.cuit}
+                            type="text"
+                            id="cuit"
+                            name="cuit"
+                        />
+                    </div>
+                </div>
+
 
                 <div class="flex flex-wrap mx-3 mb-2"
                     onDoubleClick={enableFields}>
-                    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                         <label
-                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             htmlFor="city"
                             for="grid-city">
                             Ciudad
@@ -159,14 +172,16 @@ const UserData = ({ user }) => {
                         <input
                             onChange={handleChange}
                             disabled={editingOff}
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            className={`appearance-none block w-full 
+                                            ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                            text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
                             type="text"
                             value={userToUpdate?.city}
                             id="city"
                             name="city"
                         />
                     </div>
-                    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0"
+                    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0"
                         onDoubleClick={enableFields}>
                         <label
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -177,7 +192,9 @@ const UserData = ({ user }) => {
                         <input
                             onChange={handleChange}
                             disabled={editingOff}
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            className={`appearance-none block w-full 
+                                        ${editingOff ? "bg-gray-200" : "bg-white"} 
+                                        text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`}
                             type="text"
                             value={userToUpdate?.postal}
                             id="postal"
@@ -185,8 +202,33 @@ const UserData = ({ user }) => {
                         />
                     </div>
                 </div>
+
+                {session?.user?.role?.includes('ADMIN') &&
+                    <div className="flex flex-wrap mx-3 mb-6">
+                        <div className="w-full px-3">
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="grid-password">
+                                Rol*:
+                            </label>
+                            <select value={userToUpdate?.role}
+                                disabled={editingOff}
+                                onChange={handleChange}
+                                name="role"
+                                className={`appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500
+                                            ${editingOff ? "bg-gray-200" : "bg-white"}`}
+                                id="role">
+                                {
+                                    availableRoles.map(role => (
+                                        <option value={role.value}>{role.name}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </div>
+                }
+
                 <button
-                    type={editingOff ? "button": "submit"}
+                    type={editingOff ? "button" : "submit"}
                     onClick={submit}
                     className={`${editingOff ? "bg-blue-500" : "bg-red-500"
                         } hover:${editingOff ? "bg-blue-700" : "bg-red-700"
@@ -195,7 +237,7 @@ const UserData = ({ user }) => {
                     {editingOff ? "Editar" : "Guardar"}
                 </button>
 
-            </form>
+            </form >
 
         </>
     )

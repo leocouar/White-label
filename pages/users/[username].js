@@ -1,5 +1,5 @@
 import UserData from "@/components/users/UserData";
-import UserSegurity from "@/components/users/UserSegurity";
+import UserSecurity from "@/components/users/UserSecurity";
 import {useState} from "react";
 import { getByUsername } from "services/userService";
 import BillsOfUser from "@/components/users/BillsOfUser";
@@ -16,19 +16,19 @@ const Username = ({userSession, billsOfUSer})  => {
     const [tabs, setTabs] = useState({
         usuarios: true,
         activity: false,
-        segurity: false,
+        security: false,
     });
     
     const usuariosRef = useRef(null);
     const activityRef = useRef(null);
-    const segurityRef = useRef(null);
+    const securityRef = useRef(null);
 
     const handleClick = (e) => {
         const {name} = e.target;
         setTabs({
             usuarios: false,
             activity: false,
-            segurity: false,
+            security: false,
         });
         setTabs({
             [name]: true
@@ -41,8 +41,8 @@ const Username = ({userSession, billsOfUSer})  => {
         } else if (name === 'activity' && activityRef.current) {
             activityRef.current.scrollIntoView({ behavior: 'smooth' });
             
-        } else if (name === 'segurity' && segurityRef.current) {
-            segurityRef.current.scrollIntoView({ behavior: 'smooth' });
+        } else if (name === 'security' && securityRef.current) {
+            securityRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     
     }
@@ -69,8 +69,8 @@ const Username = ({userSession, billsOfUSer})  => {
                         Actividad
                     </li>
                     </a>
-                    <a name={`segurity`} className="hidden sm:block" href="#thirt" onClick={handleClick}>
-                    <li className={`hover:bg-red-200 py-3 font-semibold flex justify-center${tabs.segurity ? `bg-red-300 py-3` : ``}`}>
+                    <a name={`security`} className="hidden sm:block" href="#third" onClick={handleClick}>
+                    <li className={`hover:bg-red-200 py-3 font-semibold flex justify-center${tabs.security ? `bg-red-300 py-3` : ``}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 " fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
@@ -110,7 +110,7 @@ const Username = ({userSession, billsOfUSer})  => {
                     </div>
                 </div>
                 
-                <div id="thirt"  ref={segurityRef}  className={`${tabs.segurity ? `` : ``}  flex bg-white justify-center p-2 lg:w-4/4 border-t-4 border-gray-500 border-opacity-10`}>
+                <div id="third"  ref={securityRef}  className={`${tabs.security ? `` : ``}  flex bg-white justify-center p-2 lg:w-4/4 border-t-4 border-gray-500 border-opacity-10`}>
                     <div className="justify-center">
                          <div className="mt-6">
                             <StoreHeading  title=""/>
@@ -119,7 +119,7 @@ const Username = ({userSession, billsOfUSer})  => {
                             <StoreHeading title="Seguridad"/>
                         </div>
                         <div className="md:-mt8 -mt-6">
-                            <UserSegurity user={userSession}/>
+                            <UserSecurity user={userSession}/>
                         </div>
                     </div>
                 </div>

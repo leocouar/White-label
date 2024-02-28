@@ -23,6 +23,17 @@ export async function update(user) {
     }
 }
 
+export async function updatePassword(userPass) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/password`;
+
+    try {
+        let response = await axios.put(fetchUrl, userPass);
+        return response;
+    } catch (error) {
+        throw new Error("Could not change the password !");
+    }
+}
+
 
 export async function login(credentials) {
     const fetchUrl = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/user/login`;
