@@ -11,8 +11,13 @@ import { activateProduct, deleteProduct, updateAsAPromotion } from 'services/pro
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getStoresByUser } from 'services/storeService';
 import WhatsAppButton from '../whatsapp/WhatsAppButton';
+import useAuthorization from "hooks/useAuthorization";
+import FavoriteButton from '../favorites/FavoriteButton';
 
 function ProductForm({ productData, image }) {
+  const storeid= productData.store.id
+  const {Auth} = useAuthorization(storeid)
+
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
   const [openUploadFile, setOpenUploadFile] = useState(false);
@@ -22,26 +27,6 @@ function ProductForm({ productData, image }) {
   const wspMsj = "¡Hola!, me comunico para consultar acerca del producto " + productData?.name;
 
   const { data: session } = useSession()
-  const [userCanEdit, setUserCanEdit] = useState(false);
-
-  const evaluateUser = async () => {
-    const currentUser = session?.user;
-    const storeId = productData?.store?.id;
-    const storesData = await getStoresByUser(currentUser?.username);
-
-    currentUser && currentUser?.role?.includes("ADMIN") ?
-      setUserCanEdit(true)
-      :
-      storesData && storesData.map((store) => {
-        if (store.id === storeId) {
-          setUserCanEdit(true);
-        }
-      });
-  }
-
-  useEffect(() => {
-    evaluateUser();
-  }, [session])
 
   const handlePromo = async () => {
     let producToUpdate = {
@@ -124,8 +109,8 @@ function ProductForm({ productData, image }) {
         <div className="w-full">
           <div className="flex flex-col space-y-2">
             <div className="flex">
-              <div className="flex-col items-start space-y-1 mr-2">
-                <input
+            <div className="flex justify-between items-start space-y-1 mr-2">
+              <input
                   type="number"
                   inputMode="numeric"
                   id="quantity"
@@ -135,8 +120,10 @@ function ProductForm({ productData, image }) {
                   value={quantity}
                   onChange={(e) => updateQuantity(e.target.value)}
                   className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
-                />
-              </div>
+              />
+              <FavoriteButton productData={productData}/>
+          </div>
+
               {/*
               <div className="flex-col items-start space-y-1">
 
@@ -188,11 +175,12 @@ function ProductForm({ productData, image }) {
               phoneNumber={"549" + productData?.store?.telephone}
               message={wspMsj}
             />
+
           </div>
         </div>
 
         {
-          userCanEdit
+          Auth
             ?
             <div className='display flex w-full justify-between h-12'>
 

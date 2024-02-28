@@ -2,12 +2,8 @@ import ProductSection from '@/components/products/ProductSection'
 import Gallery from "@/components/products/Gallery";
 import {getProduct,getProductsRelated} from "../../../services/productService";
 import SEO from '@/components/SEO';
-import useAuthorization from "../../../hooks/useAuthorization";
 
 function Index({ productData ,related}) {
-    const storeid= productData.store.id
-    const {Auth} = useAuthorization(storeid)
-
     return (
         <section>
             <div className="justify-center">
