@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import useAuthorization from "hooks/useAuthorization";
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight, faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -6,45 +7,54 @@ import logo from '../../images/default.jpeg'
 import { useSession } from "next-auth/react";
 import * as productService from 'services/productService'
 
-function ProductImage({ images, id }) {
-  const defaultImage =
-  {
+function ProductImage({ images, id, storeId }) {
+  const { Auth } = useAuthorization(storeId); // obtén el estado de autorización usando el hook useAuthorization
+
+
+  const defaultImage = {
     "url": "Image 2021-08-10 at 11.20.24 (1).jpeg",
     "link": logo,
     "main": false
   };
   
-  const [image,setImage]=useState(images && images.length != 0 ? images[0].link : defaultImage.link)
-  const [mainImg, setMainImg] = useState(image);
-   useEffect(() => {
-    setImage(images && images.length != 0 ? images[0].link : defaultImage.link)
-    setMainImg(image)
-    
-  },)
-
-
-  // const image = images && images.length != 0 ? images[0].link : defaultImage.link
-  
+  const [mainImg, setMainImg] = useState(images && images.length !== 0 ? images[0].link : defaultImage.link);
   const [delImg, setDelImg] = useState();
   const { data: session } = useSession();
   const ref = useRef();
   const [deletedModal, setDeletedModal] = useState(false);
+  function handleThumbnailClick(imgItem) {
+    setMainImg(imgItem.link);
 
+    const thumbnailIndex = images.findIndex((item) => item.url === imgItem.url);
+    const thumbnailContainer = ref.current;
+    const thumbnailWidth = thumbnailContainer.children[thumbnailIndex].offsetWidth;
+    const newPosition = thumbnailIndex * thumbnailWidth;
+
+    thumbnailContainer.scrollTo({
+      left: newPosition - thumbnailContainer.clientWidth / 2 + thumbnailWidth / 2,
+      behavior: "smooth",
+    });
+  }
   function scroll(scrollOffset) {
-    ref.current.scrollLeft += scrollOffset
+    ref.current.scrollLeft += scrollOffset;
   }
 
   function deleteProduct(img) {
-    if (deletedModal == false) {
-      setDeletedModal(!deletedModal)
+    if (!deletedModal) {
+      setDeletedModal(true);
     }
-    setDelImg(img)
+    setDelImg(img);
   }
 
   async function delImage() {
-    await productService.deletedImagen(id, delImg.url)
-    window.location.reload()
+    await productService.deletedImagen(id, delImg.url);
+    window.location.reload();
   }
+
+  useEffect(() => {
+  
+    setMainImg(images && images.length !== 0 ? images[0].link : defaultImage.link);
+  }, [images]);
 
   return (
 
@@ -83,11 +93,11 @@ function ProductImage({ images, id }) {
                   src={imgItem.link}
                   layout="fill"
                   className=""
-                  onClick={() => setMainImg(imgItem.link)}
+                  onClick={() => handleThumbnailClick(imgItem)}
                   alt='Imagen de producto'
                 />
                 {
-                  session?.user?.role?.includes('ADMIN')
+                  Auth
                     ?
                     <button className='absolute left-0' onClick={() => deleteProduct(imgItem)}><FontAwesomeIcon icon={faTimes} className="w-8 h-8 text-white bg-red-500 rounded-full p-1" /></button>
                     :

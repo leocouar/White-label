@@ -4,17 +4,13 @@ import {getProduct,getProductsRelated} from "../../../services/productService";
 import SEO from '@/components/SEO';
 
 function Index({ productData ,related}) {
-
     return (
-        <>
-        <SEO title={productData.name} />
         <section>
             <div className="justify-center">
                 <ProductSection productData={productData} />
             </div>
             <Gallery productData={related} />
         </section>
-        </>
     )
 }
  

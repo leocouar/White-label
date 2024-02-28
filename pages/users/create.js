@@ -36,8 +36,6 @@ const Create = () => {
         }));
     }, [telephone]);
 
-    useEffect(()=>{console.log(role)},[role])
-
     const handleChange = async (e) => {
         await setUser(prevUser => ({
             ...prevUser,
