@@ -3,10 +3,30 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useState, useRef, useEffect} from "react"; // Importamos useState, useRef y useEffect
+import { useRouter } from "next/router";
+
 
 const UserSession = ({ session }) => {
     const [isComponentVisible, setIsComponentVisible] = useState(false); 
     const componentRef = useRef(null); // Crea una referencia para el componente
+
+    const router = useRouter();
+    const handleSession = async () => {
+        if (session) {
+          try {
+            await router.push("/");
+          } catch (error) {
+            console.error(error);
+          }
+          try {
+            await signOut();
+          } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+          }
+        } else {
+          router.push("/login");
+        };
+      };
 
     const toggleOptionsSession = () => {
         setIsComponentVisible(prev => !prev);
@@ -62,7 +82,7 @@ const UserSession = ({ session }) => {
                             className={`${isComponentVisible ? "" : "hidden"}  z-50 absolute mt-2 w-46 lg:w-32 lg:right-0 rounded-md shadow-lg bg-white ring-2 ring-palette-lighter ring-opacity-75 focus:outline-none md:-mx-2 -mx-0`}
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
                             <div className="py-1 " role="none">
-                                <Link legacyBehavior href="/shoping/mine">
+                                <Link legacyBehavior href={`/checkout/user/${session?.user?.username}`}>
                                 <a href="#" className="text-palette-primary block text-center hover:bg-gray-50 px-4 py-2 text-xs" role="menuitem"
                                    tabIndex="-1" id="menu-item-0">MIS COMPRAS</a>
                                 </Link>
@@ -76,7 +96,7 @@ const UserSession = ({ session }) => {
                                 </Link>
                                 <form method="POST" action="#" role="none">
 
-                                    <button onClick={() => signOut({ callbackUrl: "/login" })}
+                                    <button onClick={handleSession}
 
                                             className="text-palette-primary block w-full text-center px-4 py-2 text-xs hover:bg-gray-50"
                                             role="menuitem" tabIndex="-1" id="menu-item-3">

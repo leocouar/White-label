@@ -26,10 +26,20 @@ const WalletOfUser = ({ walletOfUser, user }) => {
     const [filterText, setFilterText] = useState('');
     const filteredItems = walletOfUser && walletOfUser.filter(item => filterText == '' || filterText.toLowerCase().includes(item.id));
     
-    useEffect(async () => {
-        walletOfUser.length == 0 ? setIsWallet(false) : setIsWallet(true);
-        setPoints(await getPoints(user.username))
+    useEffect(() => {
+        const fetchData = async () => {
+            if (walletOfUser.length === 0) {
+                setIsWallet(false);
+            } else {
+                setIsWallet(true);
+            }
+            setPoints(await getPoints(user.username));
+        };
+    
+        fetchData();
+    
     }, [walletOfUser]);
+    
 
 
     const columns = [
