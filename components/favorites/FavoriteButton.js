@@ -6,11 +6,13 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { getStatus, save, deleteFav } from 'services/favoriteService';
+import { useRouter } from 'next/router';
 
 const FavoriteButton = ({ productData }) => {
     const [favoriteId, setFavoriteId] = useState(false);
     const { data: session, status } = useSession()
     const sessionUser = session?.user?.username
+    const router = useRouter();
 
     // Llamar a la función para verificar si el producto es favorito para el usuario
     const checkFavoriteStatus = async () => {
@@ -27,11 +29,17 @@ const FavoriteButton = ({ productData }) => {
 
 
     const toggleFavorite = async () => {
-        if (favoriteId == "") {
+        if (!sessionUser) {
+            // Redirigir al usuario a la página de inicio de sesión si no está autenticado
+            router.push('/login');
+            return;
+        }
+        
+        if (favoriteId === "") {
             const newFavorite = await save(
                 {
-                 "productId": productData.id,
-                 "username": sessionUser
+                    "productId": productData.id,
+                    "username": sessionUser
                 }
             );
             setFavoriteId(newFavorite.id);
