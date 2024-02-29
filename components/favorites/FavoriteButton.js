@@ -30,7 +30,6 @@ const FavoriteButton = ({ productData }) => {
 
     const toggleFavorite = async () => {
         if (!sessionUser) {
-            // Redirigir al usuario a la página de inicio de sesión si no está autenticado
             router.push('/login');
             return;
         }
