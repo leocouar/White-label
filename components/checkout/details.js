@@ -52,7 +52,7 @@ const Details = ({ checkout }) => {
                                         {p.quantity}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        $ {p.product.price}
+                                    $ {p.product.price.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         $ {parseFloat(p.price*p.quantity).toFixed(2)}

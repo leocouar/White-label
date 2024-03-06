@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { deleteProduct } from "services/productService";
 import {useState, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faBars} from '@fortawesome/free-solid-svg-icons'
+import {faBars, faWallet} from '@fortawesome/free-solid-svg-icons'
 
 const UserList = ({users}) => {
     const [filterText, setFilterText]= useState ('')
@@ -68,6 +68,18 @@ const UserList = ({users}) => {
                          items-baselinetransform transition duration-500 group cursor-pointer">
                     <FontAwesomeIcon icon={faBars} className="w-5 m-auto"/>
                     </button>
+                    </Link>
+                </div>
+            ),
+        },
+        {
+            name: 'Billetera',
+            cell: (row) => ( 
+                <div className="flex justify-center absolute ml-1">
+                    <Link href={`/users/wallet/${row.username}`} passHref>
+                        <button onClick={() => console.log('Button clicked!')} className="ml-0 w-10 h-auto p-2 font-primary font-semibold text-xs flex items-baseline transform transition duration-500 group cursor-pointer">
+                            <FontAwesomeIcon icon={faWallet} className="w-5 m-auto" />
+                        </button>
                     </Link>
                 </div>
             ),

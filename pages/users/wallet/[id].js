@@ -3,14 +3,18 @@ import PageTitle from "@/components/PageTitle";
 import WalletOfUser from "../../../components/wallet";
 import { getByUsername } from "services/userService";
 import userAuthorization from "@/components/userAuthorization";
+import SEO from "@/components/SEO";
 
 const Wallet = ({walletOfUser, user}) => {
 
     return (
+        <>
+        <SEO title="Mi Billetera" />
         <div className="mx-auto max-w-6xl">
             <PageTitle text="Mi Billetera" />
             <WalletOfUser walletOfUser={walletOfUser} user={user}/>
         </div>
+        </>
 
     )
 }

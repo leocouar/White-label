@@ -34,13 +34,23 @@ const Payment = ({ myPoints, users }) => {
   const [cross, setCross] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [personLoaded, setPersonLoaded] = useState()
+  
+  useEffect(() => {
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            let checkout = await createCheckout(cart);
+            setCheckout(checkout.data);
+        } catch (error) {
+            console.error("Error al crear el checkout:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(async () => {
-    setLoading(true);
-    let checkout = await createCheckout(cart);
-    setCheckout(checkout.data);
-    setLoading(false);
-  }, []);
+    fetchData();
+}, [cart]);
+
 
   useEffect(() => {
     let total = cart.reduce((a, v) => a + v.price, 0);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react"; // Asegúrate de importar la librería correcta
+import ForbiddenPage from './ForbiddenPage';
 
 function AuthorizationWrapper({ children }) {
   const { data: session, status } = useSession();
