@@ -12,7 +12,7 @@ const Login = ({ csrfToken }) => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({ username: "", password: "", csrfToken: csrfToken, remember: true })
-  console.log("rol:", session)
+
   return (
     <>
       <SEO title="Ingresa tu e-mail o usuario" />
@@ -43,7 +43,7 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const role = session.user.role;
+  const role = session?.user?.role;
 
   let destination;
   if (role === "ADMIN") {
