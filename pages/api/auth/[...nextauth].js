@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import axios from "axios";
+import { getByUsername , save } from "services/userService";
 
 const options = {
   // Configure one or more authentication providers
@@ -36,7 +37,9 @@ const options = {
         params: {
           prompt: "consent",
           access_type: "offline",
-          response_type: "code"
+          response_type: "code",
+          redirect_uri:`https://white-label-gules.vercel.app/api/auth/callback/google`,
+          scope: "openid profile email"
         }
       }
     }),
@@ -55,19 +58,47 @@ const options = {
   },
 
   callbacks: {
-    async signIn(user) {
-      return user;
+    async signIn({ user , account , profile }) {
+      if (account.provider != "credentials") {
+        const emailValidated = profile.email
+        let existingUser = await getByUsername(emailValidated);
+        if (!existingUser) {
+          let newUser = await save({
+            username: profile.email,
+            password: "",
+            name: profile.name,
+            lastName: "",
+            cuit: "",
+            phone: "",
+            city: "",
+            direction: "",
+            postal: "",
+            role: "CUSTOMER"
+          });
+          return {
+            newUser
+          };
+        } else {
+          return existingUser
+        }
+      } else {
+      return user
+      }
     },
     async jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
         token.user=user
+        let existingUser = await getByUsername(user.email);
+        token.role = existingUser.role
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.user= token.user;
+      if (token.role) {
+        session.user.role= token.role}
       return session;
     }
   },
