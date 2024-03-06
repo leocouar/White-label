@@ -5,7 +5,7 @@ export async function save(user) {
 
     try {
         let response = await axios.post(fetchUrl, user);
-        return response;
+        return response.data;
     } catch (error) {
         throw new Error("Could not create user !");
     }
@@ -53,7 +53,12 @@ export async function getByUsername(username) {
 
         return response.data;
     } catch (error) {
-        console.error("Could not get points by username !");
-        return []
+        if (error.response && error.response.status === 400) {
+            console.error("User not found");
+            return false;
+        } else {
+            console.error("Error fetching user:", error.message);
+            throw error;
+        }
     }
 }
