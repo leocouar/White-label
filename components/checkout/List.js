@@ -84,8 +84,9 @@ const List = ({ user = null }) => {
         },
         {
             name: 'Total',
-            selector: row => (<label>$ {Number(row.totalAmount).toFixed(2)}</label>)
+            selector: row => (<label>{Number(row.totalAmount).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</label>)
         }
+        
     ];
 
     return (
