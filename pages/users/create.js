@@ -1,13 +1,17 @@
 import StoreHeading from "@/components/StoreHeading";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { save } from "../../services/userService";
 import SEO from "@/components/SEO";
 import { useRouter } from "next/router";
 import { emailRegex, phoneRegex } from "@/components/stores/FieldRegexs";
 import PhoneInputFields from "@/components/users/PhoneInput";
 import { passwrdRegex, dniRegex } from "@/components/stores/FieldRegexs";
+import availableRoles from "@/components/users/ListOfRoles";
+import { handleChangePass, PasswordManagement } from "@/components/users/PasswordControl";
 
 const Create = () => {
+    const { data: session, status } = useSession();
     const [failedSave, setFailedSave] = useState(false);
     const router = useRouter();
     const [enable, setEnable] = useState(false)
@@ -15,18 +19,18 @@ const Create = () => {
         name: "",
         lastName: "",
         password: "",
-        cuil: "",
+        cuit: "",
         phone: "",
         city: "",
         direction: "",
-        email: ""
+        role: ""
     });
     const [role, setRole] = useState("");
 
     const [passwrdControl, setPasswrdControl] = useState({
         new: "",
         repeat: ""
-    })
+    });
     const [telephone, setTelephone] = useState("");
 
     useEffect(() => {
@@ -52,15 +56,7 @@ const Create = () => {
         if (failedSave) {
             validate();
         }
-    }, [user, passwrdControl, failedSave]);
-
-
-    const handleChangePass = async (e) => {
-        await setPasswrdControl(prevPasswrdControl => ({
-            ...prevPasswrdControl,
-            [e.target.name]: e.target.value,
-        }));
-    }
+    }, [user, failedSave]);
 
     const handleBlur = () => {
         if (failedSave) validate();
@@ -68,13 +64,13 @@ const Create = () => {
 
     const [errName, setErrName] = useState(false);
     const [errLastN, setErrLastN] = useState(false);
-    const [errEmail, setErrEmail] = useState(false);
-    const [errFormatEmail, setErrFormatEmail] = useState(false);
+    const [errUsername, setErrUsername] = useState(false);
+    const [errFormatUsername, setErrFormatUsername] = useState(false);
     const [errAddr, setErrAdd] = useState(false);
     const [errTel, setErrTel] = useState(false);
     const [errFormatTel, setErrFormatTel] = useState(false)
-    const [errCuil, setErrCuil] = useState(false);
-    const [errFormatCuil, setErrFormatCuil] = useState(false);
+    const [errCuit, setErrCuit] = useState(false);
+    const [errFormatCuit, setErrFormatCuit] = useState(false);
     const [errCity, setErrCity] = useState(false);
     const [errPass, setErrPass] = useState(false);
     const [errFormatPass, setErrFormatPass] = useState(false);
@@ -88,19 +84,20 @@ const Create = () => {
         const validations = [
             { check: () => !user.name.trim(), setErr: setErrName },
             { check: () => !user.lastName.trim(), setErr: setErrLastN },
-            { check: () => !user.email.trim(), setErr: setErrEmail },
-            { check: () => user.email && !emailRegex.test(user.email), setErr: setErrFormatEmail },
+            { check: () => !user.username.trim(), setErr: setErrUsername },
+            { check: () => user.username && !emailRegex.test(user.username), setErr: setErrFormatUsername },
             { check: () => !user.phone.trim(), setErr: setErrTel },
             { check: () => user.phone && !phoneRegex.test(user.phone), setErr: setErrFormatTel },
-            { check: () => !user.cuil, setErr: setErrCuil },
-            { check: () => user.cuil && !dniRegex.test(user.cuil), setErr: setErrFormatCuil },
+            { check: () => !user.cuit, setErr: setErrCuit },
+            { check: () => user.cuit && !dniRegex.test(user.cuit), setErr: setErrFormatCuit },
             { check: () => !user.city.trim(), setErr: setErrCity },
             { check: () => !user.direction.trim(), setErr: setErrAdd },
+            { check: () => !user.role.trim(), setErr: setErrRole },
             { check: () => !passwrdControl.new.trim(), setErr: setErrPass },
             { check: () => passwrdControl.new && !passwrdRegex.test(passwrdControl.new), setErr: setErrFormatPass },
             { check: () => !passwrdControl.repeat.trim(), setErr: setErrRepPass },
             { check: () => passwrdControl.new !== passwrdControl.repeat, setErr: setErrMismatch },
-            { check: () => !role.trim(), setErr: setErrRole}
+            { check: () => !role.trim(), setErr: setErrRole }
         ];
 
         validations.forEach(validation => {
@@ -148,6 +145,30 @@ const Create = () => {
 
                 <form onSubmit={submit} className="w-full max-w-lg">
                     <div className="flex flex-wrap -mx-3 mb-6">
+                        <div className="w-full px-3">
+                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="grid-password">
+                                E-mail*
+                            </label>
+                            <input
+                                autocomplete="off"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={user.username}
+                                name={"username"}
+                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                type="text"
+                                placeholder="Ingrese su e-mail"
+                            />
+                            {errUsername && <p className="text-red-500 text-xs italic">
+                                Complete su correo electronico.
+                            </p>}
+                            {errFormatUsername && <p className="text-red-500 text-xs italic">
+                                El formato del correo electronico es incorrecto.
+                            </p>}
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="grid-first-name">
@@ -192,46 +213,22 @@ const Create = () => {
                         <div className="w-full px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="grid-password">
-                                E-mail*
-                            </label>
-                            <input
-                                autocomplete="off"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={user.email}
-                                name={"email"}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                type="text"
-                                placeholder="Ingrese su e-mail"
-                            />
-                            {errEmail && <p className="text-red-500 text-xs italic">
-                                Complete su correo electronico.
-                            </p>}
-                            {errFormatEmail && <p className="text-red-500 text-xs italic">
-                                El formato del correo electronico es incorrecto.
-                            </p>}
-                        </div>
-                    </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                        <div className="w-full px-3">
-                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="grid-password">
                                 DNI ó CUIL*
                             </label>
                             <input
                                 autocomplete="off"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={user.cuil}
-                                name={"cuil"}
+                                value={user.cuit}
+                                name={"cuit"}
                                 className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 type="text"
                                 placeholder="Ingrese su DNI &oacute; CUIL"
                             />
-                            {errCuil && <p className="text-red-500 text-xs italic">
+                            {errCuit && <p className="text-red-500 text-xs italic">
                                 Ingrese su CUIL o DNI.
                             </p>}
-                            {errFormatCuil && <p className="text-red-500 text-xs italic">
+                            {errFormatCuit && <p className="text-red-500 text-xs italic">
                                 Ingrese un CUIL/DNI valido.
                             </p>}
                         </div>
@@ -291,7 +288,7 @@ const Create = () => {
                                 Complete su dirección.
                             </p>}
                         </div>
-                    </div>                    
+                    </div>
                     <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -310,82 +307,39 @@ const Create = () => {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                        <div className="w-full px-3">
-                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="grid-password">
-                                Rol
-                            </label>
-                            <select
-                                onChange={handleChangeRole}
-                                name={"role"}
-                                onBlur={handleBlur}
-                                value={role}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="role"
-                            >
-                                <option value={""}>Seleccionar</option>
-                                <option value={"ADMIN"}>Administrador</option>
-                                <option value={"OWNER"}>Propietario</option>
-                                <option value={"CUSTOMER"}>Cliente</option>
-                            </select>
-                            {errRole && <p className="text-red-500 text-xs italic">
-                                Escoja un rol por favor.
-                            </p>}
+                    {session?.user?.role?.includes('ADMIN') &&
+                        <div className="flex flex-wrap -mx-3 mb-6">
+                            <div className="w-full px-3">
+                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Rol*:
+                                </label>
+                                <select value={user.role} onChange={handleChange} name="role" className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="role">
+                                    <option disabled={true} value="">Seleccionar</option>
+                                    {
+                                        availableRoles.map(role => (
+                                            <option value={role.value}>{role.name}</option>
+                                        ))
+                                    }
+                                </select>
+                                {errRole && <p className="text-red-500 text-xs italic">
+                                    Escoja un rol de la lista por favor.
+                                </p>}
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex  flex-wrap -mx-3 mb-6">
-                        <div className="w-full  md:w-1/2 px-3">
-                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="grid-password">
-                                Contraseña*
-                            </label>
-                            <input
-                                autocomplete="off"
-                                onChange={handleChangePass}
-                                onBlur={handleBlur}
-                                value={passwrdControl.new}
-                                name={"new"}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                type="password"
-                                placeholder="Ingrese una contraseña"
-                            />
-                            {errPass && <p className="text-red-500 text-xs italic">
-                                Ingrese una contraseña.
-                            </p>}
-                            {errFormatPass && <p className="text-red-500 text-xs italic">
-                                Error: la contraseña no respeta las condiciones indicadas.
-                            </p>}
-                            {errMismatch && <p className="text-red-500 text-xs italic">
-                                Las contraseñas no coinciden.
-                            </p>}
-                        </div>
-                        <div className="w-full md:w-1/2 px-3">
-                            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="grid-password">
-                                Repita su contraseña*
-                            </label>
-                            <input
-                                autocomplete="off"
-                                onChange={handleChangePass}
-                                onBlur={handleBlur}
-                                value={passwrdControl.repeat}
-                                name={"repeat"}
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                type="password"
-                                placeholder="Repita su contraseña"
-                            />
-                            {errRepPass && <p className="text-red-500 text-xs italic">
-                                Repita su contraseña aqui por favor.
-                            </p>}
-                        </div>
-                        <p className={`text-blue-500 text-xs italic mt-1 px-3`}>
-                            8 a 16 caracteres al menos 1 mayúscula y 1 dígito
-                        </p>
-                    </div>
 
-
-
+                    }
+                    <PasswordManagement
+                        passwrdControl={passwrdControl}
+                        setPasswrdControl={setPasswrdControl}
+                        onChange={handleChangePass}
+                        onBlur={handleBlur}
+                        errPass={errPass}
+                        errFormatPass={errFormatPass}
+                        errRepPass={errRepPass}
+                        errMismatch={errMismatch}
+                    />
                     <div className="flex space-x-2 mt-8 justify-end">
                         <button type="button" className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"
                             onClick={() => onCancel()}
