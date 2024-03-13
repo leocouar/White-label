@@ -71,10 +71,6 @@ const List = ({ user = null }) => {
             selector: row => row.status,
         },
         {
-            name: 'Cantidad de Productos',
-            selector: row => row.products.length
-        },
-        {
             name: 'Fecha',
             selector: row => row.date,
         },
