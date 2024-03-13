@@ -29,8 +29,6 @@ const Presupuesto = ({ userSession, users }) => {
             try {
                 let checkout = await createCheckout(cart);
                 setCheckout(checkout.data);
-                // cleanCart();
-                console.log(checkout.data);
             } catch (error) {
                 console.error("Error al crear el checkout:", error);
             } finally {
@@ -45,7 +43,7 @@ const Presupuesto = ({ userSession, users }) => {
     
     const print = useReactToPrint({
         content: () => componentRed.current,
-        documentTitle: `DulceBB - Presupuesto`
+        documentTitle: `Presupuesto`
     });
     
 

@@ -11,22 +11,24 @@ const UserSession = ({ session }) => {
     const componentRef = useRef(null); // Crea una referencia para el componente
 
     const router = useRouter();
-    const handleSession = async () => {
+    const handleSession = async (event) => {
+        event.preventDefault(); // Evitar el comportamiento predeterminado del botón
         if (session) {
-          try {
-            await router.push("/");
-          } catch (error) {
-            console.error(error);
-          }
-          try {
-            await signOut();
-          } catch (error) {
-            console.error("Error al cerrar sesión:", error);
-          }
+            try {
+                await router.push("/");
+            } catch (error) {
+                console.error(error);
+            }
+            try {
+                await signOut();
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+            }
         } else {
-          router.push("/login");
+            router.push("/login");
         };
-      };
+    };
+    
 
     const toggleOptionsSession = () => {
         setIsComponentVisible(prev => !prev);
