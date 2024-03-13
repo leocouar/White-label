@@ -87,7 +87,7 @@ const Username = ({ userSession, billsOfUSer }) => {
                                 <StoreHeading title="" />
                             </div>
                             <div className="mt-6">
-                                <StoreHeading title="Seguridad" />
+                                <StoreHeading title="Cambiar Contraseña" />
                             </div>
                             <div className="md:-mt8 -mt-6">
                                 <UserSegurity user={userSession} />
