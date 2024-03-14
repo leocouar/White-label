@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCartContext } from "@/context/Store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDoorOpen, faSignOutAlt, faBars, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen, faSignOutAlt, faBars, faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 import logo from "/images/camara_bolivar_logo.png";
 import mobile_logo from "/images/camara_bolivar_logo_mobile.png";
 import { useSession, signOut } from "next-auth/react";
 import Loading from "./utils/Loading";
 import NavSearch from "./ProductSearch/ProductSearch";
 import { useRouter } from "next/router";
+import UserSession from "./users/UserSession";
 
 function Nav() {
   const router = useRouter();
@@ -118,16 +119,6 @@ function Nav() {
             <NavSearch setSearchFocus={(e) => handleSearchFocus(e)} />
           </div>
 
-          {/* SESION */}
-          <div className={`${searchFocused ? "hidden sm:block" : ""} lg:order-3`}>
-            <div
-              title={session ? "Sign Out" : "Sign On"}
-              className="flex md:-mt-1 flex-wrap  md:ml-1 object-right p-2 lg:order-last md:p-3 rounded-lg hover:text-palette-secondary"
-              onClick={handleSession}>
-              <FontAwesomeIcon icon={session ? faSignOutAlt : faDoorOpen} className="w-6 m-auto cursor-pointer" />
-            </div>
-          </div>
-
           {/* CARRITO */}
           <div className={`${searchFocused ? "hidden sm:block" : ""} lg:order-3`}>
             <Link href="/cart" passHref>
@@ -168,6 +159,11 @@ function Nav() {
                 TUS COMERCIOS
               </div>
             </Link>
+ 
+            {/* USER OPTIONS */} 
+            <div className="lg:order-2  lg:m-auto">
+              <UserSession session={session} />
+            </div>
 
              {/* TUS FAVORITOS */} 
             <Link href={username ? `/favorites/${username}` : '/favorites'} legacyBehavior>
@@ -184,6 +180,7 @@ function Nav() {
                 NOSOTROS
               </div>
             </Link>
+
           </div>
 
           {

@@ -26,10 +26,20 @@ const WalletOfUser = ({ walletOfUser, user }) => {
     const [filterText, setFilterText] = useState('');
     const filteredItems = walletOfUser && walletOfUser.filter(item => filterText == '' || filterText.toLowerCase().includes(item.id));
     
-    useEffect(async () => {
-        walletOfUser.length == 0 ? setIsWallet(false) : setIsWallet(true);
-        setPoints(await getPoints(user.username))
+    useEffect(() => {
+        const fetchData = async () => {
+            if (walletOfUser.length === 0) {
+                setIsWallet(false);
+            } else {
+                setIsWallet(true);
+            }
+            setPoints(await getPoints(user.username));
+        };
+    
+        fetchData();
+    
     }, [walletOfUser]);
+    
 
 
     const columns = [
@@ -115,12 +125,10 @@ const WalletOfUser = ({ walletOfUser, user }) => {
             {user.twins
                 ?
                 <div id="myDiv">
-                    <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden cursor-pointer transition-all duration-500 bg-gradient-to-r from-blue-500 to-green-400 p-4 py-3 px-5'>
+                    <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden transition-all duration-500 bg-gradient-to-r from-blue-500 to-green-400 p-4 py-3 px-5'>
                         <div className="relative flex justify-between">
                             <div>
-                                <h2 className='relative text-left font-bold text-xl decoration-pink-500'>Tarjeta Mellizos</h2>
-                                <h2 className="relative italic">20% de descuento</h2>
-
+                                <h2 className='relative text-left font-bold text-xl decoration-pink-500'>Tarjeta de Puntos</h2>
                             </div>
                         </div>
                         <div className='relative flex justify-between mt-8 w-48 '>
@@ -133,7 +141,7 @@ const WalletOfUser = ({ walletOfUser, user }) => {
                 </div>
                 :
                 <>
-                    <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden cursor-pointer transition-all duration-500 bg-gradient-to-r from-black to-purple-500 p-4 py-5 px-5'>
+                    <div className='m-auto w-80 h-48 rounded-2xl font-mono text-white overflow-hidden transition-all duration-500 bg-gradient-to-r from-black to-purple-500 p-4 py-5 px-5'>
                         <div className="flex justify-between">
                             <div>
 
@@ -197,8 +205,8 @@ const WalletOfUser = ({ walletOfUser, user }) => {
                     </div>
                 </div>
             </div>
-                <AddPoints onClose={handleAddPointsOnClose} visible={addPoints} user={user}/>
-                <RemovePoints onClose={handleRemovePointsOnClose} visible={removePoints} user={user}/>
+            <AddPoints onClose={handleAddPointsOnClose} visible={addPoints} user={user}/>
+            <RemovePoints onClose={handleRemovePointsOnClose} visible={removePoints} user={user}/>
         </div>
 
     );

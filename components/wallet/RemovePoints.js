@@ -69,7 +69,7 @@ function removePoints({visible, onClose, user}){
                     <div className="flex flex-col">
                         <input 
                             name="points"
-                            type="text"
+                            type="number"
                             className="border border-gray-700 p-2 rounded mb-3"
                             placeholder="Cantidad"
                             value={register.points}

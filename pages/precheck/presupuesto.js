@@ -23,19 +23,29 @@ const Presupuesto = ({ userSession, users }) => {
     const router = useRouter();
     const [personLoaded, setPersonLoaded] = useState(false)
 
-    useEffect(async () => {
-        setLoading(true);
-        let checkout = await createCheckout(cart);
-        setCheckout(checkout.data);
-        // cleanCart();
-        console.log(checkout.data);
-        setLoading(false);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let checkout = await createCheckout(cart);
+                setCheckout(checkout.data);
+            } catch (error) {
+                console.error("Error al crear el checkout:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchData();
     }, []);
-    const componentRed = useRef()
+    
+    const componentRed = useRef();
+    
     const print = useReactToPrint({
         content: () => componentRed.current,
-        documentTitle: `DulceBB - Presupuesto`
-    })
+        documentTitle: `Presupuesto`
+    });
+    
 
 
     const [person, setPerson] = useState({
