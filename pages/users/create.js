@@ -14,8 +14,8 @@ const Create = () => {
     const { data: session, status } = useSession();
     const [failedSave, setFailedSave] = useState(false);
     const router = useRouter();
-    const [enable, setEnable] = useState(false)
     const [user, setUser] = useState({
+        username: "",
         name: "",
         lastName: "",
         password: "",
@@ -23,9 +23,9 @@ const Create = () => {
         phone: "",
         city: "",
         direction: "",
+        postal : "",
         role: ""
     });
-    const [role, setRole] = useState("");
 
     const [passwrdControl, setPasswrdControl] = useState({
         new: "",
@@ -40,17 +40,12 @@ const Create = () => {
         }));
     }, [telephone]);
 
-    const handleChange = async (e) => {
-        await setUser(prevUser => ({
+    const handleChange = (e) => {
+        setUser(prevUser => ({
             ...prevUser,
             [e.target.name]: e.target.value,
         }));
-    }
-
-    const handleChangeRole = async (e) => {
-        const role = e.target.value;
-        await setRole(role);
-    }
+    }   
 
     useEffect(() => {
         if (failedSave) {
@@ -62,56 +57,60 @@ const Create = () => {
         if (failedSave) validate();
     }
 
-    const [errName, setErrName] = useState(false);
-    const [errLastN, setErrLastN] = useState(false);
-    const [errUsername, setErrUsername] = useState(false);
-    const [errFormatUsername, setErrFormatUsername] = useState(false);
-    const [errAddr, setErrAdd] = useState(false);
-    const [errTel, setErrTel] = useState(false);
-    const [errFormatTel, setErrFormatTel] = useState(false)
-    const [errCuit, setErrCuit] = useState(false);
-    const [errFormatCuit, setErrFormatCuit] = useState(false);
-    const [errCity, setErrCity] = useState(false);
-    const [errPass, setErrPass] = useState(false);
-    const [errFormatPass, setErrFormatPass] = useState(false);
-    const [errRepPass, setErrRepPass] = useState(false);
-    const [errMismatch, setErrMismatch] = useState(false);
-    const [errRole, setErrRole] = useState(false);
+    const [errors, setErrors] = useState({
+        errName: false,
+        errLastN: false,
+        errUsername: false,
+        errFormatUsername: false,
+        errAddr: false,
+        errTel: false,
+        errFormatTel: false,
+        errCuit: false,
+        errFormatCuit: false,
+        errCity: false,
+        errPass: false,
+        errFormatPass: false,
+        errRepPass: false,
+        errMismatch: false,
+        errRole: false
+      });
+      
 
-    const validate = () => {
+      const validate = () => {
         let errorDetected = false;
-
+    
         const validations = [
-            { check: () => !user.name.trim(), setErr: setErrName },
-            { check: () => !user.lastName.trim(), setErr: setErrLastN },
-            { check: () => !user.username.trim(), setErr: setErrUsername },
-            { check: () => user.username && !emailRegex.test(user.username), setErr: setErrFormatUsername },
-            { check: () => !user.phone.trim(), setErr: setErrTel },
-            { check: () => user.phone && !phoneRegex.test(user.phone), setErr: setErrFormatTel },
-            { check: () => !user.cuit, setErr: setErrCuit },
-            { check: () => user.cuit && !dniRegex.test(user.cuit), setErr: setErrFormatCuit },
-            { check: () => !user.city.trim(), setErr: setErrCity },
-            { check: () => !user.direction.trim(), setErr: setErrAdd },
-            { check: () => !user.role.trim(), setErr: setErrRole },
-            { check: () => !passwrdControl.new.trim(), setErr: setErrPass },
-            { check: () => passwrdControl.new && !passwrdRegex.test(passwrdControl.new), setErr: setErrFormatPass },
-            { check: () => !passwrdControl.repeat.trim(), setErr: setErrRepPass },
-            { check: () => passwrdControl.new !== passwrdControl.repeat, setErr: setErrMismatch },
-            { check: () => !role.trim(), setErr: setErrRole }
+            { check: () => !user.name.trim(), field: 'errName' },
+            { check: () => !user.lastName.trim(), field: 'errLastN' },
+            { check: () => !user.username.trim(), field: 'errUsername' },
+            { check: () => user.username && !emailRegex.test(user.username), field: 'errFormatUsername' },
+            { check: () => !user.phone.trim(), field: 'errTel' },
+            { check: () => user.phone && !phoneRegex.test(user.phone), field: 'errFormatTel' },
+            { check: () => !user.cuit, field: 'errCuit' },
+            { check: () => user.cuit && !dniRegex.test(user.cuit), field: 'errFormatCuit' },
+            { check: () => !user.city.trim(), field: 'errCity' },
+            { check: () => !user.direction.trim(), field: 'errAddr' },
+            { check: () => !user.role.trim(), field: 'errRole' },
+            { check: () => !passwrdControl.new.trim(), field: 'errPass' },
+            { check: () => passwrdControl.new && !passwrdRegex.test(passwrdControl.new), field: 'errFormatPass' },
+            { check: () => !passwrdControl.repeat.trim(), field: 'errRepPass' },
+            { check: () => passwrdControl.new !== passwrdControl.repeat, field: 'errMismatch' },
+            { check: () => !user.role.trim(), field: 'errRole' }
         ];
-
+    
         validations.forEach(validation => {
             const errorConditionMet = validation.check();
             if (errorConditionMet) {
                 errorDetected = true;
-                validation.setErr(true);
+                setErrors(prevErrors => ({ ...prevErrors, [validation.field]: true }));
             } else {
-                validation.setErr(false);
+                setErrors(prevErrors => ({ ...prevErrors, [validation.field]: false }));
             }
         });
-
+    
         return errorDetected;
     };
+    
 
     const onCancel = () => {
         router.push("/users")
@@ -122,11 +121,7 @@ const Create = () => {
         e.preventDefault();
         const errorDetected = validate();
         if (!errorDetected) {
-            const userUpload = {
-                role: role,
-                user: user
-            }
-            save(userUpload).then((result) => {
+            save(user).then((result) => {
                 if (result.status === 202) {
                     window.location.href = '/users'
                 }
@@ -160,10 +155,10 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su e-mail"
                             />
-                            {errUsername && <p className="text-red-500 text-xs italic">
+                            {errors.errUsername && <p className="text-red-500 text-xs italic">
                                 Complete su correo electronico.
                             </p>}
-                            {errFormatUsername && <p className="text-red-500 text-xs italic">
+                            {errors.errFormatUsername && <p className="text-red-500 text-xs italic">
                                 El formato del correo electronico es incorrecto.
                             </p>}
                         </div>
@@ -184,7 +179,7 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su nombre"
                             />
-                            {errName && <p className="text-red-500 text-xs italic">
+                            {errors.errName && <p className="text-red-500 text-xs italic">
                                 Complete su nombre.
                             </p>}
                         </div>
@@ -203,7 +198,7 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su apellido"
                             />
-                            {errLastN && <p className="text-red-500 text-xs italic">
+                            {errors.errLastN && <p className="text-red-500 text-xs italic">
                                 Complete su apellido.
                             </p>}
 
@@ -225,10 +220,10 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su DNI &oacute; CUIL"
                             />
-                            {errCuit && <p className="text-red-500 text-xs italic">
+                            {errors.errCuit && <p className="text-red-500 text-xs italic">
                                 Ingrese su CUIL o DNI.
                             </p>}
-                            {errFormatCuit && <p className="text-red-500 text-xs italic">
+                            {errors.errFormatCuit && <p className="text-red-500 text-xs italic">
                                 Ingrese un CUIL/DNI valido.
                             </p>}
                         </div>
@@ -239,10 +234,10 @@ const Create = () => {
                                 telephone={telephone}
                                 setTelephone={setTelephone}
                             ></PhoneInputFields>
-                            {errTel && <p className="text-red-500 text-xs italic">
+                            {errors.errTel && <p className="text-red-500 text-xs italic">
                                 Ingrese un numero de teléfono.
                             </p>}
-                            {errFormatTel && <p className="text-red-500 text-xs italic">
+                            {errors.errFormatTel && <p className="text-red-500 text-xs italic">
                                 Ingrese un teléfono apropiado
                             </p>}
                         </div>
@@ -263,7 +258,7 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su cuidad"
                             />
-                            {errCity && <p className="text-red-500 text-xs italic">
+                            {errors.errCity && <p className="text-red-500 text-xs italic">
                                 Complete su ciudad.
                             </p>}
                         </div>
@@ -284,7 +279,7 @@ const Create = () => {
                                 type="text"
                                 placeholder="Ingrese su direcci&oacute;n"
                             />
-                            {errAddr && <p className="text-red-500 text-xs italic">
+                            {errors.errAddr && <p className="text-red-500 text-xs italic">
                                 Complete su dirección.
                             </p>}
                         </div>
@@ -323,7 +318,7 @@ const Create = () => {
                                         ))
                                     }
                                 </select>
-                                {errRole && <p className="text-red-500 text-xs italic">
+                                {errors.errRole && <p className="text-red-500 text-xs italic">
                                     Escoja un rol de la lista por favor.
                                 </p>}
                             </div>
@@ -335,10 +330,10 @@ const Create = () => {
                         setPasswrdControl={setPasswrdControl}
                         onChange={handleChangePass}
                         onBlur={handleBlur}
-                        errPass={errPass}
-                        errFormatPass={errFormatPass}
-                        errRepPass={errRepPass}
-                        errMismatch={errMismatch}
+                        errPass={errors.errPass}
+                        errFormatPass={errors.errFormatPass}
+                        errRepPass={errors.errRepPass}
+                        errMismatch={errors.errMismatch}
                     />
                     <div className="flex space-x-2 mt-8 justify-end">
                         <button type="button" className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded-md mr-2"

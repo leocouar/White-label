@@ -5,6 +5,7 @@ import { deleteProduct } from "services/productService";
 import {useState, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBars, faWallet} from '@fortawesome/free-solid-svg-icons'
+import availableRoles from "./ListOfRoles";
 
 const UserList = ({users}) => {
     const [filterText, setFilterText]= useState ('')
@@ -56,8 +57,8 @@ const UserList = ({users}) => {
             sortable: true
         },
         {
-            name: 'ROL',
-            selector: row=>row.role ? row.role : "ROL",
+            name: 'Rol',
+            selector: row=>row.role ? availableRoles.find(role => role.value === row.role)?.name  : "Rol",
             sortable: true
         },
         {

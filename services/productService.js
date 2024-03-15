@@ -120,7 +120,7 @@ export async function activateProduct(id) {
         let response = await axios.put(fetchUrl);
         return response;
     } catch (error) {
-        throw new Error("Could not delete product!");
+        throw new Error("Could not activate product!");
     }
 }
 
