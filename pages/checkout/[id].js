@@ -11,8 +11,8 @@ const Checkout = ({ checkout }) => {
     return (
         <>
         <SEO title="Tus Compras" />
-        <div className="mx-auto max-w-6xl">
-            <PageTitle text={`Checkout #${checkout.id}\n `} />
+        <div className="min-h-screen bg-blue-200 lg: flex lg: flex-col justify-center lg: items-center -mt-12">
+            <PageTitle text={`COMPRA #${checkout.id}\n `} />
             <h1 className="text-center mb-2 -mt-4 text-lg">
                 {
                     session?.user?.role?.includes('ADMIN')
