@@ -161,14 +161,14 @@ function ProductForm({ productData, image }) {
                 </div>
                 :
                 <div className="flex flex-col items-start space-y-1">
-                  <button
+                  {/*<button
                     onClick={handleAddToCart}
                     aria-label="add-to-cart"
                     className="border border-palette-primary bg-purple-500 hover:bg-purple-600 text-lg text-white font-primary font-semibold pt-2 pb-1 leading-relaxed flex justify-center items-center focus:ring-1 focus:ring-palette-light focus:outline-none w-full rounded-md cursor-pointer  pl-4 pr-4"
                   >
                     Agregar al carrito
-                  </button>
-                </div>
+                  </button>*/}
+            </div>
             }
 
             <WhatsAppButton
