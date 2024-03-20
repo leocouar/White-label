@@ -17,11 +17,11 @@ const Index = ({ favorites }) => {
 
 
     return (
-        <>
+        <div className="pb-32">
             <SEO title="Productos Favoritos" />
             <PageTitle text="Productos Favoritos" />
             <FavoriteSection favorites={favorites} />
-        </>
+        </div>
     );
 };
 

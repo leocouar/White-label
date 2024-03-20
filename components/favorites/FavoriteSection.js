@@ -51,10 +51,10 @@ function FavoriteSection({ favorites }) {
 
 
     return (
-        <>
+        <div className=''>
             {groupedItems && groupedItems.map((storeName, index) => (
-                <div key={index} className="min-h-50 max-w-4xl my-4 sm:my-8 sm:mx-auto sm:w-full">
-                    <div className="flex items-center font-primary font-semibold px-6 py-2 ">
+                <div key={index} className="min-h-50 max-w-6xl my-4 sm:my-8 sm:mx-auto sm:w-full pb-10">
+                    <div className="flex items-center font-primary font-semibold px-6 py-2 bg-gray-200">
                         <img
                             src={groupedItems[index].logoLink}
                             className="rounded-md mr-2"
@@ -69,15 +69,15 @@ function FavoriteSection({ favorites }) {
                             </Link>
                         </h1>
                     </div>
-                    <div className="flex uppercase text-xs sm:text-sm text-palette-primary border-b ">
-                        <div className="w-1/2 text-xs text-left font-primary font-normal py-4 -px-6">Producto</div>
+                    <div className="flex uppercase text-xs sm:text-sm text-palette-primary border-b">
+                        <div className="w-1/2 lg:pl-12 font-primary font-normal py-4 -px-6">Producto</div>
                         <div className="w-1/4 font-primary font-normal px-2 sm:px-6 py-2  flex items-center justify-center ">Precio</div>
                         <div className="w-1/4 font-primary font-normal px-2 sm:px-6 py-2  flex items-center justify-center ">Puntos</div>
                         <div className="w-1/4 font-primary font-normal px-2 sm:px-6 py-2  flex items-center justify-center ">Eliminar</div>
                     </div>
                     {groupedItems[index].items.map((item, index) => (
-                        <div key={index} className="flex items-center text-sm sm:text-base text-gray-600  ">
-                            <div className="w-1/2 font-primary font-medium py-2 flex items-center">
+                        <div key={index} className="flex items-center text-sm sm:text-base text-gray-600">
+                            <div className="w-1/2 font-primary font-medium py-2 flex items-center pl-10">
                                 <Image src={item?.product?.images?.[0]?.link ?? defaultImage.link}
                                     width={50}
                                     height={50}
@@ -124,8 +124,10 @@ function FavoriteSection({ favorites }) {
                     </div>
                 </>
             )}
-        </>
+        </div>
+    
     );
+    
 }
 
 export default FavoriteSection;
