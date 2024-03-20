@@ -15,8 +15,8 @@ import useAuthorization from "hooks/useAuthorization";
 import FavoriteButton from '../favorites/FavoriteButton';
 
 function ProductForm({ productData, image }) {
-  const storeid= productData.store.id
-  const {Auth} = useAuthorization(storeid)
+  const storeid = productData.store.id
+  const { Auth } = useAuthorization(storeid)
 
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartContext();
@@ -93,7 +93,7 @@ function ProductForm({ productData, image }) {
     // Restablecer la cantidad a 1 cuando cambia el ID del producto
     setQuantity(1);
   }, [productData?.id]);
-  
+
   function updateQuantity(e) {
     if (e === '') {
       setQuantity('')
@@ -109,8 +109,8 @@ function ProductForm({ productData, image }) {
         <div className="w-full">
           <div className="flex flex-col space-y-2">
             <div className="flex">
-            <div className="flex justify-between items-start space-y-1 mr-2">
-              <input
+              <div className="flex justify-between items-start space-y-1 mr-2">
+                <input
                   type="number"
                   inputMode="numeric"
                   id="quantity"
@@ -120,9 +120,9 @@ function ProductForm({ productData, image }) {
                   value={quantity}
                   onChange={(e) => updateQuantity(e.target.value)}
                   className="text-gray-900 form-input border border-gray-300 w-16 rounded-sm focus:border-palette-light focus:ring-palette-light"
-              />
-              <FavoriteButton productData={productData}/>
-          </div>
+                />
+                <FavoriteButton productData={productData} />
+              </div>
 
               {/*
               <div className="flex-col items-start space-y-1">
@@ -161,6 +161,7 @@ function ProductForm({ productData, image }) {
                 </div>
                 :
                 <div className="flex flex-col items-start space-y-1">
+                  {/*
                   <button
                     onClick={handleAddToCart}
                     aria-label="add-to-cart"
@@ -168,6 +169,7 @@ function ProductForm({ productData, image }) {
                   >
                     Agregar al carrito
                   </button>
+                  */}
                 </div>
             }
 
