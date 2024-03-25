@@ -72,7 +72,7 @@ function CartPage({ myPoints, user }) {
     }, []);
 
     return (
-        <div className='bg-white lg:px-6 flex justify-center items-center'>
+        <div className='bg-white lg:px-6 flex justify-center items-center pb-32'>
             <div className='flex sm:content-start ' style={{ transform: `scale(${zoomFactor})` }}>
                 <div className="sm:px-10 bg-white mx-auto">
                     <SEO title={pageTitle} />
