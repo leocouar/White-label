@@ -22,7 +22,7 @@ export default Profile
 
 export async function getServerSideProps(ctx) {
     const user = await getSession(ctx)
-    const userSession = await getByUsername(user.user.username)
+    const userSession = await getByUsername(user?.user?.username)
 
     return {
         props: {

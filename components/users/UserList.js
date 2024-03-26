@@ -5,6 +5,7 @@ import { deleteProduct } from "services/productService";
 import {useState, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBars, faWallet} from '@fortawesome/free-solid-svg-icons'
+import availableRoles from "./ListOfRoles";
 
 const UserList = ({users}) => {
     const [filterText, setFilterText]= useState ('')
@@ -20,6 +21,11 @@ const UserList = ({users}) => {
 
     const columns = [            
         {
+            name: 'User ID',
+            selector: row => row.username ? row.username : "User ID",
+            sortable: true
+        },
+        {
             name: 'Nombre',
             selector: row => row.name ? row.name : "Nombre",
             sortable: true
@@ -29,11 +35,7 @@ const UserList = ({users}) => {
             selector: row => row.lastName ? row.lastName : "Apellido",
             sortable: true
         },
-        {
-            name: 'E-mail',
-            selector: row => row.email ? row.email : "E-mail",
-            sortable: true
-        },
+       
         {
             name:'CUIT',
             selector: row => row.cuit ? row.cuit : "CUIT",
@@ -41,22 +43,22 @@ const UserList = ({users}) => {
         },
         {
             name: 'Teléfono',
-            selector:row=>row.phone ? row.phone : "Teléfono",
+            selector: row=>row.phone ? row.phone : "Teléfono",
             sortable: true
         },
         {
             name: 'Ciudad',
-            selector:row=>row.city ? row.city : "Ciudad",
+            selector: row=>row.city ? row.city : "Ciudad",
             sortable: true
         },
         {
             name: 'Dirección',
-            selector:row=>row.direction ? row.direction : "Dirección",
+            selector: row=>row.direction ? row.direction : "Dirección",
             sortable: true
         },
         {
-            name: 'Codigo postal',
-            selector:row=>row.postal ? row.postal : "CP",
+            name: 'Rol',
+            selector: row=>row.role ? availableRoles.find(role => role.value === row.role)?.name  : "Rol",
             sortable: true
         },
         {
@@ -93,7 +95,7 @@ const UserList = ({users}) => {
             }
         };
         return (
-            <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText}/>
+            <></>
         );
     }, [filterText]);
 
