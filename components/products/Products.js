@@ -5,10 +5,16 @@ import { deleteProduct } from "services/productService";
 import {useState, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBars} from '@fortawesome/free-solid-svg-icons'
+import {paginationComponentOptions} from "../../DataTableUtils";
 
 const Products = ({products}) => {
+    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     const [filterText, setFilterText]= useState ('')
-    const filteredItems = products.filter(item=> filterText.toLowerCase() == '' || filterText.includes(item.id));
+    const filteredItems = products.filter(item => {
+        return filterText === '' || item.id.toString().includes(filterText) || item.name.toLowerCase().includes(filterText.toLowerCase());
+    });
+
+
     console.log(products);
     const [data,setData]= useState(filteredItems)
 
@@ -44,8 +50,8 @@ const Products = ({products}) => {
         },
         {
             name: 'Precio',
-            selector: row =>row.price ? row.price : "Precio",
-            sortable: true   
+            selector: row => row.price ? row.price.toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : "Precio",
+            sortable: true
         },
         {
             name: 'Stock',
@@ -75,27 +81,30 @@ const Products = ({products}) => {
     const subHeaderComponentMemo = useMemo(() => {
         const handleClear = () => {
             if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
                 setFilterText('');
             }
         };
         return (
             <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText}/>
         );
-    }, [filterText]);
-
+    }, [filterText, resetPaginationToggle]);
  
     return (
         <div className="min-h-80 max-w-12 my-4 sm:my-8 mx-auto w-full">
 
              <div className="overflow-hidden">
 
-                <DataTable
-                    columns={columns}
-                    data={data}
-                    pagination
-                    subHeader
-                    subHeaderComponent={subHeaderComponentMemo}
-                    />
+             <DataTable
+                            columns={columns}
+                            data={filteredItems}
+                            pagination
+                            paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                            subHeader
+                            subHeaderComponent={subHeaderComponentMemo}
+                            persistTableHead
+                            paginationComponentOptions={paginationComponentOptions}
+                        />
             </div>
         </div>
     )
