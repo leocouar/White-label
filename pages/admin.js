@@ -6,8 +6,9 @@ const Admin = () => {
     return (
         <>
             <SEO title="Administracion" />
-            <div className="antialiased bg-blue-200 w-full font-ssans flex flex-wrap">
-                <div className="flex flex-wrap m-2 w-full justify-self-center grid grid-cold-1 md:grid-cols-2 container mx-auto">
+
+            <div className="antialiased bg-blue-200 w-full font-ssans flex flex-col min-h-screen">
+                <div className="flex flex-wrap flm-2 w-full justify-self-center grid grid-cold-1 md:grid-cols-2 container mx-auto mt-8">
                     {/*
                     <Link legacyBehavior href="/bills">
                         <div className="pl-1 my-4 w-80 h-24 flex lg:w-3/4 justify-self-center bg-green-400 rounded-lg shadow-md cursor-pointer">
@@ -184,6 +185,7 @@ const Admin = () => {
                     </Link>
                 </div>
             </div>
+
         </>
     )
 
