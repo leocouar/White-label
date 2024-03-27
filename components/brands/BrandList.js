@@ -10,8 +10,9 @@ const BrandList = ({ brands }) => {
     const [filterText, setFilterText] = useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     
-    const filteredItems = brands.filter(item=> filterText == '' || filterText.includes(item.id));
-   
+    const filteredItems = brands.filter(item => {
+        return filterText === '' || item.id.toString().includes(filterText) || item.name.toLowerCase().includes(filterText.toLowerCase());
+    });
 
     const columns = [
         {
