@@ -70,10 +70,10 @@ const List = ({ user = null }) => {
             name: 'Estado',
             selector: row => row.status,
         },
-        {
+       /* {
             name: 'Cantidad de Productos',
             selector: row => row.products.length
-        },
+        }*/ 
         {
             name: 'Fecha',
             selector: row => row.date,
@@ -84,7 +84,7 @@ const List = ({ user = null }) => {
         },
         {
             name: 'Total',
-            selector: row => (<label>{Number(row.totalAmount).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</label>)
+            selector: row => (<label>$ {Number(row.totalAmount).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</label>)
         }
         
     ];
