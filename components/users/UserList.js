@@ -6,10 +6,16 @@ import {useState, useMemo} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBars, faWallet} from '@fortawesome/free-solid-svg-icons'
 import availableRoles from "./ListOfRoles";
+import {paginationComponentOptions} from "../../DataTableUtils";
 
 const UserList = ({users}) => {
+    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     const [filterText, setFilterText]= useState ('')
-    const filteredItems = users.filter(item=> filterText.toLowerCase() == '' || filterText.includes(item.id));
+    const filteredItems = users.filter(item => {
+        return filterText === '' || (item.id && item.id.toString().includes(filterText)) || item.name.toLowerCase().includes(filterText.toLowerCase());
+    });
+    
+
     const [data,setData]= useState(filteredItems)
 
     const handleDelete = (rowId) => {
@@ -91,25 +97,29 @@ const UserList = ({users}) => {
     const subHeaderComponentMemo = useMemo(() => {
         const handleClear = () => {
             if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
                 setFilterText('');
             }
         };
         return (
-            <></>
+            <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText}/>
         );
-    }, [filterText]);
+     }, [filterText, resetPaginationToggle]);
 
  
     return (
         <div className="min-h-80 max-w-12 my-4 sm:my-8 mx-auto w-full">
              <div className="overflow-hidden">
-                <DataTable
-                    columns={columns}
-                    data={data}
-                    pagination
-                    subHeader
-                    subHeaderComponent={subHeaderComponentMemo}
-                    />
+             <DataTable
+                            columns={columns}
+                            data={filteredItems}
+                            pagination
+                            paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                            subHeader
+                            subHeaderComponent={subHeaderComponentMemo}
+                            persistTableHead
+                            paginationComponentOptions={paginationComponentOptions}
+                        />
             </div>
         </div>
     )
