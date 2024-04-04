@@ -12,10 +12,10 @@ const Details = ({ checkout }) => {
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Producto
                         </th>
-                        <th scope="col"
+                        {/*<th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Cantidad
-                        </th>
+                        </th>*/}
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Precio Unitario
@@ -48,14 +48,14 @@ const Details = ({ checkout }) => {
                                             </div>
                                         </Link>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {p.quantity}
+                                    </td>*/}
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $ {p.product.price.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {p.product.price.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {parseFloat(p.price * p.quantity).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                        $ {parseFloat(p.price * p.quantity).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                     </td>
                                 </tr>
                             ))
