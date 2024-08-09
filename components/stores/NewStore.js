@@ -133,7 +133,7 @@ const NewStore = ({ users }) => {
         setFile(resizedData.fileData);
         setResizedImageUrl(resizedData.returnedURL);
     };
-
+    //manejar agregar usuario
     const handleAddUser = async () => {
         const owner = await getByUsername(newOwner.trim());
         const ownerId = owner?.username;
@@ -153,7 +153,7 @@ const NewStore = ({ users }) => {
         }
     }
 
-
+    //manejar cambio de propietario
     const handleChangeOwners = (e) => {
         const value = e.target.value;
 
@@ -238,7 +238,7 @@ const NewStore = ({ users }) => {
                 {/*NOMBRE*/}
                 <div className="w-full">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
-                        htmlFor="name">Nombre:</label>
+                        htmlFor="name">Nombre nuevo comercio:</label>
                     <input
                         type="text"
                         id="name"
@@ -302,7 +302,9 @@ const NewStore = ({ users }) => {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-3"
                         htmlFor="schedule">Horarios:</label>
                     <input
-                        type="text"
+                        type="time"
+                        min="09:00"
+                        max ="18:00"
                         id="schedule"
                         className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                         placeholder="Horarios de apertura"
